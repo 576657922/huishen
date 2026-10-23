@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <link rel="icon" href="data:," />
+    <title>回神 · 会话联调</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --fg: #23211c;
+        --bg: #f4f1ea;
+        --line: #d8d2c4;
+        --ok: #2f6b3a;
+        --bad: #a3342b;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --fg: #ece8de;
+          --bg: #1c1b18;
+          --line: #3a3832;
+          --ok: #7fbf8a;
+          --bad: #e08a80;
+        }
+      }
+      body {
+        margin: 0;
+        padding: 16px;
+        font: 14px/1.5 system-ui, -apple-system, 'PingFang SC', 'Noto Sans SC', sans-serif;
+        color: var(--fg);
+        background: var(--bg);
+      }
+      h1 {
+        font-size: 20px;
+        margin: 0 0 4px;
+      }
+      .row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 12px 0;
+      }
+      button {
+        min-height: 36px;
+        padding: 0 12px;
+        font: inherit;
+      }
+      .status {
+        opacity: 0.8;
+      }
+      pre {
+        border-top: 1px solid var(--line);
+        padding-top: 12px;
+        overflow-x: auto;
+        font: 12px/1.4 ui-monospace, monospace;
+      }
+    </style>
+  </head>
+  <body>
+    <main id="lab"></main>
+    <script type="module" src="/src/dev/session-lab.ts"></script>
+  </body>
+</html>

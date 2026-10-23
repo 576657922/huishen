@@ -1,0 +1,55 @@
+/* DESIGN.md §8.15.4 · components.css .readouts（播放器）与 .specs（小结） */
+.readouts {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  margin: 0 0 var(--sp-4);
+  border-top: var(--hair) solid var(--rule);
+}
+.spec {
+  margin-bottom: 0;
+  border-bottom: var(--hair) solid var(--rule);
+}
+.cell {
+  min-width: 0;
+  padding: var(--sp-2) 0 var(--sp-3);
+}
+.cell + .cell {
+  padding-left: var(--sp-3);
+  border-left: var(--hair) solid var(--rule);
+}
+.label {
+  display: block;
+  color: var(--ink-3);
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+  letter-spacing: var(--tr-caption);
+}
+.value {
+  display: block;
+  margin: 2px 0 0;
+  font-family: var(--font-num);
+  font-weight: var(--w-light);
+  font-size: var(--fs-readout);
+  line-height: var(--lh-readout);
+  letter-spacing: var(--tr-num);
+  font-variant-numeric: tabular-nums lining-nums;
+  white-space: nowrap;
+}
+.unit {
+  margin-left: 3px;
+  color: var(--ink-2);
+  font-family: var(--font-ui);
+  font-weight: var(--w-regular);
+  font-size: var(--fs-caption);
+  letter-spacing: var(--tr-caption);
+}
+/* 「下一处」是文字：界面字体 17，行高仍是 32，和旁边的数字对齐 */
+.text {
+  font-family: var(--font-ui);
+  font-weight: var(--w-regular);
+  font-size: var(--fs-name);
+  line-height: var(--lh-readout);
+  letter-spacing: var(--tr-body);
+  white-space: normal;
+}

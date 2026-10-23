@@ -1,0 +1,55 @@
+/* 停止指引（DESIGN.md §8.15.16、§8.17，components.css .stoplist / .emergency，pause.html） */
+.ruled {
+  margin-top: var(--sp-5);
+  padding-top: var(--sp-3);
+  border-top: 1px solid var(--ink);
+}
+
+.title {
+  composes: t-name from global;
+}
+
+.lead {
+  margin-top: var(--sp-3);
+  color: var(--ink);
+}
+.list {
+  margin-top: var(--sp-1);
+  counter-reset: s;
+}
+.list li {
+  display: grid;
+  grid-template-columns: 1.375em minmax(0, 1fr);
+  padding: 3px 0;
+  color: var(--ink-2);
+}
+.list li::before {
+  counter-increment: s;
+  content: counter(s);
+  font-family: var(--font-num);
+  color: var(--ink-3);
+}
+.dots li::before {
+  content: "·";
+  font-family: var(--font-ui);
+}
+
+.para {
+  margin-top: var(--sp-3);
+  color: var(--ink-2);
+}
+
+/* 急救的那一句（EmergencyLine）：上面一条细线 */
+.emergency {
+  margin-top: var(--sp-3);
+  padding-top: var(--sp-2);
+  border-top: var(--hair) solid var(--rule);
+}
+
+.keys {
+  margin-top: var(--sp-2);
+  color: var(--ink-3);
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+  letter-spacing: var(--tr-caption);
+}

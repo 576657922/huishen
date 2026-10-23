@@ -1,0 +1,83 @@
+/* DESIGN.md §8.8 · components.css .seg：1 px 线框、圆角 4、至少 44 高；格间 1 px 细线；选中格墨色填充 */
+.seg {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  border-radius: var(--r-2);
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+.cell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-height: var(--hit);
+  padding: 0 var(--sp-2);
+  color: var(--ink-2);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  letter-spacing: var(--tr-body);
+  white-space: nowrap;
+  transition:
+    background-color var(--dur-state) var(--ease-standard),
+    color var(--dur-state) var(--ease-standard);
+}
+.cell + .cell {
+  box-shadow: inset 1px 0 0 var(--rule);
+}
+.cell:first-child {
+  border-radius: var(--r-2) 0 0 var(--r-2);
+}
+.cell:last-child {
+  border-radius: 0 var(--r-2) var(--r-2) 0;
+}
+.cell[aria-checked="true"] {
+  background: var(--ink);
+  color: var(--on-ink);
+  font-weight: var(--w-semibold);
+  box-shadow: none;
+}
+/* 选中格两边的分隔线消失 */
+.cell[aria-checked="true"] + .cell {
+  box-shadow: none;
+}
+.cell:active:not([aria-checked="true"]) {
+  background: var(--wash-2);
+}
+/* 焦点框在格子外面、压在邻格之上：画在墨色填充里面的框会看不见 */
+.cell:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  z-index: 1;
+}
+
+.twoLine {
+  flex-direction: column;
+  gap: 0;
+  padding-block: var(--sp-1);
+}
+.sub {
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+  letter-spacing: var(--tr-caption);
+  color: var(--ink-3);
+  font-weight: var(--w-regular);
+}
+.cell[aria-checked="true"] .sub {
+  color: var(--on-ink-2);
+}
+
+/* 强制颜色（高对比度）：底色和阴影都会被清掉，靠线框和系统色把边界、状态画出来（DESIGN.md §3.7） */
+@media (forced-colors: active) {
+  .seg {
+    border: 1px solid CanvasText;
+  }
+  .cell + .cell,
+  .cell[aria-checked="true"] + .cell {
+    border-left: 1px solid CanvasText;
+  }
+  .cell[aria-checked="true"] {
+    outline: 2px solid Highlight;
+  }
+}

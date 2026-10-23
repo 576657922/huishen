@@ -1,0 +1,367 @@
+/* =========================================================================
+   回神 · tokens.css — production design tokens and base styles (v1, final)
+   Binding spec: docs/design/DESIGN.md. Ported from docs/design/final/tokens.css (the part
+   above "Base element styles"; the rest is src/ui/base.css). Three selector fixes so a
+   themed subtree keeps --fill-primary, --hair and the reduced-motion durations right.
+   Components use these variables only (ARCHITECTURE.md · 约定).
+
+   墨是正文，朱是印。
+   Ink sets everything that is printed: text, rules, curves, data, buttons.
+   朱 (cinnabar) marks only "now / here / today": the now-dot on a breath
+   curve, the playhead on a focus timeline, today's label in a calendar,
+   and the seal in the logo. It never fills a button, never colours a link,
+   a background, an error or a destructive action, and it never means
+   "missed".
+
+   Themes: light is the default. Dark = data-theme="dark" on any element
+   (players set it on their own root, with data-surface="player"), or the system
+   preference when <html> has no data-theme="light". Every value below is
+   measured in DESIGN.md §3.
+   ========================================================================= */
+
+/* ---------- Fonts: self-hosted subsets, SIL OFL 1.1 ----------------------
+   Built by scripts/build-fonts.mjs from scripts/fonts.config.json (DESIGN.md §4.1).
+   No CDN, no Google Fonts. Preload display.woff2 and num.woff2 in index.html:
+   <link rel="preload" href="/fonts/display.woff2" as="font" type="font/woff2" crossorigin>
+   <link rel="preload" href="/fonts/num.woff2" as="font" type="font/woff2" crossorigin>
+   ------------------------------------------------------------------------- */
+@font-face {
+  /* display.woff2 ← NotoSerifSC-VF.ttf (思源宋体 / Noto Serif SC 2.003), instanced at wght 600.
+     Covers every CJK character in the .ts and .tsx files under src (tests and comments
+     excluded) and index.html, so no display string can fall back. DESIGN.md §4.1
+     (The reference comment spelled the glob out; its star-slash closed the comment early,
+     and the parser then dropped this font-family declaration.) */
+  font-family: "HS Display";
+  src: url("/fonts/display.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  /* display-light.woff2 ← the same source instanced at wght 300, for the phase word only:
+     吸 再 停 呼 and 准备 (lead-in). 2.3 KB. Characters outside this range at weight 300 use the
+     600 face; nothing else is ever set light in the serif. */
+  font-family: "HS Display";
+  src: url("/fonts/display-light.woff2") format("woff2");
+  font-weight: 300;
+  font-style: normal;
+  font-display: block;
+  unicode-range: U+5438, U+518D, U+505C, U+547C, U+51C6, U+5907;
+}
+@font-face {
+  /* num.woff2 ← Inter-VF.ttf (Inter 4.001), wght 300–600, opsz 14–32 (variable), 65.6 KB.
+     Basic Latin, figures and a few signs. CJK punctuation and the
+     separators · —— “ ” are deliberately NOT in the range, so Chinese
+     text keeps its full-width forms from the system CJK face. */
+  font-family: "HS Num";
+  src: url("/fonts/num.woff2") format("woff2");
+  font-weight: 300 600;
+  font-style: normal;
+  font-display: swap;
+  unicode-range:
+    U+0020-007E, U+00A0, U+00B0, U+00B1, U+00D7, U+2009, U+2013, U+2032, U+2033, U+2190-2193, U+2212, U+2248,
+    U+2264, U+2265;
+}
+
+:root,
+[data-theme="light"] {
+  color-scheme: light;
+
+  /* ---------- Colour · 纸 light ----------------------------------------
+     Ratios are WCAG 2.x contrast against paper / paper-sunk / paper-raised. */
+  --paper: #f4f1ea; /* page ground; PWA background_color + theme_color */
+  --paper-sunk: #eae6dd; /* tracks, wells, segmented ground, selected rail item */
+  --paper-raised: #fbfaf7; /* sheets, dialogs, selected segment, thumbs, toasts */
+  --ink: #1b1916; /* text, strong rules, fills        15.55 / 14.08 / 16.80 */
+  --ink-2: #4e4943; /* secondary text                    7.90 /  7.15 /  8.53 */
+  --ink-3: #6b645a; /* meta, axes, captions              5.18 /  4.69 /  5.60 */
+  --line: #857e72; /* control boundaries (1.4.11)       3.56 /  3.23 /  3.85 */
+  --rule: #dcd6cb; /* hairlines between rows; decorative only, never a boundary */
+  --on-ink: #f4f1ea; /* text on ink fills                15.55 */
+  --on-ink-2: #b7b5af; /* secondary text on ink (72 %)      8.55 */
+  --ink-press: #34312c; /* pressed ink fill                          */
+  /* Primary fills are ink in light. Declared here too (not only in dark), so a
+     data-theme="light" subtree under a dark root does not inherit the dark ink-2 fill. */
+  --fill-primary: var(--ink);
+  --fill-primary-press: var(--ink-press);
+  --zhu: #b33a21; /* 朱 cinnabar — marks only           5.25 /  4.76 /  5.68 */
+  --zhu-wash: rgb(179 58 33 / 0.12);
+  --wash: rgb(27 25 22 / 0.05); /* hover; area under a curve          */
+  --wash-2: rgb(27 25 22 / 0.09); /* pressed                            */
+  --scrim: rgb(27 25 22 / 0.36); /* behind sheets and dialogs          */
+  --selection: rgb(27 25 22 / 0.14);
+  --trace-fill: rgb(27 25 22 / 0.07); /* wash under the past curve (players only) */
+  --grid: rgb(27 25 22 / 0.07); /* 1 s grid inside figures            */
+  --grid-major: rgb(27 25 22 / 0.14); /* 5 s grid, zero lines               */
+
+  /* elevation: hairline first; a shadow only on things that float (sheets, dialogs, knobs) */
+  --shadow-sheet: 0 -1px 0 var(--rule), 0 -8px 24px rgb(27 25 22 / 0.06);
+  --shadow-pop: 0 0 0 1px var(--rule), 0 8px 24px rgb(27 25 22 / 0.08);
+  --shadow-knob: 0 0 0 0.5px rgb(27 25 22 / 0.18), 0 1px 2px rgb(27 25 22 / 0.16);
+
+  /* ---------- Type: families ------------------------------------------ */
+  --font-display: "HS Display", "Noto Serif SC", "Source Han Serif SC", "Songti SC", "STSong", serif;
+  --font-ui:
+    "HS Num", "PingFang SC", "HarmonyOS Sans SC", "MiSans", "Microsoft YaHei UI", "Noto Sans SC",
+    "Source Han Sans SC", system-ui, sans-serif;
+  --font-num: var(--font-ui); /* same stack; Inter covers the figures */
+
+  /* ---------- Type: scale ---------------------------------------------
+     One scale for the product; any one screen uses six sizes at most.
+     Reading and UI text is in rem, so the browser's font-size preference scales it
+     (1rem = 16px; the px value is the size at 100 %). Line heights sit on the 4 px grid.
+     Instrument figures (readouts, timers, key figures, countdowns), the phase word and
+     the labels drawn inside SVG figures are fixed px: they are sized to their grid and
+     already 1.6–8.5 × body text. Browser zoom still scales everything. DESIGN.md §4.2 */
+  --fs-micro: 0.6875rem;
+  --lh-micro: 1rem; /* 11 / 16  tab labels, calendar labels, keycaps */
+  --fs-caption: 0.8125rem;
+  --lh-caption: 1.25rem; /* 13 / 20  meta, captions, notes      */
+  --fs-body: 0.9375rem;
+  --lh-body: 1.5rem; /* 15 / 24  UI text, rows, controls    */
+  --fs-reading: 1.0625rem;
+  --lh-reading: 1.75rem; /* 17 / 28  paragraphs, conclusions    */
+  --fs-name: 1.0625rem;
+  --lh-name: 1.5rem; /* 17 / 24  practice names (display)   */
+  --fs-head: 1.25rem;
+  --lh-head: 1.75rem; /* 20 / 28  section heads (display)    */
+  --fs-title: 1.5rem;
+  --lh-title: 2rem; /* 24 / 32  sheet titles, player section */
+  --fs-display: 2rem;
+  --lh-display: 2.5rem; /* 32 / 40  page and lead titles       */
+  --fs-axis: 11px; /* labels inside SVG figures (fixed)   */
+  --fs-readout: 24px;
+  --lh-readout: 32px; /* player readouts, spec strips (num 300) */
+  --fs-timer: 32px;
+  --lh-timer: 40px; /* remaining time (num 300)            */
+  --fs-figure: 40px;
+  --lh-figure: 48px; /* key figures (num 300)               */
+  --fs-count: 64px;
+  --lh-count: 64px; /* lead-in and grounding countdown     */
+  --fs-phase: 128px;
+  --lh-phase: 128px; /* 吸 / 呼 (display 300)                */
+
+  /* Tracking: three values. Text 0.02em, display (serif titles and names) 0.04em,
+     figures 0. The only exceptions are the 回神 key and the wordmark (DESIGN.md §4.2). */
+  --tr-text: 0.02em;
+  --tr-disp: 0.04em;
+  --tr-num: 0;
+  --tr-micro: var(--tr-text);
+  --tr-caption: var(--tr-text);
+  --tr-body: var(--tr-text);
+  --tr-reading: var(--tr-text);
+  --tr-button: var(--tr-text);
+  --tr-name: var(--tr-disp);
+  --tr-head: var(--tr-disp);
+  --tr-title: var(--tr-disp);
+  --tr-display: var(--tr-disp);
+  --tr-key: 0.24em; /* 回神 on the key (an instrument label)        */
+  --tr-wordmark: 0.12em; /* 回神 in the lockup (matches logo.svg)        */
+
+  --w-regular: 400;
+  --w-medium: 500;
+  --w-semibold: 600;
+  --w-display: 600; /* HS Display headings and names            */
+  --w-light: 300; /* phase word, timers, key figures          */
+
+  /* ---------- Space: 4 px unit, 8 px rhythm --------------------------- */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 24px;
+  --sp-8: 32px;
+  --sp-10: 40px;
+  --sp-12: 48px;
+  --sp-16: 64px;
+  --sp-20: 80px;
+  --sp-24: 96px;
+
+  /* ---------- Layout -------------------------------------------------- */
+  --margin: 20px; /* phone side margin: 390 → 350 column; 16 px below 360 */
+  --margin-tablet: 32px;
+  --margin-desk: 48px;
+  --rail-w: 240px; /* desktop navigation rail, ≥ 1024 px          */
+  --rail-w-compact: 80px; /* tablet rail, 768–1023 px                    */
+  --content-max: 1104px; /* 12 × 70 px columns + 11 × 24 px gutters     */
+  --col: 70px;
+  --gutter: 24px;
+  --reading-max: 640px; /* a reading column: 7 columns + 6 gutters     */
+  --measure: 34em; /* longest line of running text                */
+  --navbar-h: 44px;
+  --tabbar-h: 49px; /* plus env(safe-area-inset-bottom)            */
+  --startbar-h: 56px;
+  --dock-h: 80px; /* 12 + start bar 56 + 12, plus safe-bottom     */
+  --controls-h: 56px; /* player controls, plus safe-bottom + 8        */
+  --hit: 44px; /* minimum touch target                        */
+  --hair: 1px; /* hairline; 0.5 px on 2× screens              */
+  --glyph-w: 48px; /* practice glyph 48 × 24                      */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+
+  /* ---------- Radii: square, like a printed page --------------------- */
+  --r-0: 0;
+  --r-1: 2px; /* grade box, bars, keycaps, the 自评 tag     */
+  --r-2: 4px; /* buttons, start bar, fields, chips, choice groups */
+  --r-3: 8px; /* 回神 key, count-pad keys, toasts           */
+  --r-4: 14px; /* sheet top corners, dialogs                */
+  --r-full: 999px; /* toggle, slider thumb, dots only           */
+
+  /* ---------- Motion -------------------------------------------------- */
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1); /* enter, settle            */
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1); /* leave                    */
+  --ease-breath: cubic-bezier(0.37, 0, 0.63, 1); /* ≈ (1 − cos πt) / 2       */
+  --dur-press: 100ms; /* press feedback, a tick dropping onto the timeline */
+  --dur-state: 180ms; /* toggle, segment, tab, focus                       */
+  --dur-move: 240ms; /* list changes, disclosure, toast                    */
+  --dur-sheet: 320ms; /* sheets, dialogs, page push                         */
+  --dur-phase: 700ms; /* 吸 → 呼 cross-fade of the phase word                */
+  --dur-scene: 900ms; /* entering a player: the room dims to ink            */
+
+  /* ---------- Layers -------------------------------------------------- */
+  --z-bar: 20;
+  --z-sheet: 40;
+  --z-toast: 50;
+}
+
+/* Phone-s (< 360 px): the side margin is 16, not 20 (DESIGN.md §5.1, §5.2). */
+@media (max-width: 359px) {
+  :root,
+  [data-theme] {
+    --margin: 16px;
+  }
+}
+
+@media (min-resolution: 2dppx) {
+  /* also on themed subtrees: the light block re-declares --hair */
+  :root,
+  [data-theme] {
+    --hair: 0.5px;
+  }
+}
+
+/* ---------- Colour · 墨 dark: ink-black ground, paper-white text ---------
+   Ratios against paper / paper-sunk / paper-raised. Players always use it. */
+[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: #121110;
+  --paper-sunk: #0b0a09;
+  --paper-raised: #1c1a17;
+  --ink: #ede7db; /* 15.32 / 16.06 / 14.10 */
+  --ink-2: #b7afa2; /*  8.68 /  9.11 /  7.99 */
+  --ink-3: #918a7e; /*  5.52 /  5.78 /  5.08 */
+  --line: #6e675d; /*  3.38 /  3.54 /  3.11 */
+  --rule: #2b2824;
+  --on-ink: #121110; /* 15.32 on ink · 8.68 on ink-2 */
+  --on-ink-2: #3e3c38; /*  8.90 on ink · 5.07 on ink-2 */
+  --ink-press: #d2ccc0;
+  /* Dark primary fills (start bar, primary buttons) are ink-2, not ink: dark mode is the
+     night mode, and a full-ink slab glares (8.68 : 1 on paper, still the strongest mark). */
+  --fill-primary: var(--ink-2);
+  --fill-primary-press: var(--ink-3);
+  --zhu: #e2683f; /*  5.65 /  5.92 /  5.20 */
+  --zhu-wash: rgb(226 104 63 / 0.16);
+  --wash: rgb(237 231 219 / 0.06);
+  --wash-2: rgb(237 231 219 / 0.1);
+  --scrim: rgb(0 0 0 / 0.56);
+  --selection: rgb(237 231 219 / 0.2);
+  --trace-fill: rgb(237 231 219 / 0.07);
+  --grid: rgb(237 231 219 / 0.05);
+  --grid-major: rgb(237 231 219 / 0.11);
+  --shadow-sheet: 0 -1px 0 var(--rule);
+  --shadow-pop: 0 0 0 1px var(--rule);
+  --shadow-knob: 0 0 0 0.5px rgb(0 0 0 / 0.5), 0 1px 2px rgb(0 0 0 / 0.5);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --paper: #121110;
+    --paper-sunk: #0b0a09;
+    --paper-raised: #1c1a17;
+    --ink: #ede7db;
+    --ink-2: #b7afa2;
+    --ink-3: #918a7e;
+    --line: #6e675d;
+    --rule: #2b2824;
+    --on-ink: #121110;
+    --on-ink-2: #3e3c38;
+    --ink-press: #d2ccc0;
+    --fill-primary: var(--ink-2);
+    --fill-primary-press: var(--ink-3);
+    --zhu: #e2683f;
+    --zhu-wash: rgb(226 104 63 / 0.16);
+    --wash: rgb(237 231 219 / 0.06);
+    --wash-2: rgb(237 231 219 / 0.1);
+    --scrim: rgb(0 0 0 / 0.56);
+    --selection: rgb(237 231 219 / 0.2);
+    --trace-fill: rgb(237 231 219 / 0.07);
+    --grid: rgb(237 231 219 / 0.05);
+    --grid-major: rgb(237 231 219 / 0.11);
+    --shadow-sheet: 0 -1px 0 var(--rule);
+    --shadow-pop: 0 0 0 1px var(--rule);
+    --shadow-knob: 0 0 0 0.5px rgb(0 0 0 / 0.5), 0 1px 2px rgb(0 0 0 / 0.5);
+  }
+}
+
+/* ---------- Data aliases — figures reference these, never raw ink -----------
+   Declared on every theme root, not only on :root: a custom property that uses var()
+   is resolved where it is declared, so an alias declared only on a light <html>
+   would hand the light ink to a player that sets data-theme="dark" on its own root. */
+:root,
+[data-theme] {
+  --trace: var(--ink); /* drawn breath, data lines                      */
+  --trace-future: var(--ink-3); /* dashed curve ahead of now                     */
+  --bar: var(--ink-2); /* minutes, counts                               */
+  --dot: var(--ink); /* practised day; a day without practice draws nothing */
+  --now: var(--zhu);
+  --focus: var(--ink); /* focus ring colour                             */
+}
+
+/* ---------- Player surface ---------------------------------------------------
+   PlayerFrame and every sheet opened inside a player carry data-surface="player"
+   on the same element as data-theme="dark". At night, half-closed eyes find
+   full-ink shapes glaring: the 128 px phase word and the past curve step down to
+   ink-2 (8.68 : 1 on the dark paper); primary fills are already ink-2 in dark.
+   DESIGN.md §3.2 */
+[data-surface="player"] {
+  --trace: var(--ink-2);
+  --phase-ink: var(--ink-2);
+}
+
+/* More contrast on request: tertiary text and hairlines step up one notch. */
+@media (prefers-contrast: more) {
+  :root,
+  [data-theme="light"] {
+    --ink-3: #4e4943;
+    --line: #5f594f;
+    --rule: #a9a193;
+  }
+  [data-theme="dark"] {
+    --ink-3: #b7afa2;
+    --line: #918a7e;
+    --rule: #4a453f;
+  }
+}
+@media (prefers-contrast: more) and (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ink-3: #b7afa2;
+    --line: #918a7e;
+    --rule: #4a453f;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* also on themed subtrees: the light block re-declares the durations */
+  :root,
+  [data-theme] {
+    --dur-press: 0ms;
+    --dur-state: 0ms;
+    --dur-move: 0ms;
+    --dur-sheet: 0ms;
+    --dur-phase: 0ms;
+    --dur-scene: 0ms;
+  }
+}

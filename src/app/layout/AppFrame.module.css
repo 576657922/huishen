@@ -1,0 +1,64 @@
+/* 应用外框（DESIGN.md §5.2、§8.12，components.css .app） */
+.app {
+  min-height: 100dvh;
+}
+
+.main {
+  min-width: 0;
+}
+
+@media (min-width: 768px) {
+  .app {
+    display: grid;
+    grid-template-columns: var(--rail-w-compact) minmax(0, 1fr);
+  }
+}
+@media (min-width: 1024px) {
+  .app {
+    grid-template-columns: var(--rail-w) minmax(0, 1fr);
+  }
+}
+/* 外框里放着播放器时（舒适节律探索的每一档）：导航收起，播放器占满窗口（§5.3：播放器里没有导航） */
+:global(html[data-bars="player"]) .app {
+  display: block;
+}
+
+/*
+ * 「跳到正文」（DESIGN.md §11：桌面上第一个可聚焦的元素）。设计稿没有画它的样子，
+ * 按次要按钮的样式（§8.3）：只在聚焦时出现在左上角，浮在导航栏上
+ */
+.skip {
+  position: fixed;
+  top: var(--sp-2);
+  left: var(--sp-2);
+  z-index: var(--z-toast);
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--hit);
+  padding: 0 var(--sp-4);
+  border-radius: var(--r-2);
+  background: var(--paper-raised);
+  box-shadow: inset 0 0 0 1px var(--line);
+  color: var(--ink);
+  font-weight: var(--w-medium);
+  text-decoration: none;
+}
+.skip:not(:focus-visible) {
+  width: 1px;
+  height: 1px;
+  min-height: 0;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+@media (max-width: 767px) {
+  .skip {
+    display: none;
+  }
+}
+
+/* 换页后接住焦点的标题、小节不是控件，不画焦点框（focus.ts；与面板标题一样） */
+:global([data-focus-target]:focus) {
+  outline: none;
+}

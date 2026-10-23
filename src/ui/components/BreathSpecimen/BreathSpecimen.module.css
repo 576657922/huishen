@@ -1,0 +1,46 @@
+/* DESIGN.md §8.9 BreathSpecimen · components.css .warmup */
+.frame {
+  min-width: 0;
+}
+.specimen {
+  display: block;
+  max-width: 100%;
+  overflow: visible;
+  fill: none;
+}
+.grid {
+  stroke: var(--grid-major);
+  stroke-width: 1;
+}
+.rule {
+  stroke: var(--line);
+  stroke-width: 1;
+}
+.tick {
+  stroke: var(--line);
+  stroke-width: 1;
+}
+.major {
+  stroke: var(--ink-3);
+}
+.line {
+  stroke: var(--trace);
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+.bracket {
+  stroke: var(--ink-3);
+  stroke-width: 1;
+}
+.note {
+  fill: var(--ink-2);
+  font-family: var(--font-ui);
+  font-size: var(--fs-axis);
+  letter-spacing: 0.02em;
+}
+.axis {
+  fill: var(--ink-3);
+  font-family: var(--font-num);
+  font-size: var(--fs-axis);
+}

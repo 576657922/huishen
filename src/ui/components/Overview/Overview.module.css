@@ -1,0 +1,38 @@
+/* DESIGN.md §12.3 · components.css .overview */
+.overview {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+}
+.cell + .cell {
+  padding-left: var(--sp-4);
+  border-left: var(--hair) solid var(--rule);
+}
+.label {
+  color: var(--ink-3);
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+  letter-spacing: var(--tr-caption);
+}
+.value {
+  margin-top: var(--sp-1);
+  color: var(--ink-2);
+  font-size: var(--fs-body);
+  line-height: var(--lh-figure);
+  letter-spacing: var(--tr-body);
+}
+.figure {
+  font-weight: var(--w-light);
+  font-size: var(--fs-figure);
+  color: var(--ink);
+}
+.note {
+  color: var(--ink-3);
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+  letter-spacing: var(--tr-caption);
+}
+/* 本周的点在小字下面 12 */
+.cell > :global(svg) {
+  margin-top: var(--sp-3);
+}

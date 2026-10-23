@@ -1,0 +1,13 @@
+/* DESIGN.md §8.17 · components.css .emergency */
+.emergency {
+  color: var(--ink);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+}
+.emergency a {
+  font-family: var(--font-num);
+  font-weight: var(--w-semibold);
+  letter-spacing: var(--tr-num);
+  text-decoration-color: currentColor;
+  text-underline-offset: 0.25em;
+}

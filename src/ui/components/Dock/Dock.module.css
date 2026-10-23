@@ -1,0 +1,29 @@
+/* DESIGN.md §8.4 .dock：12 / 20 / 12 + 底部安全区，顶上一条细线；不加阴影 */
+.dock {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: var(--z-bar);
+  padding: var(--sp-3) var(--margin) calc(var(--sp-3) + var(--safe-bottom));
+  background: var(--paper);
+  border-top: var(--hair) solid var(--rule);
+}
+/* 平板：停靠条从紧凑导航栏的右边开始，内容和页面一样留 32 边距、不超过 640 的阅读栏（规格没写平板，按最近的做法） */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .dock {
+    left: var(--rail-w-compact);
+    padding-inline: var(--margin-tablet);
+  }
+  .dock > * {
+    max-width: var(--reading-max);
+  }
+}
+@media (min-width: 1024px) {
+  .dock {
+    position: static;
+    padding: 0;
+    background: none;
+    border-top: 0;
+  }
+}

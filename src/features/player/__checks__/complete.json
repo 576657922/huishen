@@ -1,0 +1,45 @@
+{
+  "results": [
+    {
+      "id": "box",
+      "passed": true
+    },
+    {
+      "id": "slow",
+      "passed": true
+    },
+    {
+      "id": "focus",
+      "passed": true
+    },
+    {
+      "id": "timer",
+      "passed": true
+    },
+    {
+      "id": "body-scan",
+      "passed": true
+    },
+    {
+      "id": "breath-count",
+      "passed": true
+    },
+    {
+      "id": "cyclic-sigh",
+      "passed": true
+    },
+    {
+      "id": "grounding",
+      "passed": true
+    },
+    {
+      "id": "listen",
+      "passed": true
+    },
+    {
+      "id": "sleep",
+      "passed": true
+    }
+  ],
+  "errors": []
+}

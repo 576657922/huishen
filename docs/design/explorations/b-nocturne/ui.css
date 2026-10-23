@@ -1,0 +1,122 @@
+/* ==========================================================================
+   回神 · Direction B「夜读」 · shared components for the mockups
+   Everything is drawn from tokens.css. The mockup frame is .screen, a fixed
+   390×844 phone or 1440×900 desktop canvas.
+   ========================================================================== */
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: #2A2F2D; }
+body {
+  font-family: var(--font-ui);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+p, h1, h2, h3, h4, ol, ul, figure { margin: 0; padding: 0; }
+ol, ul { list-style: none; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+
+.screen {
+  position: relative;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--text-1);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  letter-spacing: var(--ls-body);
+}
+.screen.phone { width: 390px; height: 844px; }
+.screen.desk { width: 1440px; height: 900px; }
+
+/* ---- Type roles ------------------------------------------------------------ */
+.serif { font-family: var(--font-display); font-weight: 500; }
+.t-micro { font-size: var(--fs-micro); line-height: var(--lh-micro); }
+.t-caption { font-size: var(--fs-caption); line-height: var(--lh-caption); }
+.t-body { font-size: var(--fs-body); line-height: var(--lh-body); }
+.t-headline { font-size: var(--fs-headline); line-height: var(--lh-headline); font-weight: var(--fw-medium); }
+.t-title { font-size: var(--fs-title); line-height: var(--lh-title); letter-spacing: var(--ls-title); }
+.t-large { font-family: var(--font-display); font-weight: 500; font-size: var(--fs-large); line-height: var(--lh-large); letter-spacing: var(--ls-display); word-spacing: var(--ws-display); }
+.t-xlarge { font-family: var(--font-display); font-weight: 500; font-size: var(--fs-xlarge); line-height: var(--lh-xlarge); letter-spacing: var(--ls-display); word-spacing: var(--ws-display); }
+.t-title.serif { word-spacing: var(--ws-display); letter-spacing: var(--ls-display); }
+.t-display { font-family: var(--font-display); font-weight: 500; font-size: var(--fs-display); line-height: var(--lh-display); letter-spacing: var(--ls-display); word-spacing: var(--ws-display); }
+.c1 { color: var(--text-1); } .c2 { color: var(--text-2); } .c3 { color: var(--text-3); } .ca { color: var(--accent); }
+.num { font-variant-numeric: tabular-nums; }          /* columns, timers, ticks only */
+.fig { font-variant-numeric: proportional-nums; letter-spacing: -0.01em; }  /* standalone figures */
+.balance { text-wrap: balance; }
+.pretty { text-wrap: pretty; }
+.sep { color: var(--text-3); padding: 0 0.3em; }        /* the · between meta items */
+
+/* ---- Icons: 24 grid, 1.5 stroke, round caps/joins -------------------------- */
+.i { width: 24px; height: 24px; flex: none; fill: none; stroke: currentColor;
+     stroke-width: var(--icon-stroke); stroke-linecap: round; stroke-linejoin: round; display: block; }
+.i.sm { width: 20px; height: 20px; }
+.i.xs { width: 16px; height: 16px; stroke-width: 1.75px; }
+
+/* ---- iOS status bar (390×844 notch) ---------------------------------------- */
+.status { position: absolute; inset: 0 0 auto 0; height: var(--status-h); z-index: 5; color: var(--text-1); }
+.status .time { position: absolute; left: 33px; top: 14px; font: 600 16.5px/20px var(--font-ui); letter-spacing: -0.01em; font-variant-numeric: tabular-nums; }
+.status .sys { position: absolute; right: 24px; top: 18px; display: flex; gap: 6px; align-items: center; }
+.status .sys svg { display: block; fill: currentColor; }
+
+/* ---- Navigation bar --------------------------------------------------------- */
+.navbar { position: absolute; top: var(--status-h); left: 0; right: 0; height: var(--nav-h); display: flex; align-items: center; justify-content: space-between; padding: 0 8px; z-index: 4; }
+.navbar .back { display: flex; align-items: center; gap: 2px; height: var(--target); padding: 0 8px 0 4px; color: var(--accent); font-size: var(--fs-headline); }
+.navbar .title { position: absolute; left: 50%; transform: translateX(-50%); font-size: var(--fs-headline); font-weight: var(--fw-semibold); }
+.icon-btn { width: var(--target); height: var(--target); display: grid; place-items: center; color: var(--text-1); border-radius: var(--r-full); }
+
+/* ---- Tab bar ----------------------------------------------------------------- */
+.tabbar { position: absolute; left: 0; right: 0; bottom: 0; height: calc(var(--tab-h) + var(--home-h)); background: var(--bg); border-top: var(--hairline) solid var(--line); display: flex; padding: 0 10px; z-index: 4; }
+.tab { flex: 1; height: var(--tab-h); display: flex; flex-direction: column; align-items: center; padding-top: 6px; gap: 3px; color: var(--text-3); font-size: var(--fs-micro); line-height: var(--lh-micro); font-weight: var(--fw-medium); letter-spacing: 0.04em; }
+.tab[aria-current="page"] { color: var(--accent); }
+.home-ind { position: absolute; left: 50%; bottom: 8px; width: 134px; height: 5px; margin-left: -67px; border-radius: 3px; background: var(--text-1); z-index: 6; }
+
+/* ---- Buttons ------------------------------------------------------------------- */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 48px; padding: 0 20px; border-radius: var(--r-md); font-size: var(--fs-headline); font-weight: var(--fw-semibold); letter-spacing: 0.04em; white-space: nowrap; }
+.btn .i { width: 18px; height: 18px; }
+.btn-primary { background: var(--accent); color: var(--on-accent); }
+.btn-primary .i { fill: currentColor; }
+.btn-secondary { background: var(--fill-1); color: var(--text-1); box-shadow: inset 0 0 0 var(--hairline) var(--line); }
+.btn-plain { color: var(--accent); padding: 0 12px; }
+.btn .dur { font-weight: var(--fw-regular); opacity: 0.86; font-variant-numeric: tabular-nums; letter-spacing: 0; }
+.btn:focus-visible, .seg button:focus-visible, .row:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+
+/* ---- Segmented control (iOS-faithful, tinted) ------------------------------------- */
+.seg { display: flex; padding: 2px; border-radius: 9px; background: var(--fill-1); box-shadow: inset 0 0 0 var(--hairline) var(--line); height: 34px; position: relative; }
+.seg button { flex: 1; position: relative; border-radius: 7px; font-size: var(--fs-caption); font-weight: var(--fw-medium); color: var(--text-2); letter-spacing: 0.04em; min-width: 0; }
+.seg button + button::before { content: ""; position: absolute; left: 0; top: 8px; bottom: 8px; width: 1px; background: var(--line); }
+.seg button[aria-pressed="true"] { background: var(--bg-raised); color: var(--text-1); box-shadow: var(--shadow-thumb); font-weight: var(--fw-semibold); }
+.seg button[aria-pressed="true"]::before, .seg button[aria-pressed="true"] + button::before { display: none; }
+[data-theme="dark"] .seg button[aria-pressed="true"] { background: #2A3330; }
+
+/* ---- Switch -------------------------------------------------------------------- */
+.switch { width: 51px; height: 31px; border-radius: 16px; background: var(--fill-2); position: relative; flex: none; }
+.switch::after { content: ""; position: absolute; top: 2px; left: 2px; width: 27px; height: 27px; border-radius: 50%; background: #FFFFFF; box-shadow: 0 2px 6px rgba(0,0,0,0.16), 0 0 0 0.5px rgba(0,0,0,0.06); }
+.switch.on { background: var(--accent); }
+.switch.on::after { left: 22px; }
+
+/* ---- Slider ------------------------------------------------------------------- */
+.slider { position: relative; height: 28px; flex: 1; }
+.slider .track { position: absolute; left: 0; right: 0; top: 12px; height: 4px; border-radius: 2px; background: var(--fill-2); }
+.slider .fill { position: absolute; left: 0; top: 12px; height: 4px; border-radius: 2px; background: var(--accent); }
+.slider .thumb { position: absolute; top: 0; width: 28px; height: 28px; margin-left: -14px; border-radius: 50%; background: #FFFFFF; box-shadow: 0 0.5px 4px rgba(0,0,0,0.12), 0 6px 13px rgba(0,0,0,0.12), 0 0 0 0.5px rgba(0,0,0,0.04); }
+
+/* ---- Rows ---------------------------------------------------------------------- */
+.row { display: flex; align-items: center; min-height: var(--target); gap: 12px; position: relative; }
+.row .chev { color: var(--text-3); width: 16px; height: 16px; stroke-width: 2px; }
+.rule { height: var(--hairline); background: var(--line); }
+
+/* ---- Evidence grade: a letter, never a pill ------------------------------------- */
+.grade { font-family: var(--font-display); font-weight: 600; font-size: 1.05em; letter-spacing: 0; color: var(--text-1); }
+
+/* ---- Desktop navigation rail ----------------------------------------------------- */
+.rail { position: absolute; left: 0; top: 0; bottom: 0; width: var(--rail-w); border-right: var(--hairline) solid var(--line); padding: 28px 16px 24px; display: flex; flex-direction: column; }
+.rail .brand { display: flex; align-items: center; gap: 10px; padding: 0 12px; height: 32px; color: var(--text-1); }
+.rail nav { margin-top: 36px; display: flex; flex-direction: column; gap: 2px; }
+.rail .item { display: flex; align-items: center; gap: 12px; height: 40px; padding: 0 12px; border-radius: 8px; color: var(--text-2); font-size: 15px; letter-spacing: 0.06em; }
+.rail .item .i { width: 20px; height: 20px; color: var(--text-3); }
+.rail .item[aria-current="page"] { background: var(--fill-1); color: var(--text-1); font-weight: var(--fw-medium); }
+.rail .item[aria-current="page"] .i { color: var(--accent); }
+.rail .foot { margin-top: auto; display: flex; flex-direction: column; gap: 14px; }
+.rail .note { padding: 0 12px; font-size: 12px; line-height: 18px; color: var(--text-3); letter-spacing: 0.02em; }
+
+/* ---- Wordmark --------------------------------------------------------------------- */
+.wordmark { font-family: var(--font-display); font-weight: 600; font-size: 20px; letter-spacing: 0.08em; line-height: 1; }

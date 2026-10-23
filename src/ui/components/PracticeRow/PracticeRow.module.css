@@ -1,0 +1,117 @@
+/* DESIGN.md §8.6 · components.css .prow：48 | 1fr | auto，列间距 16，至少 60 高，上下 8 */
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.item:last-child > [data-row] {
+  border-bottom: 0;
+}
+
+.row {
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--glyph-w) minmax(0, 1fr) auto;
+  column-gap: var(--sp-4);
+  align-items: center;
+  width: 100%;
+  min-height: 60px;
+  padding: var(--sp-2) 0;
+  border-bottom: var(--hair) solid var(--rule);
+  color: inherit;
+  text-align: left;
+  text-decoration: none;
+}
+/* 行直接并排放（不在 PracticeList 里）时，最后一行同样不画细线；列表里的行各自是 li 的独子，
+   由上面的 .item:last-child 处理——这里若写成 .row:last-child，会把列表里每一行的细线都去掉 */
+:not(.item) > .row:last-child {
+  border-bottom: 0;
+}
+/* 悬停和按下的底色铺到屏幕两边（行本身在边距以内，焦点框也在边距以内） */
+.row::after {
+  content: "";
+  position: absolute;
+  inset: 0 calc(-1 * var(--margin));
+  background: transparent;
+  pointer-events: none;
+  transition: background-color var(--dur-press) var(--ease-standard);
+}
+.row:active::after,
+.row[data-pressed]::after {
+  background: var(--wash-2);
+}
+.row:focus-visible {
+  outline-offset: 2px;
+}
+div.row::after {
+  display: none;
+}
+
+.text {
+  min-width: 0;
+}
+.name {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: var(--w-display);
+  font-size: var(--fs-name);
+  line-height: var(--lh-name);
+  letter-spacing: var(--tr-name);
+}
+.desc {
+  display: block;
+  color: var(--ink-2);
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+  letter-spacing: var(--tr-caption);
+}
+
+.end {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1);
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+.end:empty {
+  display: none;
+}
+.chevron {
+  color: var(--ink-3);
+  margin-right: -4px;
+}
+.dur {
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+  letter-spacing: var(--tr-caption);
+}
+.figure {
+  font-size: var(--fs-body);
+  color: var(--ink);
+}
+
+/* 导航行（今日 · 现在有点难）：至少 52 高，界面字体 15 / 24 600，提示三级墨色 */
+.nav {
+  min-height: 52px;
+}
+.nav .name {
+  font-family: var(--font-ui);
+  font-weight: var(--w-semibold);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  letter-spacing: var(--tr-body);
+}
+.nav .desc {
+  color: var(--ink-3);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  a.row:hover::after,
+  button.row:hover::after {
+    background: var(--wash);
+  }
+  a.row:active::after,
+  button.row:active::after {
+    background: var(--wash-2);
+  }
+}

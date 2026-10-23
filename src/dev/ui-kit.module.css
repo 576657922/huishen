@@ -1,0 +1,166 @@
+/* 组件目录的排版（只在开发时用）：浅色、深色两栏，每栏里的组件放在 350 宽的手机栏里，和设计稿同宽 */
+.kit {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+.single {
+  display: block;
+}
+@media (min-width: 900px) {
+  .kit {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.board {
+  min-width: 0;
+  padding: var(--sp-8) var(--margin) var(--sp-16);
+  background: var(--paper);
+  color: var(--ink);
+}
+@media (min-width: 900px) {
+  .board {
+    padding: var(--sp-8) var(--sp-10) var(--sp-16);
+  }
+}
+.boardTitle {
+  font-family: var(--font-ui);
+  font-weight: var(--w-semibold);
+  font-size: var(--fs-head);
+  line-height: var(--lh-head);
+  letter-spacing: var(--tr-head);
+}
+
+.part {
+  margin-top: var(--sp-10);
+  padding-top: var(--sp-1);
+  border-top: 1px solid var(--ink);
+}
+.partTitle {
+  font-family: var(--font-ui);
+  font-weight: var(--w-semibold);
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+  letter-spacing: var(--tr-caption);
+  color: var(--ink-2);
+}
+
+.cell,
+.cellWide {
+  margin-top: var(--sp-6);
+  max-width: 350px;
+}
+.cellWide {
+  max-width: 720px;
+}
+.spec {
+  margin-bottom: var(--sp-2);
+  font-size: var(--fs-micro);
+  line-height: var(--lh-micro);
+  letter-spacing: var(--tr-micro);
+  color: var(--ink-3);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-4);
+  margin-top: var(--sp-2);
+}
+.stack {
+  display: grid;
+  justify-items: start;
+  gap: var(--sp-3);
+}
+.stackWide {
+  display: grid;
+  gap: var(--sp-3);
+  margin-top: var(--sp-4);
+}
+.cards {
+  display: grid;
+  gap: var(--sp-10);
+}
+.gap {
+  height: var(--sp-4);
+}
+.list {
+  border-top: var(--hair) solid var(--rule);
+}
+.caption {
+  margin-top: var(--sp-3);
+  color: var(--ink-3);
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+}
+.readout {
+  font-family: var(--font-num);
+  font-weight: var(--w-light);
+  font-size: var(--fs-readout);
+  line-height: var(--lh-readout);
+  font-variant-numeric: tabular-nums;
+}
+.reveal {
+  padding: var(--sp-2) 0 var(--sp-3);
+  color: var(--ink-2);
+}
+.sheetIntro {
+  margin-bottom: var(--sp-3);
+  color: var(--ink-2);
+}
+.monthNav {
+  display: flex;
+  margin-right: calc(-1 * var(--sp-3));
+}
+.forceWrap {
+  display: inline-flex;
+}
+
+.iconGrid,
+.glyphGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: var(--sp-3) var(--sp-2);
+}
+.glyphGrid {
+  grid-template-columns: repeat(auto-fill, minmax(112px, 1fr));
+  margin-bottom: var(--sp-4);
+}
+.iconCell,
+.glyphCell {
+  display: grid;
+  justify-items: start;
+  gap: var(--sp-1);
+}
+.iconName {
+  font-family: var(--font-num);
+  font-size: var(--fs-micro);
+  line-height: var(--lh-micro);
+  color: var(--ink-3);
+}
+
+/* 目录里停靠条不固定在屏幕底部，放在原处看样子 */
+.dockDemo {
+  margin-top: var(--sp-4);
+  margin-inline: calc(-1 * var(--margin));
+}
+.dockStatic {
+  position: static;
+}
+/* 桌面的记录表：目录里给它整行的宽度，窄屏上在格子里横向滚动 */
+.cellFull {
+  margin-top: var(--sp-6);
+}
+.scroller {
+  position: relative;
+  overflow-x: auto;
+}
+.table {
+  min-width: 1080px;
+}
+/* 开始之前的底部：说明在按钮上面 */
+.firstRunFoot {
+  display: grid;
+  gap: var(--sp-2);
+}

@@ -1,0 +1,55 @@
+/* DESIGN.md §8.8 stepper · components.css .stepper：44 | 64 | 44，44 高，1 px 线框，圆角 4 */
+.stepper {
+  display: inline-grid;
+  grid-template-columns: var(--hit) 64px var(--hit);
+  align-items: center;
+  height: var(--hit);
+  border-radius: var(--r-2);
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+.btn {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  color: var(--ink);
+  touch-action: manipulation;
+  transition: background-color var(--dur-press) var(--ease-standard);
+}
+.btn:first-child {
+  border-radius: var(--r-2) 0 0 var(--r-2);
+}
+.btn:last-child {
+  border-radius: 0 var(--r-2) var(--r-2) 0;
+}
+.btn:active:not([aria-disabled="true"]) {
+  background: var(--wash-2);
+}
+.btn:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  z-index: 1;
+}
+/* 到头的一端变成线色 */
+.btn[aria-disabled="true"] {
+  color: var(--line);
+  cursor: default;
+}
+.value {
+  display: block;
+  height: 100%;
+  border-inline: var(--hair) solid var(--rule);
+  font-family: var(--font-num);
+  font-variant-numeric: tabular-nums lining-nums;
+  letter-spacing: var(--tr-num);
+  line-height: var(--hit);
+  text-align: center;
+}
+/* 强制颜色（高对比度）：底色和阴影都会被清掉，靠线框和系统色把边界、状态画出来（DESIGN.md §3.7） */
+@media (forced-colors: active) {
+  .stepper {
+    border: 1px solid CanvasText;
+  }
+  .btn[aria-disabled="true"] {
+    color: GrayText;
+  }
+}

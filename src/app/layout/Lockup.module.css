@@ -1,0 +1,41 @@
+/* 标志（DESIGN.md §8.0，components.css .lockup）：印章 18 × 19.2 朱色，间距 10，字 20 / 24 字距 0.12em */
+.lockup {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: var(--hit);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.seal {
+  width: 18px;
+  height: 19.2px;
+  flex: none;
+  color: var(--zhu);
+}
+
+.wordmark {
+  font-family: var(--font-display);
+  font-weight: var(--w-display);
+  font-size: var(--fs-head);
+  line-height: var(--lh-name);
+  letter-spacing: var(--tr-wordmark);
+}
+
+/* 首次使用页：印章 24，字 24 / 32（DESIGN.md §13.12） */
+.large .seal {
+  width: 24px;
+  height: 25.6px;
+}
+.large .wordmark {
+  font-size: var(--fs-title);
+  line-height: var(--lh-title);
+}
+
+/* 朱色是印，强制配色下也保留（DESIGN.md §3.7） */
+@media (forced-colors: active) {
+  .seal {
+    forced-color-adjust: none;
+  }
+}

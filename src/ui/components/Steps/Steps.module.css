@@ -1,0 +1,28 @@
+/* DESIGN.md §8.10 · components.css .steps */
+.steps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: step;
+}
+.step {
+  display: grid;
+  grid-template-columns: 1.875em minmax(0, 1fr);
+  column-gap: var(--sp-2);
+  padding: var(--sp-3) 0;
+  border-bottom: var(--hair) solid var(--rule);
+  text-wrap: pretty;
+}
+.step:last-child {
+  border-bottom: 0;
+}
+.step::before {
+  counter-increment: step;
+  content: counter(step, decimal-leading-zero);
+  font-family: var(--font-num);
+  font-variant-numeric: tabular-nums lining-nums;
+  letter-spacing: var(--tr-num);
+  color: var(--ink-3);
+  font-size: var(--fs-caption);
+  line-height: var(--lh-body);
+}

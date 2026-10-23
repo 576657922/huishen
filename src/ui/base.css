@@ -1,0 +1,359 @@
+/* =========================================================================
+   回神 · base.css — reset, base element styles, type roles and utilities.
+   Ported from docs/design/final/tokens.css (everything from "Base element styles"
+   on); tokens live in src/ui/tokens.css. Import both once (src/ui/index.ts does).
+   Additions at the end: the text helpers .clause / .keep (components.css §8.1) and
+   the scroll lock that Sheet and Dialog set on <html> (DESIGN.md §8.13).
+   ========================================================================= */
+
+/* =========================================================================
+   Base element styles
+   ========================================================================= */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+  text-autospace: no-autospace; /* spacing between CJK and figures lives in the copy */
+  /* WCAG 2.4.11: a focused element never ends up under a fixed bar. PageFrame sets
+     data-bars on <html>: "tabs" (default), "dock" (practice detail, summary, programme,
+     pace-finder intro and result), "player" (players), "none" (welcome, pushed pages
+     without a bar). DESIGN.md §11 */
+  scroll-padding-top: calc(var(--safe-top) + 8px);
+  scroll-padding-bottom: calc(var(--tabbar-h) + var(--safe-bottom) + 8px);
+}
+html[data-bars="dock"] {
+  scroll-padding-bottom: calc(var(--dock-h) + var(--safe-bottom) + 8px);
+}
+html[data-bars="player"] {
+  scroll-padding-bottom: calc(var(--controls-h) + var(--safe-bottom) + 16px);
+}
+html[data-bars="none"] {
+  scroll-padding-bottom: calc(var(--safe-bottom) + 8px);
+}
+@media (min-width: 768px) {
+  /* tablet and desktop: the rail replaces the tab bar */
+  html:not([data-bars="dock"]):not([data-bars="player"]) {
+    scroll-padding-bottom: 8px;
+  }
+}
+@media (min-width: 1024px) {
+  /* desktop: the start bar is inline, not docked */
+  html[data-bars="dock"] {
+    scroll-padding-bottom: 8px;
+  }
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-ui);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  font-weight: var(--w-regular);
+  letter-spacing: var(--tr-body);
+  font-kerning: normal;
+  font-synthesis: none; /* never fake bold or italic on CJK          */
+  font-optical-sizing: auto; /* Inter's opsz follows the font size        */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-break: strict; /* 禁则: no 。，、」at the start of a line   */
+  text-wrap: pretty; /* no one-character last lines (inherited)   */
+  text-spacing-trim: trim-start; /* 「 at line start sits flush with the column */
+  overflow-wrap: break-word;
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+ol,
+ul,
+li,
+dl,
+dt,
+dd,
+figure,
+figcaption,
+blockquote {
+  margin: 0;
+  padding: 0;
+}
+ol,
+ul {
+  list-style: none;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: var(--w-display);
+  text-wrap: balance; /* no single character alone on a last line */
+}
+h1 {
+  font-size: var(--fs-display);
+  line-height: var(--lh-display);
+  letter-spacing: var(--tr-display);
+}
+h2 {
+  font-size: var(--fs-head);
+  line-height: var(--lh-head);
+  letter-spacing: var(--tr-head);
+}
+h3 {
+  font-size: var(--fs-name);
+  line-height: var(--lh-name);
+  letter-spacing: var(--tr-name);
+}
+
+p {
+  text-wrap: pretty;
+}
+
+em,
+i,
+cite,
+address {
+  font-style: normal;
+} /* CJK has no italics; emphasise with weight */
+strong,
+b {
+  font-weight: var(--w-semibold);
+}
+
+a {
+  color: inherit;
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.3em;
+  text-decoration-color: var(--line);
+  transition: text-decoration-color var(--dur-state) var(--ease-standard);
+}
+/* Hover only where a pointer can hover: on touch screens a tapped element would keep
+   its hover look after the finger lifts (DESIGN.md §7.2). */
+@media (hover: hover) and (pointer: fine) {
+  a:hover {
+    text-decoration-color: currentColor;
+  }
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+}
+button {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+button:disabled {
+  cursor: default;
+}
+
+svg {
+  display: block;
+  overflow: visible;
+}
+img,
+canvas {
+  display: block;
+  max-width: 100%;
+}
+
+:focus {
+  outline: none;
+}
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: var(--selection);
+  color: inherit;
+}
+
+hr {
+  margin: 0;
+  border: 0;
+  border-top: var(--hair) solid var(--rule);
+}
+
+/* =========================================================================
+   Type roles — use these instead of raw sizes
+   ========================================================================= */
+.t-micro {
+  font-size: var(--fs-micro);
+  line-height: var(--lh-micro);
+  letter-spacing: var(--tr-micro);
+}
+.t-caption {
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+  letter-spacing: var(--tr-caption);
+}
+.t-body {
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  letter-spacing: var(--tr-body);
+}
+.t-reading {
+  font-size: var(--fs-reading);
+  line-height: var(--lh-reading);
+  letter-spacing: var(--tr-reading);
+}
+.t-name {
+  font-family: var(--font-display);
+  font-weight: var(--w-display);
+  font-size: var(--fs-name);
+  line-height: var(--lh-name);
+  letter-spacing: var(--tr-name);
+}
+.t-head {
+  font-family: var(--font-display);
+  font-weight: var(--w-display);
+  font-size: var(--fs-head);
+  line-height: var(--lh-head);
+  letter-spacing: var(--tr-head);
+}
+.t-title {
+  font-family: var(--font-display);
+  font-weight: var(--w-display);
+  font-size: var(--fs-title);
+  line-height: var(--lh-title);
+  letter-spacing: var(--tr-title);
+}
+.t-display {
+  font-family: var(--font-display);
+  font-weight: var(--w-display);
+  font-size: var(--fs-display);
+  line-height: var(--lh-display);
+  letter-spacing: var(--tr-display);
+}
+.t-phase {
+  font-family: var(--font-display);
+  font-weight: var(--w-light);
+  font-size: var(--fs-phase);
+  line-height: var(--lh-phase);
+  letter-spacing: 0;
+}
+.t-timer {
+  font-family: var(--font-num);
+  font-weight: var(--w-light);
+  font-size: var(--fs-timer);
+  line-height: var(--lh-timer);
+  font-variant-numeric: tabular-nums lining-nums;
+  letter-spacing: 0;
+}
+.t-figure {
+  font-family: var(--font-num);
+  font-weight: var(--w-light);
+  font-size: var(--fs-figure);
+  line-height: var(--lh-figure);
+  font-variant-numeric: proportional-nums lining-nums;
+  letter-spacing: 0;
+}
+.t-count {
+  font-family: var(--font-num);
+  font-weight: var(--w-light);
+  font-size: var(--fs-count);
+  line-height: var(--lh-count);
+  font-variant-numeric: tabular-nums lining-nums;
+  letter-spacing: 0;
+}
+
+.ink-2 {
+  color: var(--ink-2);
+}
+.ink-3 {
+  color: var(--ink-3);
+}
+
+/* ---------- Utilities ---------------------------------------------- */
+.tnum {
+  /* timers, tables, axes: anything that ticks or aligns */
+  font-family: var(--font-num);
+  font-variant-numeric: tabular-nums lining-nums;
+  letter-spacing: var(--tr-num);
+}
+.pnum {
+  /* standalone figures and figures in running text */
+  font-family: var(--font-num);
+  font-variant-numeric: proportional-nums lining-nums;
+  letter-spacing: var(--tr-num);
+}
+.vh {
+  /* visually hidden, still announced */
+  /* biome-ignore lint/complexity/noImportantStyles: a utility must beat the component it hides */
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+/* Input modality: copy that names a gesture or a key shows only where it applies
+   (DESIGN.md §10.2). The two conditions are exact complements. */
+@media (hover: hover) and (pointer: fine) {
+  [data-modality="touch"] {
+    /* biome-ignore lint/complexity/noImportantStyles: must beat any component display rule */
+    display: none !important;
+  }
+}
+@media (hover: none), (pointer: coarse), (pointer: none) {
+  [data-modality="fine"] {
+    /* biome-ignore lint/complexity/noImportantStyles: must beat any component display rule */
+    display: none !important;
+  }
+}
+.icon {
+  width: 24px;
+  height: 24px;
+  flex: none;
+  color: inherit;
+}
+.icon-20 {
+  width: 20px;
+  height: 20px;
+  flex: none;
+}
+.icon-16 {
+  width: 16px;
+  height: 16px;
+  flex: none;
+}
+
+/* ---------- Text helpers (DESIGN.md §4.3; src/ui/text.ts) -------------- */
+/* Phrase wrapping: clauses() wraps the text after each ，；：。？！ in a .clause, so a line
+   ends at a pause (guided captions, stop guidance, figure captions, sheet paragraphs). */
+.clause {
+  display: inline-block;
+}
+/* Last-line rule: keep() wraps the last four characters of a block in .keep */
+.keep {
+  white-space: nowrap;
+}
+
+/* ---------- Modal scroll lock (Sheet, Dialog: the page behind does not scroll) */
+html[data-scroll-lock] {
+  overflow: hidden;
+}

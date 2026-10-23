@@ -1,0 +1,160 @@
+/* ==========================================================================
+   回神 · Direction B「夜读」 · design tokens
+   Dark is the reference theme. Light uses the same hues at reading-by-day values.
+   Colours are authored in OKLCH and shipped as hex. Every text/background pair
+   listed here passes WCAG AA (ratios noted against --bg).
+   Theme: set data-theme="light" | "dark" on any element; without it, the system
+   preference decides.
+   ========================================================================== */
+
+/* ---- Fonts: self-hosted subsets, SIL OFL. No CDN. ------------------------- */
+@font-face {
+  font-family: "HS Serif";              /* Noto Serif SC VF (wght 200–900) · display only */
+  src: url("fonts/hs-serif.woff") format("woff");
+  font-weight: 200 900;
+  font-display: swap;
+}
+@font-face {
+  font-family: "HS Inter";              /* Inter VF (opsz, wght) · Latin and all figures */
+  src: url("fonts/hs-inter.woff") format("woff");
+  font-weight: 100 900;
+  font-display: swap;
+  unicode-range: U+0020-007E, U+00A0-00FF, U+2010-2027, U+2030-205E, U+2190-2199, U+2212;
+}
+
+:root {
+  /* ---- Families ---------------------------------------------------------- */
+  --font-ui: "HS Inter", "PingFang SC", "HarmonyOS Sans SC", "MiSans", "Microsoft YaHei UI",
+             "Noto Sans SC", system-ui, sans-serif;           /* CJK falls through to the system face */
+  --font-display: "HS Serif", "Noto Serif SC", "Source Han Serif SC", "Songti SC", serif;
+
+  /* ---- Type scale: size / line-height. A screen uses at most six. -------- */
+  --fs-micro: 11px;   --lh-micro: 14px;       /* tab labels, chart ticks */
+  --fs-caption: 13px; --lh-caption: 20px;     /* meta, secondary */
+  --fs-body: 15px;    --lh-body: 24px;        /* body text, 1.6 */
+  --fs-headline: 17px; --lh-headline: 24px;   /* row titles, buttons */
+  --fs-title: 22px;   --lh-title: 30px;       /* section display */
+  --fs-large: 28px;   --lh-large: 36px;       /* page titles (serif) */
+  --fs-xlarge: 34px;  --lh-xlarge: 42px;      /* phone hero (serif) */
+  --fs-display: 44px; --lh-display: 52px;     /* desktop hero (serif) */
+  --fs-figure: 56px;  --lh-figure: 60px;      /* lead figures (Inter, proportional) */
+  --fs-phase: 120px;  --lh-phase: 120px;      /* player phase word (serif, light) */
+
+  --fw-regular: 400; --fw-medium: 500; --fw-semibold: 600;
+  --ls-display: 0.04em;    /* CJK headings */
+  --ws-display: -0.1em;    /* serif headings: the copy keeps CJK–figure spaces, display tightens them to ~1/8 em */
+  --ls-title: 0.02em;
+  --ls-body: 0.01em;
+  --ls-caps: 0.02em;       /* Latin labels: no all-caps anywhere */
+
+  /* ---- Spacing: 4 px grid ------------------------------------------------ */
+  --sp-1: 4px;  --sp-2: 8px;  --sp-3: 12px; --sp-4: 16px; --sp-5: 20px;
+  --sp-6: 24px; --sp-8: 32px; --sp-10: 40px; --sp-12: 48px; --sp-16: 64px;
+
+  /* ---- Layout ------------------------------------------------------------ */
+  --gutter: 20px;          /* phone side margin */
+  --gutter-desk: 48px;
+  --status-h: 47px;        /* 390×844 notch devices */
+  --nav-h: 44px;
+  --tab-h: 49px;
+  --home-h: 34px;          /* bottom safe area */
+  --rail-w: 232px;
+  --target: 44px;          /* minimum touch target */
+
+  /* ---- Radii --------------------------------------------------------------- */
+  --r-xs: 3px;    /* heatmap cells */
+  --r-sm: 6px;    /* segmented thumb, small chips */
+  --r-md: 10px;   /* buttons, fields */
+  --r-lg: 14px;   /* sheets, popovers */
+  --r-full: 999px;
+
+  /* ---- Stroke ------------------------------------------------------------ */
+  --hairline: 1px;
+  --icon-stroke: 1.5px;    /* every icon: 24 px grid, round caps and joins */
+  --curve-stroke: 2px;     /* data lines */
+
+  /* ---- Motion ------------------------------------------------------------ */
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-enter: cubic-bezier(0, 0, 0, 1);
+  --ease-exit: cubic-bezier(0.3, 0, 1, 1);
+  --ease-breath: cubic-bezier(0.37, 0, 0.63, 1);   /* sine in-out: the breath itself */
+  --dur-instant: 100ms;    /* press feedback */
+  --dur-quick: 160ms;      /* toggles, segmented thumb */
+  --dur-base: 240ms;       /* sheets, page push */
+  --dur-slow: 400ms;       /* theme change, chart redraw */
+  --dur-scene: 900ms;      /* entering a player: light dims slowly */
+
+  /* ---- Colour · light (reading by day) ------------------------------------ */
+  --bg: #F3F5F1;           /* paper with a celadon cast */
+  --bg-raised: #FFFFFF;    /* sheets, segmented thumb, popovers */
+  --bg-sunken: #E6EBE7;    /* empty heat cells, wells */
+  --fill-1: rgba(21, 33, 30, 0.05);   /* control tracks, hover */
+  --fill-2: rgba(21, 33, 30, 0.09);   /* pressed, selected row */
+  --line: #D7DCD8;         /* hairlines */
+  --line-strong: #B2B9B6;  /* axis baselines, control outlines */
+  --text-1: #15211E;       /* 15.1 : 1 */
+  --text-2: #475350;       /*  7.3 : 1 */
+  --text-3: #626D6B;       /*  4.9 : 1 */
+  --accent: #346D56;       /* deep celadon · 5.5 : 1, white on it 6.1 : 1 */
+  --accent-press: #245844;
+  --on-accent: #FFFFFF;
+  --accent-wash: rgba(52, 109, 86, 0.10);
+  --focus-ring: rgba(52, 109, 86, 0.45);
+  --heat-0: #E6EBE7;       /* not practised: an empty slot, never a warning colour */
+  --heat-1: #8CB99F;       /* 1–9 min · 2.0 : 1 */
+  --heat-2: #699E84;       /* 10–14 */
+  --heat-3: #49846A;       /* 15–19 */
+  --heat-4: #2F6952;       /* 20+ */
+  --curve-fill: rgba(52, 109, 86, 0.12);
+  --shadow-thumb: 0 1px 2px rgba(21, 33, 30, 0.10), 0 0 0 0.5px rgba(21, 33, 30, 0.06);
+  --shadow-pop: 0 1px 2px rgba(21, 33, 30, 0.06), 0 10px 28px rgba(21, 33, 30, 0.10);
+  color-scheme: light;
+}
+
+/* ---- Colour · dark (the reference) ---------------------------------------- */
+[data-theme="dark"] {
+  --bg: #0C1311;           /* green-black lacquer */
+  --bg-raised: #141C1A;
+  --bg-sunken: #070D0B;
+  --fill-1: rgba(229, 235, 232, 0.06);
+  --fill-2: rgba(229, 235, 232, 0.10);
+  --line: #28302D;
+  --line-strong: #414A47;
+  --text-1: #E5EBE8;       /* 15.6 : 1 */
+  --text-2: #AFB8B4;       /*  9.3 : 1 */
+  --text-3: #88928E;       /*  5.9 : 1 */
+  --accent: #A5D6BD;       /* luminous celadon · 11.6 : 1 */
+  --accent-press: #8FBEA6;
+  --on-accent: #0C1311;
+  --accent-wash: rgba(165, 214, 189, 0.12);
+  --focus-ring: rgba(165, 214, 189, 0.50);
+  --heat-0: #18211E;
+  --heat-1: #355547;       /* 2.3 : 1 */
+  --heat-2: #54806B;
+  --heat-3: #7BAB93;
+  --heat-4: #A5D6BD;
+  --curve-fill: rgba(165, 214, 189, 0.14);
+  --shadow-thumb: 0 0 0 0.5px rgba(0, 0, 0, 0.4);
+  --shadow-pop: 0 0 0 1px #28302D, 0 16px 40px rgba(0, 0, 0, 0.55);
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0C1311; --bg-raised: #141C1A; --bg-sunken: #070D0B;
+    --fill-1: rgba(229, 235, 232, 0.06); --fill-2: rgba(229, 235, 232, 0.10);
+    --line: #28302D; --line-strong: #414A47;
+    --text-1: #E5EBE8; --text-2: #AFB8B4; --text-3: #88928E;
+    --accent: #A5D6BD; --accent-press: #8FBEA6; --on-accent: #0C1311;
+    --accent-wash: rgba(165, 214, 189, 0.12); --focus-ring: rgba(165, 214, 189, 0.50);
+    --heat-0: #18211E; --heat-1: #355547; --heat-2: #54806B; --heat-3: #7BAB93; --heat-4: #A5D6BD;
+    --curve-fill: rgba(165, 214, 189, 0.14);
+    --shadow-thumb: 0 0 0 0.5px rgba(0, 0, 0, 0.4);
+    --shadow-pop: 0 0 0 1px #28302D, 0 16px 40px rgba(0, 0, 0, 0.55);
+    color-scheme: dark;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --dur-quick: 0ms; --dur-base: 0ms; --dur-slow: 0ms; --dur-scene: 0ms; }
+  /* The breath curve keeps moving (it is the content) but stops scrolling: the dot travels instead. */
+}

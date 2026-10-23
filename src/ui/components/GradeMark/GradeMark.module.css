@@ -1,0 +1,43 @@
+/* DESIGN.md §8.5 · components.css 8.5：18 × 18 的方框，1 px 墨线、圆角 2，Inter 600 11 px */
+.grade {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+  letter-spacing: var(--tr-caption);
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+.box {
+  display: inline-grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border: 1px solid var(--ink);
+  border-radius: var(--r-1);
+  font-family: var(--font-num);
+  font-weight: var(--w-semibold);
+  font-size: var(--fs-axis);
+  line-height: 1;
+  letter-spacing: 0;
+  color: var(--ink);
+}
+.word {
+  color: var(--ink-2);
+}
+/* 目录行：字母跟在名字后面 8 px，对齐汉字的字身中线 */
+.inline {
+  margin-left: var(--sp-2);
+  vertical-align: 2px;
+}
+.none .box {
+  border-color: var(--line);
+  color: var(--ink-3);
+  font-weight: var(--w-regular);
+}
+@media (forced-colors: active) {
+  .box {
+    border-color: CanvasText;
+  }
+}

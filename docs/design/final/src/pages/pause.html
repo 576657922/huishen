@@ -1,0 +1,55 @@
+{{ head('已暂停 · 回神', { theme: 'dark', bars: 'player', surface: 'player' }) }}
+<style>
+  .behind { min-height: 844px; }
+  .behind .phase { margin-top: var(--sp-6); }
+  .sheet { top: 112px; max-height: none; }
+  .sheet__meta { margin-top: -4px; color: var(--ink-3); font-size: var(--fs-caption); line-height: var(--lh-caption); }
+  .guidance { margin-top: var(--sp-5); padding-top: var(--sp-3); border-top: 1px solid var(--ink); }
+  .guidance h3 { font-family: var(--font-display); font-weight: var(--w-display); font-size: var(--fs-name); line-height: var(--lh-name); letter-spacing: var(--tr-name); }
+  .guidance .lead-in { margin-top: var(--sp-3); color: var(--ink); }
+  .guidance .stoplist { margin-top: var(--sp-1); }
+  .guidance .para { margin-top: var(--sp-3); color: var(--ink-2); }
+  .emergency { margin-top: var(--sp-3); padding-top: var(--sp-2); border-top: var(--hair) solid var(--rule); }
+  .keys { margin-top: var(--sp-2); color: var(--ink-3); font-size: var(--fs-caption); line-height: var(--lh-caption); }
+</style>
+<body>
+{{ sprite() }}
+{{ device() }}
+{{ statusbar('21:43') }}
+<div class="player behind" aria-hidden="true" inert data-audit-skip>
+  <header class="hud">
+    <div><p class="hud__name">慢呼吸</p><p class="hud__meta">10 分钟 · 雨 + 长音 · {{ K.COPY.PLAYER.paused }}</p></div>
+  </header>
+  <p class="phase">呼</p>
+</div>
+<div class="scrim"></div>
+<section class="sheet" role="dialog" aria-modal="true" aria-labelledby="pause-h">
+  <div class="sheet__grabber" aria-hidden="true"></div>
+  <div class="sheet__head"><h2 id="pause-h" tabindex="-1">{{ K.COPY.PLAYER.paused }}</h2></div>
+  <div class="sheet__body">
+    <p class="sheet__meta"><span class="tnum">{{ NEW['PLAYER.pause.elapsed'] }} {{ fmtClock(225.5 - 0.5) }}</span> · <span class="tnum">{{ NEW['PLAYER.pause.left'] }} {{ fmtClock(600 - 225.5) }}</span></p>
+    <div class="guidance" id="stop">
+      <h3>{{ K.SAFETY.STOP_GUIDANCE.title }}</h3>
+      <p class="lead-in">{{ K.clauses(K.SAFETY.STOP_GUIDANCE.when.lead) }}</p>
+      <ul class="stoplist stoplist--dots">
+        {{ K.SAFETY.STOP_GUIDANCE.when.items.map(t => `<li><span>${K.clauses(t)}</span></li>`).join('') }}
+      </ul>
+      <p class="lead-in">{{ K.SAFETY.STOP_GUIDANCE.after.lead }}</p>
+      <ol class="stoplist">
+        {{ K.SAFETY.STOP_GUIDANCE.after.items.map(t => `<li><span>${K.clauses(t)}</span></li>`).join('') }}
+      </ol>
+      <p class="para">{{ K.clauses(K.SAFETY.STOP_GUIDANCE.breathing) }}</p>
+      <p class="emergency">{{ K.clauses(K.SAFETY.STOP_GUIDANCE.emergency, { link: ['120'] }) }}</p>
+      <a class="link-more" href="/help">{{ K.SAFETY.STOP_GUIDANCE.actions.help }}{{ icon('chevron-right') }}</a>
+      <p class="keys" data-modality="fine">{{ NEW['PLAYER.pause.keys'] }}</p>
+    </div>
+  </div>
+  <div class="sheet__foot">
+    <button class="btn btn--primary" type="button">{{ K.COPY.PLAYER.resume }}</button>
+    <button class="btn btn--secondary" type="button">{{ K.COPY.PLAYER.end }}</button>
+  </div>
+</section>
+{{ homebar() }}
+</div>
+</body>
+</html>

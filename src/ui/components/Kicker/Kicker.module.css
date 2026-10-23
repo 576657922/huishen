@@ -1,0 +1,32 @@
+/* DESIGN.md §8.1 · components.css .kicker / .lead / .unit */
+.kicker {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  color: var(--ink-3);
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+  letter-spacing: var(--tr-caption);
+}
+.kicker b {
+  color: var(--ink-2);
+  font-weight: var(--w-semibold);
+}
+.note {
+  color: var(--ink-2);
+}
+.lead {
+  color: var(--ink-2);
+  font-size: var(--fs-reading);
+  line-height: var(--lh-reading);
+  letter-spacing: var(--tr-reading);
+}
+.unit {
+  margin-left: 3px;
+  color: var(--ink-2);
+  font-family: var(--font-ui);
+  font-weight: var(--w-regular);
+  font-size: var(--fs-caption);
+  letter-spacing: var(--tr-caption);
+}

@@ -1,0 +1,110 @@
+{{ head('慢呼吸 · 回神', { bars: 'dock' }) }}
+<style>
+  .intro { padding-top: var(--sp-2); }
+  .intro h1 { margin-top: var(--sp-1); }
+  .intro .lead { margin-top: var(--sp-3); }
+  .fig { margin-top: var(--sp-6); }
+  .section .steps { margin-top: var(--sp-1); }
+  .claims { margin-top: var(--sp-1); }
+  .notes { margin-top: var(--sp-4); }
+  .safety p { margin-top: var(--sp-3); }
+  .safety p + p { margin-top: var(--sp-2); }
+  .safety .link-more { margin-top: var(--sp-1); }
+  .settings .row:first-of-type { border-top: 0; }
+</style>
+<body>
+{{ sprite() }}
+{{ device() }}
+{{ statusbar('21:15') }}
+<main class="page page--dock">
+  <nav class="navbar" aria-label="返回">
+    <a class="back" href="/practices">{{ icon('back') }}练习</a>
+  </nav>
+
+  <header class="intro">
+    <p class="kicker"><span>{{ K.PRACTICES.CATEGORY_LABEL[K.practice('slow').category] }}</span>{{ grade(K.practice('slow').grade, { prefix: true }) }}</p>
+    <h1 class="t-display" tabindex="-1">{{ K.practice('slow').name }}</h1>
+    <p class="lead">{{ K.keep(K.sentences(K.practice('slow').description, 2)) }}</p>
+  </header>
+
+  <figure class="figure fig">
+    {{ breathSpecimen({ p: resonance(5.5, 'long'), cycles: 3, width: 350, height: 140 }) }}
+    <figcaption class="figcaption"><b>图 1</b>{{ K.clauses(NEW['DETAIL.figureCaption.slow']) }}</figcaption>
+  </figure>
+
+  <section class="section" aria-labelledby="how">
+    <div class="section-head"><h2 id="how">做法</h2><span class="aside">{{ K.practice('slow').durations[0] }}–{{ K.practice('slow').durations.at(-1) }} 分钟，默认 {{ K.practice('slow').defaultMinutes }} 分钟</span></div>
+    <ol class="steps">
+      {{ K.practice('slow').steps.map(t => `<li><span>${K.keep(t)}</span></li>`).join('') }}
+    </ol>
+  </section>
+
+  <section class="section settings" aria-labelledby="set">
+    <div class="section-head"><h2 id="set">设置</h2><span class="aside">改动会记住</span></div>
+    <div class="row row--stack">
+      <div class="row__top"><span id="rate-l">节律</span><span class="value"><span class="pnum">5.5</span> 次/分</span></div>
+      <div class="slider" role="slider" aria-labelledby="rate-l" aria-valuemin="4.5" aria-valuemax="6.5" aria-valuenow="5.5" aria-valuetext="每分钟 5.5 次" tabindex="0" data-hit>
+        <div class="slider__track"></div><div class="slider__fill" style="width: calc((100% - 24px) * 0.5)"></div>
+        <div class="slider__ticks"><i class="major" style="left:0%"></i><i style="left:12.5%"></i><i class="major" style="left:25%"></i><i style="left:37.5%"></i><i class="major" style="left:50%"></i><i style="left:62.5%"></i><i class="major" style="left:75%"></i><i style="left:87.5%"></i><i class="major" style="left:100%"></i></div>
+        <div class="slider__thumb" style="left: calc(12px + (100% - 24px) * 0.5)"></div>
+        <div class="slider__scale" aria-hidden="true"><span style="left:0%;transform:none">4.5</span><span style="left:25%">5.0</span><span aria-current="true" style="left:50%">5.5</span><span style="left:75%">6.0</span><span style="left:100%;transform:translateX(-100%)">6.5</span></div>
+      </div>
+      <span class="row__hint">{{ K.keep(K.sentences(NEW['DETAIL.slow.rateHint'], 1).replace(/。$/, '<a class="cite" href="#n1">1</a>。') + NEW['DETAIL.slow.rateHint'].slice(K.sentences(NEW['DETAIL.slow.rateHint'], 1).length).replace('舒适节律探索', '<a href="/pace-finder">舒适节律探索</a>')) }}</span>
+    </div>
+    <div class="row row--stack">
+      <div class="row__top"><span id="ratio-l">吸与呼</span></div>
+      <div class="seg" role="radiogroup" aria-labelledby="ratio-l">
+        <button role="radio" aria-checked="true" type="button">吸 <span class="pnum">4.5</span> · 呼 <span class="pnum">6.5</span></button>
+        <button role="radio" aria-checked="false" type="button" tabindex="-1">等长</button>
+      </div>
+      <span class="row__hint">{{ K.keep(NEW['DETAIL.slow.ratioHint']) }}</span>
+    </div>
+    <div class="row">
+      <span class="row__label" id="warm-l">{{ NEW['DETAIL.slow.warmup'] }}<span class="row__hint">{{ K.keep(NEW['DETAIL.slow.warmupHint']) }}</span></span>
+      <button class="toggle" role="switch" aria-checked="true" aria-labelledby="warm-l" type="button" data-hit></button>
+    </div>
+    <div class="row row--stack">
+      <div class="row__top"><span id="dur-l">{{ NEW['DETAIL.durationLabel'] }}</span></div>
+      <div class="seg" role="radiogroup" aria-labelledby="dur-l">
+        {{ K.practice('slow').durations.map(m => `<button role="radio" aria-checked="${m === K.practice('slow').defaultMinutes}" type="button" aria-label="${m} 分钟"${m === K.practice('slow').defaultMinutes ? '' : ' tabindex="-1"'}><span class="pnum">${m}</span></button>`).join('') }}
+      </div>
+    </div>
+    <a class="row" href="/settings/sound">
+      <span class="row__label">声音</span>
+      <span class="row__value">雨 + 长音{{ icon('chevron-right') }}</span>
+    </a>
+    <div class="row row--stack">
+      <div class="row__top"><span id="cue-l">{{ K.COPY.SETTINGS.sound.cueStyle.label }}</span></div>
+      <div class="seg" role="radiogroup" aria-labelledby="cue-l">
+        {{ Object.values(K.COPY.SETTINGS.sound.cueStyle.options).map((o, i) => `<button role="radio" aria-checked="${i === 0}" type="button"${i ? ' tabindex="-1"' : ''}>${o.name}</button>`).join('') }}
+      </div>
+      <span class="row__hint">{{ K.keep(Object.values(K.COPY.SETTINGS.sound.cueStyle.options)[0].help) }}</span>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="ev">
+    <div class="section-head"><h2 id="ev">依据</h2><a class="link-more" href="/evidence#slow">全部依据{{ icon('chevron-right') }}</a></div>
+    <ol class="claims">
+      {{ D.SLOW_CLAIMS.map(c => `<li><p class="claim__text">${K.keep(c.claim.replace(/([。？！])$/, c.cites.map(n => `<a class="cite" href="#n${n}">${n}</a>`).join('') + '$1'))}</p><p class="claim__grade">${grade(c.grade, { prefix: true })}</p></li>`).join('') }}
+    </ol>
+    <p class="claims-scope">{{ K.keep(K.COPY.EVIDENCE.grades.scope) }}</p>
+    <ol class="notes">
+      <li class="note" id="n1"><span class="note__no">1</span><div><p class="note__who">Shaffer &amp; Meehan 2020<span class="type">实践指南</span></p><p class="note__what">{{ K.keep(`成人的慢呼吸节律多在每分钟 4.5–6.5 次之间，按 0.5 次一档测试。回神的范围和步长取自这里。`) }}</p><p class="note__src"><span lang="en">Frontiers in Neuroscience</span><a href="https://doi.org/10.3389/fnins.2020.570400" lang="en" data-hit>doi:10.3389/fnins.2020.570400{{ icon('external') }}</a></p></div></li>
+      <li class="note" id="n2"><span class="note__no">2</span><div><p class="note__who">Laborde 等 2022<span class="type">元分析，223 项研究</span></p><p class="note__what">{{ K.keep(`练习中 RMSSD 增大，<span class="tnum">g = 0.53（95% CI 0.43–0.62）</span>；练完即刻只剩 <span class="tnum">g = 0.14</span>。多数研究偏倚风险高。`) }}</p><p class="note__src"><span lang="en">Neuroscience &amp; Biobehavioral Reviews</span><a href="https://doi.org/10.1016/j.neubiorev.2022.104711" lang="en" data-hit>doi:10.1016/j.neubiorev.2022.104711{{ icon('external') }}</a></p></div></li>
+      <li class="note" id="n3"><span class="note__no">3</span><div><p class="note__who">Fincham 等 2023<span class="type">随机对照试验，n = 400</span></p><p class="note__what">{{ K.keep(`每天约 10 分钟、共 4 周。与每分钟 12 次的安慰剂呼吸相比，5.5 次组的压力改善没有差别，两组都减轻了。`) }}</p><p class="note__src"><span lang="en">Scientific Reports</span><a href="https://doi.org/10.1038/s41598-023-49279-8" lang="en" data-hit>doi:10.1038/s41598-023-49279-8{{ icon('external') }}</a></p></div></li>
+    </ol>
+  </section>
+
+  <section class="section safety" aria-labelledby="safe">
+    <div class="section-head"><h2 id="safe">安全</h2></div>
+    {{ K.practice('slow').safety.map(t => `<p>${K.keep(t)}</p>`).join('') }}
+    <a class="link-more" href="/help">{{ K.COPY.TODAY.hard.help.label }}{{ icon('chevron-right') }}</a>
+  </section>
+</main>
+<div class="dock">
+  <a class="startbar" href="/play/slow"><span class="startbar__label">{{ icon('play') }}开始</span><span class="startbar__meta"><span class="pnum">{{ K.practice('slow').defaultMinutes }}</span> 分钟</span></a>
+</div>
+{{ homebar() }}
+</div>
+</body>
+</html>

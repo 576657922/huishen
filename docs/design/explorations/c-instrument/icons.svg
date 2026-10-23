@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter">
+  <!-- 回神 · 方向 C 图标：24 网格，线宽 1.5，方头，斜接。用 <use href="icons.svg#i-today"/> 引用。 -->
+  <symbol id="i-today" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.25"/><path d="M12 12l3.75-3.75"/><path d="M12 3.75v2.25"/><rect x="10.75" y="10.75" width="2.5" height="2.5" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-practice" viewBox="0 0 24 24"><path d="M3 12c2.5-8 6.5-8 9 0s6.5 8 9 0"/></symbol>
+  <symbol id="i-records" viewBox="0 0 24 24"><path d="M3.75 20.25h16.5"/><path d="M6.75 16.5V12M10.25 16.5V5.25M13.75 16.5v-2.25M17.25 16.5V9"/></symbol>
+  <symbol id="i-evidence" viewBox="0 0 24 24"><path d="M7.5 3.75h-3v16.5h3M16.5 3.75h3v16.5h-3"/><path d="M9.75 9.75h4.5M9.75 14.25h4.5"/></symbol>
+  <symbol id="i-settings" viewBox="0 0 24 24"><path d="M3.75 8.25h16.5M3.75 15.75h16.5"/><rect x="13.25" y="6" width="3" height="4.5" fill="currentColor"/><rect x="7.75" y="13.5" width="3" height="4.5" fill="currentColor"/></symbol>
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="M14.25 5.25L7.5 12l6.75 6.75"/></symbol>
+  <symbol id="i-chevron" viewBox="0 0 24 24"><path d="M9.75 5.25L16.5 12l-6.75 6.75"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M7.5 5.25v13.5L18.75 12z"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><path d="M9 5.25v13.5M15 5.25v13.5"/></symbol>
+  <symbol id="i-stop" viewBox="0 0 24 24"><rect x="6.75" y="6.75" width="10.5" height="10.5"/></symbol>
+  <symbol id="i-sound" viewBox="0 0 24 24"><path d="M4.5 9.75h3l4.5-4.5v13.5l-4.5-4.5h-3z"/><path d="M15.4 9.4a3.7 3.7 0 0 1 0 5.2M17.9 6.9a7.2 7.2 0 0 1 0 10.2"/></symbol>
+  <symbol id="i-cue" viewBox="0 0 24 24"><path d="M9 3.75v6.75a3 3 0 0 0 6 0V3.75"/><path d="M12 13.5v6.75"/></symbol>
+  <symbol id="i-export" viewBox="0 0 24 24"><path d="M12 3.75v10.5M7.5 8.25L12 3.75l4.5 4.5"/><path d="M4.5 13.5v6.75h15V13.5"/></symbol>
+  <symbol id="i-source" viewBox="0 0 24 24"><path d="M9.75 5.25h9v9"/><path d="M18.75 5.25L5.25 18.75"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+  <symbol id="i-sensor" viewBox="0 0 24 24"><path d="M3.75 12h3.5l2-4.5 3.5 9 2-4.5h5.5"/></symbol>
+</svg>

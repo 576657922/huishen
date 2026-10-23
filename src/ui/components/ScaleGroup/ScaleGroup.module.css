@@ -1,0 +1,79 @@
+/* DESIGN.md §8.16 · components.css .scale：6 列 × 57，间隔 1 px，1 px 线色边由相邻格共用 */
+/* 390 宽时每格 57；栏宽不够时（360、320 的手机，200% 文字）格子一起变窄，最窄 44，不撑出横向滚动 */
+.scale {
+  display: grid;
+  gap: 1px;
+  width: 100%;
+  max-width: max-content;
+  padding: 1px;
+}
+.two {
+  grid-template-columns: repeat(6, minmax(44px, 57px));
+}
+.one {
+  grid-template-columns: repeat(5, minmax(44px, 57px));
+}
+.cell {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 48px;
+  box-shadow: 0 0 0 1px var(--line);
+  font-family: var(--font-num);
+  font-variant-numeric: tabular-nums lining-nums;
+  letter-spacing: var(--tr-num);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--ink);
+  transition: background-color var(--dur-state) var(--ease-standard);
+}
+/* 0–10：外形四个角圆 4 */
+.two .cell:nth-child(1) {
+  border-top-left-radius: var(--r-2);
+}
+.two .cell:nth-child(6) {
+  border-top-right-radius: var(--r-2);
+  border-bottom-right-radius: var(--r-2);
+}
+.two .cell:nth-child(7) {
+  border-bottom-left-radius: var(--r-2);
+}
+.two .cell:nth-child(11) {
+  border-bottom-right-radius: var(--r-2);
+}
+/* 1–5：一行，两端圆角 */
+.one .cell:first-child {
+  border-radius: var(--r-2) 0 0 var(--r-2);
+}
+.one .cell:last-child {
+  border-radius: 0 var(--r-2) var(--r-2) 0;
+}
+.cell[aria-checked="true"] {
+  background: var(--ink);
+  color: var(--on-ink);
+  font-weight: var(--w-semibold);
+}
+.cell:active:not([aria-checked="true"]) {
+  background: var(--wash-2);
+}
+.cell:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  z-index: 1;
+}
+.anchors {
+  margin-top: var(--sp-2);
+  color: var(--ink-3);
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+  letter-spacing: var(--tr-caption);
+}
+/* 强制颜色（高对比度）：底色和阴影都会被清掉，靠线框和系统色把边界、状态画出来（DESIGN.md §3.7） */
+@media (forced-colors: active) {
+  .cell {
+    outline: 1px solid CanvasText;
+  }
+  .cell[aria-checked="true"] {
+    outline: 2px solid Highlight;
+  }
+}

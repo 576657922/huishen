@@ -1,0 +1,21 @@
+/* 点选题（DESIGN.md §8.16）：问题 display 17 / 24（.t-name），上 32、下 8；「跳过」是安静按钮，44 高 */
+.question {
+  margin-top: var(--sp-8);
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  margin-bottom: var(--sp-2);
+}
+
+.title {
+  composes: t-name from global;
+}
+
+/* 安静按钮自带 4 的左右内边距：向右让出 4，文字与右边距对齐 */
+.skip {
+  margin-right: calc(-1 * var(--sp-1));
+}

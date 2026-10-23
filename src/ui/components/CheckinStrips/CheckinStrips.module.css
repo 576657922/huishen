@@ -1,0 +1,41 @@
+/* DESIGN.md §8.9 CheckinStrips · components.css .checkins */
+.frame {
+  min-width: 0;
+}
+.strips {
+  display: block;
+  max-width: 100%;
+  overflow: visible;
+  fill: none;
+}
+.grid {
+  stroke: var(--grid);
+  stroke-width: 1;
+}
+.major {
+  stroke: var(--rule);
+}
+.base {
+  stroke: var(--line);
+  stroke-width: 1;
+}
+.median {
+  stroke: var(--ink);
+  stroke-width: 1.5;
+}
+.dot {
+  fill: var(--ink-2);
+  stroke: var(--paper);
+  stroke-width: 1;
+}
+.label {
+  fill: var(--ink-2);
+  font-family: var(--font-ui);
+  font-size: var(--fs-axis);
+}
+.axis {
+  fill: var(--ink-3);
+  font-family: var(--font-num);
+  font-size: var(--fs-axis);
+  font-variant-numeric: tabular-nums;
+}

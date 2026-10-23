@@ -1,0 +1,166 @@
+/* =====================================================================
+   回神 · 方向 A「书页」 design tokens
+   ---------------------------------------------------------------------
+   墨是正文，朱是批注。
+   Ink sets everything that is printed: text, rules, figures.
+   Vermilion (朱) only marks what is yours or what is now: the now-dot on
+   the breath curve, each 回神 tick, today's cell, and the seal in the logo.
+   It never fills a button, a link or a background.
+   ===================================================================== */
+
+/* ---------- Fonts: SIL OFL, self-hosted subsets (fonts/, built by src/build.py) ---------- */
+@font-face {               /* 思源宋体 Noto Serif SC VF: display, titles, reading text */
+  font-family: "HS Song";
+  src: url("fonts/hs-song.woff") format("woff");
+  font-weight: 200 900;
+  font-display: swap;
+}
+@font-face {               /* Source Serif 4 VF: Latin and figures, drawn as the companion of 思源宋体 */
+  font-family: "HS Serif";
+  src: url("fonts/hs-serif.woff") format("woff");
+  font-weight: 200 900;
+  font-display: swap;
+  /* Latin, digits and a few signs only. CJK punctuation, the em dash and the
+     middle dot fall through to the CJK face so Chinese stays full-width. */
+  unicode-range: U+0020-007E, U+00A0, U+00B0, U+00B1, U+00D7, U+2009, U+2013, U+2032, U+2033, U+2212, U+2192, U+2191, U+2193;
+}
+@font-face {               /* 霞鹜文楷: only for words the user wrote (session notes) */
+  font-family: "HS Kai";
+  src: url("fonts/hs-kai.woff") format("woff");
+  font-weight: 400;
+  font-display: swap;
+}
+
+:root {
+  color-scheme: light;
+
+  /* ---------- Colour · 纸 light ---------------------------------------- */
+  --paper:        #F5F2EB;   /* ground: uncoated book paper                    */
+  --paper-sunk:   #ECE8DF;   /* tracks, wells, segmented-control ground        */
+  --paper-raised: #FCFBF8;   /* sheets, selected segment, slider thumb         */
+  --ink:          #1D1B18;   /* text, head rules, primary fills    15.4 : 1    */
+  --ink-2:        #57524A;   /* secondary text                      6.9 : 1    */
+  --ink-3:        #6E675D;   /* meta, axis text                     5.0 : 1  (4.6 on sunk) */
+  --rule:         #DAD4C9;   /* hairlines between rows (decorative)            */
+  --line:         #8F877B;   /* control outlines, off-state tracks  3.2 : 1    */
+  --on-ink:       #F5F2EB;   /* text on ink fills                              */
+  --zhu:          #BA3A1F;   /* 朱 vermilion, marks only            5.0 : 1    */
+  --zhu-wash:     rgb(186 58 31 / .10);
+  --wash:         rgb(29 27 24 / .06);   /* area under the breath curve        */
+  --scrim:        rgb(29 27 24 / .32);
+  --heat-1:       #D3CBBE;   /* sequential ink ramp, minutes in a day: 1–9     */
+  --heat-2:       #968D80;   /*                                       10–19    */
+  --heat-3:       #3B3631;   /*                                       20 +     */
+  --shadow-sheet: 0 -1px 0 var(--rule), 0 -12px 32px rgb(29 27 24 / .07);
+  --shadow-knob:  0 0 0 .5px rgb(29 27 24 / .14), 0 1px 3px rgb(29 27 24 / .16);
+
+  /* ---------- Type ----------------------------------------------------- */
+  --font-song:  "HS Serif", "HS Song", "Songti SC", "STSong", serif;          /* display + reading */
+  --font-sans:  "PingFang SC", "HarmonyOS Sans SC", "MiSans", "Microsoft YaHei UI", "Noto Sans SC", sans-serif; /* UI */
+  --font-figure:"HS Serif", "HS Song", serif;                                  /* numbers in data  */
+  --font-kai:   "HS Kai", "Kaiti SC", "STKaiti", serif;                        /* the user's notes */
+
+  /* One scale for the product. A screen uses six sizes at most.
+     Line heights sit on a 4 px baseline. */
+  --fs-11: 11px;   --lh-11: 16px;    /* tab labels, axis ticks, legends          */
+  --fs-13: 13px;   --lh-13: 20px;    /* meta, captions, footnotes                */
+  --fs-15: 15px;   --lh-15: 24px;    /* UI body, controls, list titles (sans)    */
+  --fs-17: 17px;   --lh-17: 28px;    /* reading text (宋), list titles (宋)       */
+  --fs-20: 20px;   --lh-20: 28px;    /* section heads                            */
+  --fs-24: 24px;   --lh-24: 32px;    /* sub-display                              */
+  --fs-32: 32px;   --lh-32: 40px;    /* page titles, phone                       */
+  --fs-40: 40px;   --lh-40: 48px;    /* lead titles, phone; figures              */
+  --fs-64: 64px;   --lh-64: 64px;    /* key figures, desktop                     */
+  --fs-96: 96px;   --lh-96: 104px;   /* lead title, desktop; 回神 count           */
+  --fs-176: 176px; --lh-176: 176px;  /* the phase word 吸 / 呼                    */
+
+  --track-display: .04em;   /* CJK at 32 px and up                      */
+  --track-head:    .06em;   /* short CJK heads at 13–20 px              */
+  --track-ui:      .02em;   /* CJK UI text                              */
+  --track-caps:    .12em;   /* the wordmark only                        */
+
+  --wt-song-display: 600;   /* 思源宋体 SemiBold for titles                */
+  --wt-song-light:   300;   /* 思源宋体 Light for the big phase word        */
+  --wt-song-text:    400;
+
+  /* ---------- Space: 4 px unit, 8 px rhythm --------------------------- */
+  --sp-1: 4px;  --sp-2: 8px;  --sp-3: 12px; --sp-4: 16px; --sp-5: 20px;
+  --sp-6: 24px; --sp-8: 32px; --sp-10: 40px; --sp-12: 48px; --sp-16: 64px;
+  --sp-20: 80px; --sp-24: 96px;
+
+  --margin-phone: 20px;     /* page margin, phone                        */
+  --hang:         28px;     /* hanging column for section numbers        */
+  --glyph-w:      48px;     /* practice specimen glyph                   */
+  --hit:          44px;     /* minimum touch target                      */
+  --hair:         1px;      /* hairline; 0.5 px on 2× screens            */
+
+  /* ---------- Radii: square, like a printed page --------------------- */
+  --r-0:    0;
+  --r-1:    2px;     /* buttons, cells, marks          */
+  --r-2:    6px;     /* segmented control              */
+  --r-3:    14px;    /* sheet top corners              */
+  --r-full: 999px;   /* toggle and slider thumb only   */
+
+  /* ---------- Layout -------------------------------------------------- */
+  --status-h:  47px;        /* iPhone 390 × 844                          */
+  --nav-h:     44px;
+  --tabbar-h:  49px;
+  --home-h:    34px;        /* home-indicator safe area                  */
+  --rail-w:    232px;       /* desktop navigation rail                   */
+  --measure:   34em;        /* longest reading line                      */
+
+  /* ---------- Motion -------------------------------------------------- */
+  --ease-out:    cubic-bezier(.2, 0, 0, 1);      /* entering, settling      */
+  --ease-in:     cubic-bezier(.4, 0, 1, 1);      /* leaving                 */
+  --ease-breath: cubic-bezier(.37, 0, .63, 1);   /* = (1 − cos πt) / 2, the engine's breath easing */
+  --dur-1: 100ms;   /* press, tick drop                 */
+  --dur-2: 180ms;   /* toggle, segment, focus ring      */
+  --dur-3: 280ms;   /* page elements                    */
+  --dur-4: 400ms;   /* sheets                           */
+  --dur-phase: 700ms; /* cross-fade of the phase word 吸 → 呼 */
+
+  /* ---------- Focus --------------------------------------------------- */
+  --focus-ring: 0 0 0 2px var(--paper), 0 0 0 4px var(--ink);
+}
+
+@media (min-resolution: 2dppx) { :root { --hair: .5px; } }
+
+/* ---------- Colour · 墨 dark: ink-black ground, paper-white text ------ */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --paper:        #141311;
+  --paper-sunk:   #0D0C0B;
+  --paper-raised: #1D1B18;
+  --ink:          #ECE6DA;   /* 14.9 : 1 */
+  --ink-2:        #B4AC9F;   /*  8.3 : 1 */
+  --ink-3:        #8E877B;   /*  5.2 : 1 */
+  --rule:         #2E2B27;
+  --line:         #726B61;   /*  3.5 : 1 */
+  --on-ink:       #141311;
+  --zhu:          #E5653F;   /*  5.5 : 1 */
+  --zhu-wash:     rgb(229 101 63 / .14);
+  --wash:         rgb(236 230 218 / .07);
+  --scrim:        rgb(0 0 0 / .5);
+  --heat-1:       #3A3631;
+  --heat-2:       #7A7268;
+  --heat-3:       #CFC7BA;
+  --shadow-sheet: 0 -1px 0 var(--rule);
+  --shadow-knob:  0 0 0 .5px rgb(0 0 0 / .4), 0 1px 3px rgb(0 0 0 / .5);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --paper: #141311; --paper-sunk: #0D0C0B; --paper-raised: #1D1B18;
+    --ink: #ECE6DA; --ink-2: #B4AC9F; --ink-3: #8E877B;
+    --rule: #2E2B27; --line: #726B61; --on-ink: #141311;
+    --zhu: #E5653F; --zhu-wash: rgb(229 101 63 / .14); --wash: rgb(236 230 218 / .07);
+    --scrim: rgb(0 0 0 / .5);
+    --heat-1: #3A3631; --heat-2: #7A7268; --heat-3: #CFC7BA;
+    --shadow-sheet: 0 -1px 0 var(--rule);
+    --shadow-knob: 0 0 0 .5px rgb(0 0 0 / .4), 0 1px 3px rgb(0 0 0 / .5);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --dur-1: 0ms; --dur-2: 0ms; --dur-3: 0ms; --dur-4: 0ms; --dur-phase: 0ms; }
+}

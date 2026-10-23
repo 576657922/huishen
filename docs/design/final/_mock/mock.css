@@ -1,0 +1,65 @@
+/* Mock-up only — not shipped.
+   1. Loads the source TTFs from the local font cache under the family names tokens.css uses.
+      The app loads the /fonts/*.woff2 subsets instead; these rules come later, so they win.
+   2. Draws device chrome (status bar, home indicator) for 390 × 844 screenshots and fixes the
+      safe-area insets of an iPhone 390 × 844 (47 / 34 px).
+   3. Spec annotations for the system sheet. */
+@font-face {
+  font-family: "HS Display";
+  src: url("file:///private/tmp/claude-501/-Users-user-Workspace-projects---/f22b5159-9a91-45f0-86f3-be240492ba74/scratchpad/fonts/NotoSerifSC-VF.ttf") format("truetype");
+  font-weight: 300 600;
+  font-style: normal;
+}
+@font-face {
+  font-family: "HS Num";
+  src: url("file:///private/tmp/claude-501/-Users-user-Workspace-projects---/f22b5159-9a91-45f0-86f3-be240492ba74/scratchpad/fonts/Inter-VF.ttf") format("truetype");
+  font-weight: 300 600;
+  font-style: normal;
+  unicode-range: U+0020-007E, U+00A0, U+00B0, U+00B1, U+00D7, U+2009,
+    U+2013, U+2032, U+2033, U+2190-2193, U+2212, U+2248, U+2264, U+2265;
+}
+
+/* ---------- phone ---------- */
+.device {
+  --safe-top: 47px;
+  --safe-bottom: 34px;
+  position: relative;
+  width: 390px;
+  min-height: 844px;
+  margin: 0;
+  overflow: hidden;
+  background: var(--paper);
+  color: var(--ink);
+}
+.statusbar { position: absolute; top: 0; left: 0; z-index: 60; color: var(--ink); pointer-events: none; }
+.statusbar .sb-time { font-family: -apple-system, "SF Pro Text", "PingFang SC", sans-serif; font-size: 17px; font-weight: 600; fill: currentColor; letter-spacing: -0.3px; }
+.homebar {
+  position: fixed; left: 128px; bottom: 8px; z-index: 60;
+  width: 134px; height: 5px; border-radius: 3px;
+  background: var(--ink);
+  pointer-events: none;
+}
+/* iPhone 390 × 844 on its side: no status bar, the sensor housing on the left */
+.device--landscape {
+  --safe-top: 0px;
+  --safe-bottom: 21px;
+  --safe-left: 47px;
+  --safe-right: 47px;
+  width: 844px;
+  min-height: 390px;
+}
+.device--landscape .homebar { left: 355px; }
+
+/* keyboard-state board (states.html) */
+.board { display: grid; grid-template-columns: 1fr 1fr; }
+.board > section { padding: 32px 40px 40px; }
+.board h2 { margin-bottom: 4px; }
+.board .spec { margin-bottom: 20px; }
+.board .cell { margin-top: 24px; }
+.board .cell > .spec { margin: 0 0 8px; }
+
+/* ---------- desktop ---------- */
+.desktop { width: 1440px; min-height: 900px; background: var(--paper); color: var(--ink); }
+
+/* ---------- annotations (system sheet only) ---------- */
+.spec { font-size: 11px; line-height: 16px; letter-spacing: 0.02em; color: var(--ink-3); }

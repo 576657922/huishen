@@ -1,0 +1,57 @@
+{{ head('今日 · 回神', { bars: 'tabs' }) }}
+<style>
+  .rec { padding-top: var(--sp-4); }
+  .rec__title { display: flex; align-items: center; justify-content: space-between; margin-top: var(--sp-1); margin-right: calc(-1 * var(--sp-1)); }
+  .rec__desc { margin-top: var(--sp-2); color: var(--ink-2); }
+  .rec__fig { margin: var(--sp-4) 0 var(--sp-5); }
+  .quick { margin-top: var(--sp-8); }
+  .weekrow { display: flex; align-items: flex-end; justify-content: space-between; margin-top: var(--sp-6); padding-top: var(--sp-3); border-top: var(--hair) solid var(--rule); }
+  .weekrow__label { font-family: var(--font-ui); font-weight: var(--w-regular); letter-spacing: var(--tr-caption); color: var(--ink-3); font-size: var(--fs-caption); line-height: var(--lh-caption); }
+  .weekrow__value { margin-top: var(--sp-1); font-size: var(--fs-name); line-height: var(--lh-name); }
+</style>
+<body>
+{{ sprite() }}
+{{ device() }}
+{{ statusbar('21:12') }}
+<main class="page">
+  <h1 class="vh" tabindex="-1">{{ K.COPY.TODAY.title }}</h1>
+  <header class="masthead">
+    {{ lockup('/') }}
+    <a class="icon-btn" href="/settings" aria-label="设置">{{ icon('settings') }}</a>
+  </header>
+  <p class="dateline"><time datetime="2026-10-22">10月22日 星期四</time><span>霜降前一日</span></p>
+
+  <section class="rec" aria-labelledby="rec-title">
+    <p class="kicker"><span><b>八周正念</b> · 第 3 周第 2 天</span>{{ grade(K.practice('body-scan').grade, { prefix: true }) }}</p>
+    <div class="rec__title">
+      <h2 id="rec-title" class="t-display">{{ K.practice('body-scan').name }}</h2>
+      <button class="btn btn--quiet" type="button">{{ icon('refresh') }}{{ K.COPY.TODAY.change }}</button>
+    </div>
+    <p class="rec__desc">{{ K.sentences(NEW['TODAY.todayLine.body-scan'], 1) }}<br>{{ NEW['TODAY.todayLine.body-scan'].slice(K.sentences(NEW['TODAY.todayLine.body-scan'], 1).length) }}</p>
+    <figure class="rec__fig">{{ stepChart({ width: 350, step: 5 }) }}</figure>
+    <a class="startbar" href="/play/body-scan"><span class="startbar__label">{{ icon('play') }}{{ K.COPY.TODAY.start }}</span><span class="startbar__meta"><span class="pnum">10</span> 分钟</span></a>
+  </section>
+
+  <section class="quick" aria-labelledby="quick-title">
+    <div class="section-head">
+      <h2 id="quick-title">{{ K.COPY.TODAY.quick.title }}</h2>
+    </div>
+    <div>
+      {{ K.TODAY_CONTENT.QUICK_PICKS.map(q => `<a class="prow" href="/play/${q.practiceId}" aria-describedby="hint-${q.practiceId}">${glyph(q.practiceId)}<span><span class="prow__name">${q.label}</span><span class="prow__desc">${NEW['TODAY.quick.structure.' + q.practiceId]}</span><span class="vh" id="hint-${q.practiceId}">${q.hint}</span></span><span class="prow__end"><span class="prow__dur"><span class="pnum">${q.minutes}</span> 分钟</span></span></a>`).join('') }}
+      <a class="prow prow--nav" href="#hard" aria-haspopup="dialog" data-unwell>{{ glyph('grounding') }}<span><span class="prow__name">{{ K.COPY.TODAY.hard.title }}</span><span class="prow__desc">{{ NEW['TODAY.hard.rowHint'] }}</span></span><span class="prow__end">{{ icon('chevron-right') }}</span></a>
+    </div>
+  </section>
+
+  <section class="weekrow" aria-labelledby="week-title">
+    <div>
+      <h2 id="week-title" class="weekrow__label">{{ K.COPY.TODAY.week.title }}</h2>
+      <p class="weekrow__value">{{ K.COPY.TODAY.week.value(D.week().practisedDays, D.week().minutes).replace(/(\d+)/g, '<span class="pnum">$1</span>') }}</p>
+    </div>
+    {{ weekDots(D.week().days) }}
+  </section>
+</main>
+{{ tabbar('today') }}
+{{ homebar() }}
+</div>
+</body>
+</html>

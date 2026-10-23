@@ -1,0 +1,61 @@
+/* 播放器外框（DESIGN.md §8.15.1、§8.15.18，components.css .player） */
+.player {
+  position: relative;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  padding: var(--safe-top) var(--margin) calc(var(--safe-bottom) + var(--sp-2));
+  background: var(--paper);
+  color: var(--ink);
+  /* 进入播放器：底色从应用的主题过渡到深色（§7.2）；减少动态效果时时长为 0 */
+  animation: scene-in var(--dur-scene) var(--ease-standard) both;
+}
+@keyframes scene-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* 播放器开着时页面不回弹，免得露出后面浅色的底 */
+:global(html[data-bars="player"]) {
+  overscroll-behavior: none;
+}
+
+.player > [data-region="stage"] {
+  flex: 1;
+}
+
+/* 平板和桌面：HUD、舞台、读数和控件在居中的 640 一栏里——全应用唯一居中的版式（§5.5） */
+@media (min-width: 768px) {
+  .player {
+    padding-inline: max(var(--margin-tablet), calc((100% - var(--reading-max)) / 2));
+  }
+}
+
+/* 横着拿的手机：舞台在左 55 %，HUD、读数和控件在右 45 %（§13.5.12） */
+@media (orientation: landscape) and (max-height: 499px) {
+  .player {
+    display: grid;
+    grid-template-columns: 55fr 45fr;
+    grid-template-rows: auto 1fr auto auto;
+    column-gap: var(--sp-6);
+    padding: var(--sp-2) max(var(--margin), var(--safe-right)) calc(var(--safe-bottom) + var(--sp-2))
+      max(var(--margin), var(--safe-left));
+  }
+  .player > [data-region="stage"] {
+    grid-column: 1;
+    grid-row: 1 / -1;
+  }
+  .player > [data-region="hud"] {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .player > [data-region="readouts"] {
+    grid-column: 2;
+    grid-row: 3;
+  }
+  .player > [data-region="controls"] {
+    grid-column: 2;
+    grid-row: 4;
+  }
+}

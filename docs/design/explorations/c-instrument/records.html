@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>记录 · 回神</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="components.css">
+<style>
+  .main { padding: 32px 48px 0; overflow: hidden; }
+  .head { display: flex; justify-content: space-between; align-items: center; }
+  .head .tools { display: flex; gap: 12px; align-items: center; }
+  .head .seg { width: 264px; height: 36px; }
+  .head .seg > span { font-size: var(--fs-small); }
+  .sub { margin-top: 4px; }
+  .kpis { display: grid; grid-template-columns: 200px 200px 200px 1fr; margin-top: 22px; border-top: 1px solid var(--ink); }
+  .kpi { padding: 14px 24px 0 0; }
+  .kpi + .kpi { padding-left: 24px; border-left: 1px solid var(--rule); }
+  .kpi .v { display: flex; align-items: baseline; gap: 6px; margin-top: 4px; }
+  .kpi .v .num { font-size: var(--fs-figure); line-height: 44px; font-weight: 300; letter-spacing: -0.01em; }
+  .kpi .v span:last-child { color: var(--ink-2); }
+  .kpi .s { margin-top: 2px; }
+  .kpi.note { padding-left: 32px; padding-right: 0; }
+  .kpi.note p:first-child { color: var(--ink); max-width: 30em; }
+  .kpi.note cite { display: block; margin-top: 6px; font-style: normal; }
+  .grid2 { display: grid; grid-template-columns: 384px 1fr; column-gap: 64px; margin-top: 24px; }
+  .sec-h { display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 7px; border-bottom: 1px solid var(--rule-strong); }
+  .heat { display: grid; grid-template-columns: 40px repeat(7, 44px); column-gap: 4px; row-gap: 4px; margin-top: 12px; }
+  .heat .hd { font-size: var(--fs-micro); line-height: 16px; color: var(--ink-3); text-align: center; }
+  .heat .rl { font: 400 11px/26px var(--font-mono); color: var(--ink-3); }
+  .heat .c { position: relative; height: 26px; border-radius: var(--r-1); }
+  .heat .c i { position: absolute; left: 5px; top: 2px; font: 400 11px/14px var(--font-mono); font-style: normal; color: var(--ink-3); }
+  .heat .l0 { box-shadow: inset 0 0 0 1px var(--rule); }
+  .heat .l1 { background: var(--heat-1); }
+  .heat .l2 { background: var(--heat-2); }
+  .heat .l2 i { color: var(--ink); }
+  .heat .l3 { background: var(--heat-3); }
+  .heat .l4 { background: var(--heat-4); }
+  .heat .l3 i, .heat .l4 i { color: var(--on-ink); }
+  .heat .fut { box-shadow: inset 0 0 0 1px var(--rule); opacity: .55; }
+  .heat .fut i { color: var(--ink-4); }
+  .heat .today { outline: 2px solid var(--signal); outline-offset: 1px; }
+  .legend { display: flex; align-items: center; gap: 6px; margin-top: 14px; color: var(--ink-3); }
+  .legend .sw { width: 14px; height: 10px; border-radius: 1px; }
+  .legend .sw.l0 { box-shadow: inset 0 0 0 1px var(--rule-strong); }
+  .legend .sw.l1 { background: var(--heat-1); } .legend .sw.l2 { background: var(--heat-2); }
+  .legend .sw.l3 { background: var(--heat-3); } .legend .sw.l4 { background: var(--heat-4); }
+  .legend .td { width: 12px; height: 12px; outline: 2px solid var(--signal); outline-offset: -2px; margin-left: 14px; }
+  .legnote { margin-top: 6px; color: var(--ink-3); }
+  .trends { margin-top: 0; }
+  .trow { display: grid; grid-template-columns: 1fr 440px; column-gap: 24px; align-items: start; padding: 10px 0 6px; border-bottom: 1px solid var(--rule); }
+  .trow:last-child { border-bottom: 0; }
+  .tr-t { color: var(--ink-2); }
+  .tr-v { display: flex; align-items: baseline; gap: 8px; margin-top: 2px; }
+  .tr-v .num { font-size: var(--fs-readout); line-height: 36px; font-weight: 300; letter-spacing: 0; }
+  .tr-v span:last-child { color: var(--ink-3); }
+  .sm { display: block; margin-top: 2px; overflow: visible; }
+  .sm .gl { stroke: var(--rule); stroke-width: 1; }
+  .sm .yl, .sm .xl { font-family: var(--font-mono); font-size: 11px; fill: var(--ink-3); }
+  .sm .ln { fill: none; stroke: var(--ink); stroke-width: 2; stroke-linejoin: round; }
+  .sm .dot { fill: var(--ink); stroke: var(--bg); stroke-width: 2; }
+  .sm .vl { font-family: var(--font-mono); font-size: 11px; fill: var(--ink); }
+  .sm .vl.dim { fill: var(--ink-3); }
+  .sm .db { stroke: var(--ink-4); stroke-width: 2; }
+  .sm .pre { fill: var(--bg); stroke: var(--ink-2); stroke-width: 1.5; }
+  .sm .post { fill: var(--ink); stroke: var(--bg); stroke-width: 2; }
+  .tr-n { margin-top: 6px; color: var(--ink-3); max-width: 15em; }
+  .key2 { display: inline-flex; gap: 12px; }
+  .key2 i { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 4px; vertical-align: 1px; }
+  .key2 .k-pre { box-shadow: inset 0 0 0 1.5px var(--ink-2); }
+  .key2 .k-post { background: var(--ink); }
+  .grid3 { display: grid; grid-template-columns: 384px 1fr; column-gap: 64px; margin-top: 24px; }
+  .bd { margin-top: 6px; }
+  .bd li { display: grid; grid-template-columns: 104px 1fr 56px; align-items: center; column-gap: 12px; height: 22px; }
+  .bd .n { font-size: var(--fs-small); color: var(--ink-2); }
+  .bd .bar { height: 8px; }
+  .bd .bar i { display: block; height: 8px; background: var(--ink-2); border-radius: 0 2px 2px 0; }
+  .bd li:first-child .bar i { background: var(--ink); }
+  .bd .m { text-align: right; font-size: var(--fs-small); color: var(--ink-2); }
+  table { width: 100%; border-collapse: collapse; margin-top: 2px; font-size: var(--fs-small); }
+  th { text-align: left; font-weight: 400; color: var(--ink-3); font-size: var(--fs-micro); height: 28px; letter-spacing: .04em; }
+  td { height: 27px; border-bottom: 1px solid var(--rule); white-space: nowrap; }
+  tr:last-child td { border-bottom: 0; }
+  td.r, th.r { text-align: right; padding-right: 32px; }
+  .ar { font-family: var(--font-mono); color: var(--ink-3); }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><symbol id="i-today" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.25"/><path d="M12 12l3.75-3.75"/><path d="M12 3.75v2.25"/><rect x="10.75" y="10.75" width="2.5" height="2.5" fill="currentColor" stroke="none"/></symbol><symbol id="i-practice" viewBox="0 0 24 24"><path d="M3 12c2.5-8 6.5-8 9 0s6.5 8 9 0"/></symbol><symbol id="i-records" viewBox="0 0 24 24"><path d="M3.75 20.25h16.5"/><path d="M6.75 16.5V12M10.25 16.5V5.25M13.75 16.5v-2.25M17.25 16.5V9"/></symbol><symbol id="i-evidence" viewBox="0 0 24 24"><path d="M7.5 3.75h-3v16.5h3M16.5 3.75h3v16.5h-3"/><path d="M9.75 9.75h4.5M9.75 14.25h4.5"/></symbol><symbol id="i-settings" viewBox="0 0 24 24"><path d="M3.75 8.25h16.5M3.75 15.75h16.5"/><rect x="13.25" y="6" width="3" height="4.5" fill="currentColor"/><rect x="7.75" y="13.5" width="3" height="4.5" fill="currentColor"/></symbol><symbol id="i-back" viewBox="0 0 24 24"><path d="M14.25 5.25L7.5 12l6.75 6.75"/></symbol><symbol id="i-chevron" viewBox="0 0 24 24"><path d="M9.75 5.25L16.5 12l-6.75 6.75"/></symbol><symbol id="i-play" viewBox="0 0 24 24"><path d="M7.5 5.25v13.5L18.75 12z"/></symbol><symbol id="i-pause" viewBox="0 0 24 24"><path d="M9 5.25v13.5M15 5.25v13.5"/></symbol><symbol id="i-stop" viewBox="0 0 24 24"><rect x="6.75" y="6.75" width="10.5" height="10.5"/></symbol><symbol id="i-sound" viewBox="0 0 24 24"><path d="M4.5 9.75h3l4.5-4.5v13.5l-4.5-4.5h-3z"/><path d="M15.4 9.4a3.7 3.7 0 0 1 0 5.2M17.9 6.9a7.2 7.2 0 0 1 0 10.2"/></symbol><symbol id="i-cue" viewBox="0 0 24 24"><path d="M9 3.75v6.75a3 3 0 0 0 6 0V3.75"/><path d="M12 13.5v6.75"/></symbol><symbol id="i-export" viewBox="0 0 24 24"><path d="M12 3.75v10.5M7.5 8.25L12 3.75l4.5 4.5"/><path d="M4.5 13.5v6.75h15V13.5"/></symbol><symbol id="i-source" viewBox="0 0 24 24"><path d="M9.75 5.25h9v9"/><path d="M18.75 5.25L5.25 18.75"/></symbol><symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol><symbol id="i-sensor" viewBox="0 0 24 24"><path d="M3.75 12h3.5l2-4.5 3.5 9 2-4.5h5.5"/></symbol></defs></svg>
+<div class="desk">
+  <aside class="rail"><div class="brand"><svg class="logo" viewBox="60 30 1940 960" width="52.54" height="26" role="img" aria-label="回神"><path fill="currentColor" fill-rule="evenodd" d="M66 84h868v868h-868zM148 166v704h704v-704z"/><path fill="var(--signal)" d="M375 393h250v250h-250z"/><path fill="currentColor" transform="translate(1056 880) scale(1 -1)" d="M419.5687255859375 699.20263671875H933.101318359375V158H831.4066162109375V603.538330078125H517.2431640625V148.979736328125H419.5687255859375ZM484.1519775390625 494.903076171875H883.55859375V400.9088134765625H484.1519775390625ZM484.1519775390625 290.2938232421875H883.55859375V194.95947265625H484.1519775390625ZM621.4775390625 847.421142578125H726.1925048828125V-85.7510986328125H621.4775390625ZM45.2489013671875 678.12158203125H335.1475830078125V581.1171875H45.2489013671875ZM171.777099609375 351.396484375 269.7916259765625 476.5224609375V-86.0810546875H171.777099609375ZM265.44140625 444.7105712890625Q276.44140625 436.380615234375 297.101318359375 416.22576904296875Q317.76123046875 396.0709228515625 340.91607666015625 372.921142578125Q364.0709228515625 349.7713623046875 383.560791015625 329.61651611328125Q403.0506591796875 309.461669921875 411.380615234375 300.4718017578125L348.837890625 211.1475830078125Q337.1678466796875 229.837890625 318.8480224609375 254.34295654296875Q300.5281982421875 278.8480224609375 280.21343994140625 304.677978515625Q259.898681640625 330.5079345703125 240.91387939453125 353.34295654296875Q221.9290771484375 376.177978515625 208.5889892578125 391.5281982421875ZM305.0462646484375 678.12158203125H325.4471435546875L343.1678466796875 682.1317138671875L395.68017578125 641.31982421875Q363.0101318359375 549.939208984375 309.17510986328125 465.56365966796875Q255.340087890625 381.1881103515625 190.99493408203125 312.49273681640625Q126.6497802734375 243.79736328125 60.619384765625 198.1273193359375Q57.9493408203125 213.51806640625 50.93414306640625 235.10418701171875Q43.9189453125 256.6903076171875 35.73370361328125 276.94140625Q27.5484619140625 297.1925048828125 20.8682861328125 307.2330322265625Q80.1982421875 343.20263671875 136.337890625 399.17730712890625Q192.4775390625 455.1519775390625 236.777099609375 522.2916259765625Q281.07666015625 589.4312744140625 305.0462646484375 658.40087890625ZM140.4775390625 801.9493408203125 224.12158203125 847.4312744140625Q248.4312744140625 818.4312744140625 273.07598876953125 782.7662963867188Q297.720703125 747.101318359375 311.380615234375 721.101318359375L223.7264404296875 667.59912109375Q211.4066162109375 694.9290771484375 187.4268798828125 733.1041870117188Q163.4471435546875 771.279296875 140.4775390625 801.9493408203125Z"/></svg></div><nav aria-label="主导航"><a><svg class="i" aria-hidden="true"><use href="#i-today"/></svg><span>今日</span></a><a><svg class="i" aria-hidden="true"><use href="#i-practice"/></svg><span>练习</span></a><a aria-current="page"><svg class="i" aria-hidden="true"><use href="#i-records"/></svg><span>记录</span></a><a><svg class="i" aria-hidden="true"><use href="#i-evidence"/></svg><span>依据</span></a></nav><div class="foot"><a><svg class="i" aria-hidden="true"><use href="#i-settings"/></svg><span>设置</span></a><p class="status"><i></i><span>离线可用<br>记录只存在这台设备上</span></p></div></aside>
+  <main class="main">
+    <div class="head">
+      <h1 class="t-large">记录</h1>
+      <div class="tools">
+        <div class="seg"><span aria-pressed="true">近 8 周</span><span>近 6 个月</span><span>全部</span></div>
+        <button class="btn-line"><svg class="i s20" aria-hidden="true"><use href="#i-export"/></svg><span>导出数据</span><span class="ink-3">CSV · JSON</span></button>
+      </div>
+    </div>
+    <p class="sub t-small ink-2">8月31日 – 10月22日<span class="sep">·</span>36 次练习</p>
+
+    <div class="kpis">
+      <div class="kpi"><p class="t-label">近 7 天</p><p class="v"><span class="num">64</span><span>分钟</span></p><p class="s t-small ink-3">练习 5 天，8 次</p></div>
+      <div class="kpi"><p class="t-label">本月</p><p class="v"><span class="num">212</span><span>分钟</span></p><p class="s t-small ink-3">10月1日起，17 天</p></div>
+      <div class="kpi"><p class="t-label">近 8 周</p><p class="v"><span class="num">31</span><span>天</span></p><p class="s t-small ink-3">共 356 分钟</p></div>
+      <div class="kpi note"><p class="t-label">为什么不显示连续天数</p><p class="t-body pretty" style="margin-top:4px">偶尔漏掉一天，几乎不影响习惯养成；<br>断掉的“连续”反而容易让人放弃。</p><cite class="t-small ink-3">Lally 等，2010，European Journal of Social Psychology</cite></div>
+    </div>
+
+    <div class="grid2">
+      <section>
+        <div class="sec-h"><h2 class="t-label">8 周日历</h2><span class="t-micro">每格一天 · 颜色越深练得越久</span></div>
+        <div class="heat" role="img" aria-label="近 8 周每日练习分钟数日历"><span></span><span class="hd">一</span><span class="hd">二</span><span class="hd">三</span><span class="hd">四</span><span class="hd">五</span><span class="hd">六</span><span class="hd">日</span><span class="rl">8/31</span><span class="c l2" title="8月31日 5 分钟"><i></i></span><span class="c l0" title="9月1日 未练习"><i>9/1</i></span><span class="c l3" title="9月2日 10 分钟"><i></i></span><span class="c l0" title="9月3日 未练习"><i></i></span><span class="c l0" title="9月4日 未练习"><i></i></span><span class="c l3" title="9月5日 10 分钟"><i></i></span><span class="c l0" title="9月6日 未练习"><i></i></span><span class="rl">9/7</span><span class="c l0" title="9月7日 未练习"><i></i></span><span class="c l2" title="9月8日 5 分钟"><i></i></span><span class="c l0" title="9月9日 未练习"><i></i></span><span class="c l3" title="9月10日 10 分钟"><i></i></span><span class="c l0" title="9月11日 未练习"><i></i></span><span class="c l0" title="9月12日 未练习"><i></i></span><span class="c l4" title="9月13日 13 分钟"><i></i></span><span class="rl">9/14</span><span class="c l0" title="9月14日 未练习"><i></i></span><span class="c l3" title="9月15日 10 分钟"><i></i></span><span class="c l0" title="9月16日 未练习"><i></i></span><span class="c l3" title="9月17日 10 分钟"><i></i></span><span class="c l0" title="9月18日 未练习"><i></i></span><span class="c l4" title="9月19日 15 分钟"><i></i></span><span class="c l0" title="9月20日 未练习"><i></i></span><span class="rl">9/21</span><span class="c l0" title="9月21日 未练习"><i></i></span><span class="c l3" title="9月22日 10 分钟"><i></i></span><span class="c l0" title="9月23日 未练习"><i></i></span><span class="c l4" title="9月24日 13 分钟"><i></i></span><span class="c l0" title="9月25日 未练习"><i></i></span><span class="c l3" title="9月26日 10 分钟"><i></i></span><span class="c l0" title="9月27日 未练习"><i></i></span><span class="rl">9/28</span><span class="c l3" title="9月28日 10 分钟"><i></i></span><span class="c l0" title="9月29日 未练习"><i></i></span><span class="c l4" title="9月30日 13 分钟"><i></i></span><span class="c l3" title="10月1日 10 分钟"><i>10/1</i></span><span class="c l0" title="10月2日 未练习"><i></i></span><span class="c l4" title="10月3日 15 分钟"><i></i></span><span class="c l0" title="10月4日 未练习"><i></i></span><span class="rl">10/5</span><span class="c l0" title="10月5日 未练习"><i></i></span><span class="c l3" title="10月6日 12 分钟"><i></i></span><span class="c l3" title="10月7日 10 分钟"><i></i></span><span class="c l3" title="10月8日 10 分钟"><i></i></span><span class="c l3" title="10月9日 10 分钟"><i></i></span><span class="c l4" title="10月10日 15 分钟"><i></i></span><span class="c l4" title="10月11日 13 分钟"><i></i></span><span class="rl">10/12</span><span class="c l3" title="10月12日 10 分钟"><i></i></span><span class="c l4" title="10月13日 13 分钟"><i></i></span><span class="c l3" title="10月14日 10 分钟"><i></i></span><span class="c l4" title="10月15日 20 分钟"><i></i></span><span class="c l4" title="10月16日 13 分钟"><i></i></span><span class="c l0" title="10月17日 未练习"><i></i></span><span class="c l4" title="10月18日 20 分钟"><i></i></span><span class="rl">10/19</span><span class="c l3" title="10月19日 10 分钟"><i></i></span><span class="c l0" title="10月20日 未练习"><i></i></span><span class="c l4" title="10月21日 13 分钟"><i></i></span><span class="c l2 today" title="10月22日 8 分钟"><i>22</i></span><span class="c fut"></span><span class="c fut"></span><span class="c fut"></span></div>
+        <div class="legend t-micro"><span>0</span><i class="sw l0"></i><i class="sw l1"></i><i class="sw l2"></i><i class="sw l3"></i><i class="sw l4"></i><span>13 分钟以上</span><i class="td"></i><span>今天</span></div>
+        <p class="legnote t-micro">满格取 13 分钟：<br>每天 13 分钟、持续 8 周的引导冥想已见效果（Basso 等，2019）。</p>
+      </section>
+      <section>
+        <div class="sec-h"><h2 class="t-label">近 6 周趋势</h2><span class="t-micro">按周平均</span></div>
+        <div class="trends">
+          <div class="trow">
+            <div><p class="tr-t t-small">每 10 分钟回神次数</p>
+            <p class="tr-v"><span class="num">4.1</span><span class="t-small">次 · 6 周前 7.2</span></p>
+            <p class="tr-n t-micro pretty">只算专注呼吸。变少可能是走神少了，也可能是没察觉。</p></div>
+            <svg class="sm" viewBox="0 0 440 92" width="440" height="92"><path class="gl" d="M30 70H402"/><text class="yl" x="24" y="74" text-anchor="end">0</text><path class="gl" d="M30 40H402"/><text class="yl" x="24" y="44" text-anchor="end">4</text><path class="gl" d="M30 10H402"/><text class="yl" x="24" y="14" text-anchor="end">8</text><path class="ln" d="M30 16L103.2 22L176.4 24.25L249.6 31L322.8 35.5L396 39.25"/><circle class="dot" cx="30" cy="16" r="3.5"/><circle class="dot" cx="103.2" cy="22" r="3.5"/><circle class="dot" cx="176.4" cy="24.25" r="3.5"/><circle class="dot" cx="249.6" cy="31" r="3.5"/><circle class="dot" cx="322.8" cy="35.5" r="3.5"/><circle class="dot end" cx="396" cy="39.25" r="4"/><text class="vl" x="404" y="43.25">4.1</text><text class="xl" x="30" y="88" text-anchor="middle">9/14</text><text class="xl" x="103.2" y="88" text-anchor="middle">9/21</text><text class="xl" x="176.4" y="88" text-anchor="middle">9/28</text><text class="xl" x="249.6" y="88" text-anchor="middle">10/5</text><text class="xl" x="322.8" y="88" text-anchor="middle">10/12</text><text class="xl" x="396" y="88" text-anchor="middle">10/19</text></svg>
+          </div>
+          <div class="trow">
+            <div><p class="tr-t t-small">数息准确率</p>
+            <p class="tr-v"><span class="num">86%</span><span class="t-small">6 周前 78%</span></p>
+            <p class="tr-n t-micro pretty">数到九、中途没有数乱的轮次占比。</p></div>
+            <svg class="sm" viewBox="0 0 440 92" width="440" height="92"><path class="gl" d="M30 70H402"/><text class="yl" x="24" y="74" text-anchor="end">60</text><path class="gl" d="M30 40H402"/><text class="yl" x="24" y="44" text-anchor="end">80</text><path class="gl" d="M30 10H402"/><text class="yl" x="24" y="14" text-anchor="end">100</text><path class="ln" d="M30 43L103.2 41.5L176.4 38.5L249.6 37L322.8 32.5L396 31"/><circle class="dot" cx="30" cy="43" r="3.5"/><circle class="dot" cx="103.2" cy="41.5" r="3.5"/><circle class="dot" cx="176.4" cy="38.5" r="3.5"/><circle class="dot" cx="249.6" cy="37" r="3.5"/><circle class="dot" cx="322.8" cy="32.5" r="3.5"/><circle class="dot end" cx="396" cy="31" r="4"/><text class="vl" x="404" y="35">86%</text><text class="xl" x="30" y="88" text-anchor="middle">9/14</text><text class="xl" x="103.2" y="88" text-anchor="middle">9/21</text><text class="xl" x="176.4" y="88" text-anchor="middle">9/28</text><text class="xl" x="249.6" y="88" text-anchor="middle">10/5</text><text class="xl" x="322.8" y="88" text-anchor="middle">10/12</text><text class="xl" x="396" y="88" text-anchor="middle">10/19</text></svg>
+          </div>
+          <div class="trow">
+            <div><p class="tr-t t-small">练习前后紧张度 <span class="ink-3">0–10 自评</span></p>
+            <p class="tr-v"><span class="num">−2.1</span><span class="t-small">平均每次</span></p>
+            <p class="tr-n t-micro pretty">共 19 次前后自评。自评受期待影响，仅作参考。</p></div>
+            <svg class="sm" viewBox="0 0 440 92" width="440" height="92"><path class="gl" d="M30 70H390"/><text class="yl" x="24" y="74" text-anchor="end">0</text><path class="gl" d="M30 40H390"/><text class="yl" x="24" y="44" text-anchor="end">5</text><path class="gl" d="M30 10H390"/><text class="yl" x="24" y="14" text-anchor="end">10</text><path class="db" d="M30 34.6V44.2"/><circle class="pre" cx="30" cy="34.6" r="3.5"/><circle class="post" cx="30" cy="44.2" r="3.5"/><path class="db" d="M100.8 35.2V46.6"/><circle class="pre" cx="100.8" cy="35.2" r="3.5"/><circle class="post" cx="100.8" cy="46.6" r="3.5"/><path class="db" d="M171.6 34V46"/><circle class="pre" cx="171.6" cy="34" r="3.5"/><circle class="post" cx="171.6" cy="46" r="3.5"/><path class="db" d="M242.4 36.4V50.2"/><circle class="pre" cx="242.4" cy="36.4" r="3.5"/><circle class="post" cx="242.4" cy="50.2" r="3.5"/><path class="db" d="M313.2 35.8V49"/><circle class="pre" cx="313.2" cy="35.8" r="3.5"/><circle class="post" cx="313.2" cy="49" r="3.5"/><path class="db" d="M384 37.6V52"/><circle class="pre" cx="384" cy="37.6" r="3.5"/><circle class="post" cx="384" cy="52" r="3.5"/><text class="vl dim" x="394" y="39.6">前 5.4</text><text class="vl" x="394" y="60">后 3.0</text><text class="xl" x="30" y="88" text-anchor="middle">9/14</text><text class="xl" x="100.8" y="88" text-anchor="middle">9/21</text><text class="xl" x="171.6" y="88" text-anchor="middle">9/28</text><text class="xl" x="242.4" y="88" text-anchor="middle">10/5</text><text class="xl" x="313.2" y="88" text-anchor="middle">10/12</text><text class="xl" x="384" y="88" text-anchor="middle">10/19</text></svg>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="grid3">
+      <section>
+        <div class="sec-h"><h2 class="t-label">练习构成</h2><span class="t-micro">近 8 周 · 分钟</span></div>
+        <ul class="bd"><li><span class="n">专注呼吸</span><span class="bar"><i style="width:100%"></i></span><span class="m"><span class="num">113</span> 分</span></li><li><span class="n">身体扫描</span><span class="bar"><i style="width:66.37%"></i></span><span class="m"><span class="num">75</span> 分</span></li><li><span class="n">数息</span><span class="bar"><i style="width:53.1%"></i></span><span class="m"><span class="num">60</span> 分</span></li><li><span class="n">共振呼吸</span><span class="bar"><i style="width:35.4%"></i></span><span class="m"><span class="num">40</span> 分</span></li><li><span class="n">周期性叹息</span><span class="bar"><i style="width:22.12%"></i></span><span class="m"><span class="num">25</span> 分</span></li><li><span class="n">三分钟呼吸空间</span><span class="bar"><i style="width:15.93%"></i></span><span class="m"><span class="num">18</span> 分</span></li><li><span class="n">静坐计时</span><span class="bar"><i style="width:11.5%"></i></span><span class="m"><span class="num">13</span> 分</span></li><li><span class="n">慈心</span><span class="bar"><i style="width:10.62%"></i></span><span class="m"><span class="num">12</span> 分</span></li></ul>
+      </section>
+      <section>
+        <div class="sec-h"><h2 class="t-label">最近练习</h2><a class="t-micro" style="color:var(--ink)">全部 36 次</a></div>
+        <table>
+          <thead><tr><th style="width:150px">日期</th><th style="width:96px">开始</th><th>练习</th><th class="r" style="width:120px">时长</th><th style="width:200px">记录</th></tr></thead>
+          <tbody><tr><td><span>10月22日</span> <span class="ink-3">周四</span></td><td class="num">12:40</td><td>周期性叹息</td><td class="r"><span class="num">5</span> 分钟</td><td class="ink-2">紧张度 6 <span class=ar>→</span> 4</td></tr><tr><td><span>10月22日</span> <span class="ink-3">周四</span></td><td class="num">08:05</td><td>三分钟呼吸空间</td><td class="r"><span class="num">3</span> 分钟</td><td class="ink-2">—</td></tr><tr><td><span>10月21日</span> <span class="ink-3">周三</span></td><td class="num">22:10</td><td>三分钟呼吸空间</td><td class="r"><span class="num">3</span> 分钟</td><td class="ink-2">—</td></tr><tr><td><span>10月21日</span> <span class="ink-3">周三</span></td><td class="num">07:50</td><td>专注呼吸</td><td class="r"><span class="num">10</span> 分钟</td><td class="ink-2">回神 4 次</td></tr><tr><td><span>10月19日</span> <span class="ink-3">周一</span></td><td class="num">21:30</td><td>共振呼吸</td><td class="r"><span class="num">10</span> 分钟</td><td class="ink-2">紧张度 5 <span class=ar>→</span> 3</td></tr><tr><td><span>10月18日</span> <span class="ink-3">周日</span></td><td class="num">21:05</td><td>身体扫描</td><td class="r"><span class="num">15</span> 分钟</td><td class="ink-2">紧张度 6 <span class=ar>→</span> 3</td></tr></tbody>
+        </table>
+      </section>
+    </div>
+  </main>
+</div>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>今日 · 回神</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="components.css">
+<style>
+  /* type sizes on this screen: 11 · 13 · 15 · 17 · 20 · 40 */
+  .mast { display: flex; align-items: center; justify-content: space-between; height: 48px; margin-right: -10px; }
+  .mast-brand { color: var(--ink); display: inline-flex; padding: 8px 0; }
+  .dateline {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding: 6px 0; border-top: 1px solid var(--ink); border-bottom: var(--hair) solid var(--rule);
+    font-size: var(--fs-13); line-height: var(--lh-13); color: var(--ink-2);
+  }
+  .dateline .fig { font-size: var(--fs-13); color: var(--ink); }
+
+  .lead { padding-top: 24px; }
+  .kicker { font-size: var(--fs-13); line-height: var(--lh-13); color: var(--ink-3); }
+  .kicker b { color: var(--ink); font-weight: 600; margin-right: .75em; }
+  .lead-title {
+    margin-top: 6px;
+    font-size: var(--fs-40); line-height: var(--lh-40);
+    font-weight: var(--wt-song-display); letter-spacing: var(--track-display);
+  }
+  .lead-deck {
+    margin-top: 8px; max-width: 21em;
+    font-size: var(--fs-17); line-height: var(--lh-17); color: var(--ink-2);
+    text-wrap: pretty;
+  }
+  .lead-map { margin-top: 20px; }
+  .lead-actions { display: flex; align-items: center; gap: var(--sp-6); margin-top: 20px; }
+  .lead-actions .btn { padding: 0 22px 0 26px; }
+
+  .quick { margin-top: 28px; }
+  .quick .sec-head { padding-bottom: 4px; }
+  
+
+  .week {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    padding: 12px 0 0; border-top: var(--hair) solid var(--rule);
+  }
+  .quick .prow { min-height: 60px; padding: 10px 0; }
+  .week-label { display: block; font-size: var(--fs-13); line-height: var(--lh-13); color: var(--ink-3); }
+  .week-sum { margin-top: 2px; font-size: var(--fs-15); line-height: var(--lh-15); }
+  .week-sum .fig { font-size: var(--fs-17); }
+</style>
+</head>
+<body>
+{{ sprite() }}
+<div class="phone">
+  {{ statusbar('21:12') }}
+  <main class="screen">
+    <header class="mast">
+      <a class="mast-brand" href="#" aria-label="回神">{{ lockup(20) }}</a>
+      <a class="navbtn" href="#" aria-label="设置">{{ icon('settings') }}</a>
+    </header>
+    <p class="dateline"><span><span class="fig">10</span>月<span class="fig">22</span>日　星期四</span><span>霜降前一日</span></p>
+
+    <section class="lead" aria-labelledby="lead-title">
+      <p class="kicker"><b>今晚</b>八周正念，第 3 周第 2 天</p>
+      <h1 id="lead-title" class="lead-title song optical">身体扫描</h1>
+      <p class="lead-deck song">从脚到头，一处一处地留意身体此刻的感觉。可以躺着练，睡着了也没关系。</p>
+      <figure class="figure lead-map">{{ body_scan_strip(350, axis=False) }}</figure>
+      <div class="lead-actions">
+        <a class="btn btn-primary" href="#">开始<span class="btn-sep"></span><span class="btn-sub fig">15 分钟</span></a>
+        <a class="btn-quiet" href="#">换一个</a>
+      </div>
+    </section>
+
+    <section class="quick" aria-labelledby="quick-title">
+      <header class="sec-head"><h2 id="quick-title" class="sec-title">只有几分钟</h2></header>
+      <ul>
+        <li class="prow">{{ glyph('breathing-space') }}
+          <div><p class="prow-title">三分钟呼吸空间</p><p class="prow-desc">觉察、集中、扩展，各一分钟</p></div>
+          <p class="prow-end"><span class="fig">3</span> 分钟</p></li>
+        <li class="prow">{{ glyph('sigh') }}
+          <div><p class="prow-title">周期性叹息</p><p class="prow-desc">两次鼻吸，一次长长地呼出</p></div>
+          <p class="prow-end"><span class="fig">5</span> 分钟</p></li>
+        <li class="prow">{{ glyph('focus') }}
+          <div><p class="prow-title">专注呼吸</p><p class="prow-desc">走神了，发现了，就回来</p></div>
+          <p class="prow-end"><span class="fig">10</span> 分钟</p></li>
+      </ul>
+    </section>
+
+    <section class="week" aria-label="近 7 天">
+      <div>
+        <span class="week-label">近 7 天</span>
+        <p class="week-sum"><span class="fig">64</span> 分钟，练了 <span class="fig">5</span> 天</p>
+      </div>
+      {{ week_strip() }}
+    </section>
+  </main>
+  {{ tabbar('today') }}
+  {{ homebar() }}
+</div>
+</body>
+</html>

@@ -1,0 +1,119 @@
+/* DESIGN.md §8.3 · components.css 8.3。按下只换底色；悬停只在能悬停的指针上（§7.2） */
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  min-height: 48px;
+  padding: 0 var(--sp-6);
+  border-radius: var(--r-2);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  font-weight: var(--w-semibold);
+  letter-spacing: var(--tr-button);
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    background-color var(--dur-press) var(--ease-standard),
+    color var(--dur-press) var(--ease-standard);
+}
+.btn:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.primary {
+  background: var(--fill-primary, var(--ink));
+  color: var(--on-ink);
+}
+.primary:active {
+  background: var(--fill-primary-press, var(--ink-press));
+}
+
+.secondary {
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1px var(--line);
+  font-weight: var(--w-medium);
+}
+.secondary:active,
+.danger:active {
+  background: var(--wash-2);
+}
+
+.quiet {
+  min-height: var(--hit);
+  padding: 0 var(--sp-1);
+  color: var(--ink-2);
+  font-weight: var(--w-regular);
+}
+.quiet:active {
+  color: var(--ink);
+  background: var(--wash-2);
+}
+
+.danger {
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1px var(--ink);
+  font-weight: var(--w-medium);
+}
+
+.small {
+  min-height: 36px;
+  padding: 0 var(--sp-3);
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+  letter-spacing: var(--tr-caption);
+}
+/* 36 高的小按钮把点按区域扩到 44 */
+.small::before {
+  content: "";
+  position: absolute;
+  inset: -4px 0;
+}
+
+.block {
+  display: flex;
+  width: 100%;
+}
+
+/* 不可用：纸色凹底、三级墨色文字、没有线框；安静按钮只把字变成三级墨色 */
+.btn:disabled,
+.btn[aria-disabled="true"] {
+  background: var(--paper-sunk);
+  color: var(--ink-3);
+  box-shadow: none;
+  cursor: default;
+}
+.quiet:disabled,
+.quiet[aria-disabled="true"] {
+  background: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .primary:not(:disabled, [aria-disabled="true"]):hover {
+    background: var(--fill-primary-press, var(--ink-press));
+  }
+  .secondary:not(:disabled, [aria-disabled="true"]):hover,
+  .danger:not(:disabled, [aria-disabled="true"]):hover {
+    background: var(--wash);
+  }
+  .quiet:not(:disabled, [aria-disabled="true"]):hover {
+    color: var(--ink);
+  }
+}
+
+/* 强制颜色（高对比度）：底色和阴影都会被清掉，靠线框和系统色把边界、状态画出来（DESIGN.md §3.7） */
+@media (forced-colors: active) {
+  .primary,
+  .secondary,
+  .danger {
+    border: 1px solid CanvasText;
+  }
+  .primary:is(:disabled, [aria-disabled="true"]),
+  .secondary:is(:disabled, [aria-disabled="true"]),
+  .danger:is(:disabled, [aria-disabled="true"]) {
+    border-color: GrayText;
+    color: GrayText;
+  }
+}

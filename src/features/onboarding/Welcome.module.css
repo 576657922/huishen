@@ -1,0 +1,56 @@
+.page {
+  max-width: calc(var(--reading-max) + var(--margin) * 2);
+  padding-top: calc(var(--safe-top) + var(--sp-12));
+  padding-bottom: calc(var(--dock-h) + var(--hit) + var(--safe-bottom) + var(--sp-10));
+}
+.brand {
+  margin: 0;
+}
+.description {
+  margin-top: var(--sp-6);
+}
+.actions button + button {
+  margin-top: var(--sp-1);
+}
+.noticeSection + .noticeSection {
+  margin-top: var(--sp-6);
+}
+.noticeSection h3 {
+  margin-bottom: var(--sp-2);
+}
+.noticeSection ul {
+  padding-left: var(--sp-5);
+}
+.noticeSection li + li {
+  margin-top: var(--sp-2);
+}
+.noticeSection p + p {
+  margin-top: var(--sp-3);
+}
+.end {
+  height: 1px;
+}
+@media (min-width: 768px) {
+  .page {
+    max-width: calc(var(--reading-max) + var(--margin-tablet) * 2);
+  }
+}
+@media (min-width: 1024px) {
+  .page {
+    max-width: calc(var(--reading-max) + var(--margin-desk) * 2);
+    padding-top: var(--sp-12);
+  }
+  .actions {
+    margin-top: var(--sp-8);
+    max-width: calc(var(--sp-20) * 5);
+  }
+  .notice {
+    max-width: calc(var(--reading-max) - var(--sp-20));
+  }
+}
+.noticeFooter {
+  width: 100%;
+}
+.noticeFooter > :where(p) {
+  margin-bottom: var(--sp-2);
+}

@@ -1,0 +1,77 @@
+{{ head('键盘状态 · 回神', { bars: 'none' }) }}
+<style>
+  body { background: var(--paper); }
+  .board > section { background: var(--paper); color: var(--ink); }
+  .board .tabbar { display: grid !important; position: static; width: 390px; height: 49px; padding-bottom: 0; }
+  .board .rail { position: static; height: auto; width: 240px; padding: 16px; border: var(--hair) solid var(--rule); }
+  .board .rail .lockup { margin-bottom: 16px; }
+  .board .col { width: 350px; }
+  .board .row2 { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+  .board .player-controls { width: 350px; }
+  .board .huishen-key { height: 120px; width: 350px; }
+  .board .dial { width: 350px; }
+  .board .scale-wrap { width: 350px; }
+  .board h2 { font-size: var(--fs-head); }
+</style>
+<body>
+{{ sprite() }}
+<div class="board">
+{{ ['light', 'dark'].map(theme => `
+<section data-theme="${theme}"${theme === 'dark' ? ' data-surface="player"' : ''} aria-label="${theme === 'light' ? '浅色' : '深色'}">
+  <h2>${theme === 'light' ? '浅色 · 键盘焦点' : '深色 · 键盘焦点（播放器）'}</h2>
+  <p class="spec">Every ring below is the real :focus-visible style, forced by the build (CSS.forcePseudoState). Ring: 2 px --focus (ink), offset 2 outside the target unless noted.</p>
+
+  <div class="cell"><p class="spec">Tab bar — 练习 focused (inset −4, radius 4); icons 今日 (sunrise) · 练习 · 记录 · 依据</p>
+    <nav class="tabbar" aria-label="主导航">${[['today', '今日'], ['practice', '练习'], ['records', '记录'], ['evidence', '依据']].map(([id, l], i) => `<a class="tab" href="/"${i === 0 ? ' aria-current="page"' : ''}${i === 1 ? ' data-force="focus-visible"' : ''}>${icon(i === 0 ? id + '-on' : id)}<span>${l}</span></a>`).join('')}</nav>
+  </div>
+
+  <div class="cell"><p class="spec">Rail — 记录 current (paper-sunk), 依据 focused; 设置 is the gear</p>
+    <nav class="rail" aria-label="主导航">${lockup('/')}<div class="rail__list">${[['today', '今日'], ['practice', '练习'], ['records', '记录'], ['evidence', '依据']].map(([id, l]) => `<a class="rail__item" href="/"${id === 'records' ? ' aria-current="page"' : ''}${id === 'evidence' ? ' data-force="focus-visible"' : ''}>${icon(id === 'records' ? id + '-on' : id)}<span>${l}</span></a>`).join('')}</div><div class="rail__foot"><a class="rail__item" href="/help">${icon('help')}<span>求助方式</span></a><a class="rail__item" href="/settings">${icon('settings')}<span>设置</span></a></div></nav>
+  </div>
+
+  <div class="cell col"><p class="spec">Practice row — ring on the row box, offset 2 (inside the side margin)</p>
+    <a class="prow" href="/practices/slow" data-force="focus-visible">${glyph('slow')}<span><span class="prow__name">慢呼吸<span class="grade__box" aria-hidden="true">B</span></span><span class="prow__desc">跟着节拍放慢呼吸，轻柔不深</span></span><span class="prow__end"><span class="prow__dur"><span class="pnum">5</span> 分钟</span></span></a>
+  </div>
+
+  <div class="cell col"><p class="spec">Segmented — selected cell focused, then an unselected cell focused</p>
+    <div class="seg" role="radiogroup" aria-label="节拍提示"><button role="radio" aria-checked="true" type="button" data-force="focus-visible">滑音</button><button role="radio" aria-checked="false" type="button" tabindex="-1">钟点</button><button role="radio" aria-checked="false" type="button" tabindex="-1">仅背景</button><button role="radio" aria-checked="false" type="button" tabindex="-1">静音</button></div>
+    <div class="seg" role="radiogroup" aria-label="时长" style="margin-top: 16px"><button role="radio" aria-checked="false" type="button" tabindex="-1">3</button><button role="radio" aria-checked="true" type="button">5</button><button role="radio" aria-checked="false" type="button" data-force="focus-visible">10</button><button role="radio" aria-checked="false" type="button" tabindex="-1">15</button><button role="radio" aria-checked="false" type="button" tabindex="-1">20</button></div>
+  </div>
+
+  <div class="cell col"><p class="spec">Filter row — current option focused (inset −2)</p>
+    <div class="filter" role="radiogroup" aria-label="分类">${['全部', '冥想', '呼吸', '声音'].map((l, i) => `<button role="radio" aria-checked="${i === 2}" type="button" data-label="${l}"${i === 2 ? ' data-force="focus-visible"' : ' tabindex="-1"'}>${l}</button>`).join('')}</div>
+  </div>
+
+  <div class="cell col"><p class="spec">练完感觉 — an unselected cell focused · 0–10 — the selected 4 focused</p>
+    <div class="choice" role="radiogroup" aria-label="练完感觉"><button role="radio" aria-checked="false" type="button" data-force="focus-visible">更平静</button><button role="radio" aria-checked="false" type="button" tabindex="-1">差不多</button><button role="radio" aria-checked="false" type="button" tabindex="-1">更紧张</button><button role="radio" aria-checked="false" type="button" tabindex="-1">很不舒服</button></div>
+    <div class="scale" role="radiogroup" aria-label="此刻有多紧张" style="margin-top: 16px">${Array.from({ length: 11 }, (_, i) => `<button role="radio" aria-checked="${i === 4}" type="button"${i === 4 ? ' data-force="focus-visible"' : ' tabindex="-1"'}>${i}</button>`).join('')}</div>
+  </div>
+
+  <div class="cell"><p class="spec">Start bar · icon button · link-more · toggle · slider</p>
+    <div class="col"><a class="startbar" href="/play/slow" data-force="focus-visible"><span class="startbar__label">${icon('play')}开始</span><span class="startbar__meta"><span class="pnum">5</span> 分钟</span></a></div>
+    <div class="row2" style="margin-top: 16px"><button class="icon-btn" type="button" aria-label="设置" data-force="focus-visible">${icon('settings')}</button><a class="link-more" href="/help" data-force="focus-visible">求助方式${icon('chevron-right')}</a><button class="toggle" role="switch" aria-checked="true" aria-label="开头倒数" type="button" data-hit data-force="focus-visible"></button></div>
+    <div class="col" style="margin-top: 8px"><div class="slider" role="slider" aria-label="节律" aria-valuemin="4.5" aria-valuemax="6.5" aria-valuenow="5.5" tabindex="0" data-force="focus-visible"><div class="slider__track"></div><div class="slider__fill" style="width: calc((100% - 24px) * 0.5)"></div><div class="slider__thumb" style="left: calc(12px + (100% - 24px) * 0.5)"></div></div></div>
+  </div>
+
+  <div class="cell col"><p class="spec">DOI link — the ring hugs the 24 px line; the target is 44 by ::before</p>
+    <p class="note__src"><a href="https://doi.org/10.1038/s41598-023-49279-8" lang="en" data-hit data-force="focus-visible">doi:10.1038/s41598-023-49279-8${icon('external')}</a></p>
+  </div>
+
+  <div class="cell"><p class="spec">Chips — 有点急 focused; 不舒服？ (HUD, tablet / desktop / landscape) focused</p>
+    <div class="row2"><button class="chip chip--quiet" type="button" data-force="focus-visible">有点急</button><button class="chip chip--unwell" type="button" style="display: inline-flex" data-force="focus-visible">${icon('help')}不舒服？</button></div>
+  </div>
+
+  ${theme === 'dark' ? `
+  <div class="cell"><p class="spec">Player controls — 不舒服 focused (inset −4) · the four controls of a phone held upright</p>
+    <nav class="player-controls" aria-label="练习控制"><button type="button">${icon('pause')}暂停</button><button type="button">${icon('sound')}声音</button><button type="button" data-force="focus-visible">${icon('help')}不舒服</button><button type="button">${icon('end')}结束</button></nav>
+  </div>
+  <div class="cell"><p class="spec">回神 key — focused; edge 1 px --line (3.11 : 1 on raised)</p>
+    <button class="huishen-key" type="button" data-force="focus-visible"><span class="huishen-key__label">回神</span><span class="huishen-key__hint">也可以按 <kbd>空格</kbd></span></button>
+  </div>
+  <div class="cell"><p class="spec">Dial grid — 急救 120 focused (offset 2, outside the cell)</p>
+    <div class="dial">${K.SAFETY.CRISIS_RESOURCES[0].lines.map((l, i) => `<a href="${l.href}" aria-label="${l.name} ${l.display}，拨打"${i === 2 ? ' data-force="focus-visible"' : ''}><span class="dial__name">${l.name}</span><span class="dial__num">${l.display}${icon('phone')}</span></a>`).join('')}</div>
+  </div>` : ''}
+</section>`).join('') }}
+</div>
+</body>
+</html>

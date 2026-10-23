@@ -1,0 +1,84 @@
+.phaseRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+.phase {
+  font-family: var(--font-display);
+  font-size: var(--fs-phase);
+  line-height: var(--lh-phase);
+  font-weight: var(--w-light);
+  color: var(--phase-ink);
+  margin-left: -0.04em;
+  animation: arrive var(--dur-phase) var(--ease-standard);
+}
+.next {
+  padding-bottom: var(--sp-5);
+  color: var(--ink-2);
+}
+.curve {
+  display: block;
+  max-width: none;
+  width: calc(100% + var(--margin) * 2);
+  margin: var(--sp-4) calc(-1 * var(--margin)) 0;
+  height: calc(var(--sp-24) * 2 + var(--sp-6));
+}
+.box {
+  display: block;
+  width: calc(var(--sp-16) * 4);
+  height: calc(var(--sp-16) * 4);
+  max-width: 100%;
+  margin-top: var(--sp-4);
+}
+.hurry {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: var(--sp-3);
+  margin-top: var(--sp-3);
+}
+.caption {
+  font-size: var(--fs-reading);
+  line-height: var(--lh-reading);
+  min-height: var(--sp-16);
+  margin-top: var(--sp-8);
+  color: var(--ink);
+  transition: color var(--dur-move);
+}
+.caption span {
+  animation: arrive var(--dur-move) var(--ease-standard);
+}
+.dim {
+  color: var(--ink-3);
+}
+@keyframes arrive {
+  from {
+    opacity: 0;
+  }
+}
+@media (min-width: 768px) {
+  .curve {
+    width: 100%;
+    margin-inline: 0;
+  }
+  .box {
+    width: calc(var(--sp-24) * 3 + var(--sp-2));
+    height: calc(var(--sp-24) * 3 + var(--sp-2));
+  }
+}
+@media (orientation: landscape) and (max-height: 499px) {
+  .curve {
+    height: 150px;
+  }
+  .caption {
+    margin-top: var(--sp-4);
+  }
+  .phase {
+    font-size: var(--fs-count);
+    line-height: var(--lh-count);
+  }
+  .box {
+    width: 180px;
+    height: 180px;
+  }
+}

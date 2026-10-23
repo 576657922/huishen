@@ -1,0 +1,112 @@
+{{ head('依据 · 回神', { bars: 'tabs' }) }}
+<style>
+  .intro { margin-top: var(--sp-4); }
+  .method { margin-top: var(--sp-6); }
+  .method__body { margin-top: var(--sp-1); color: var(--ink-2); }
+  .filter-wrap { margin-top: var(--sp-2); }
+  .claims-sec { margin-top: var(--sp-6); }
+  .ecard { margin-top: var(--sp-6); }
+  .ecard--closed { margin-top: var(--sp-6); }
+  .grades { margin-top: var(--sp-10); }
+  .gdef { display: grid; grid-template-columns: 18px 40px minmax(0, 1fr); column-gap: var(--sp-3); align-items: start; padding: var(--sp-3) 0; border-bottom: var(--hair) solid var(--rule); }
+  .gdef .grade__box { margin-top: 3px; }
+  .gdef b { font-weight: var(--w-semibold); }
+  .gdef p { color: var(--ink-2); font-size: var(--fs-caption); line-height: var(--lh-body); }
+  .scope { margin-top: var(--sp-3); color: var(--ink-3); font-size: var(--fs-caption); line-height: var(--lh-caption); }
+  .unknown { margin-top: var(--sp-10); }
+  .unknown li { padding: var(--sp-3) 0; border-bottom: var(--hair) solid var(--rule); color: var(--ink-2); }
+  .unknown li:last-child { border-bottom: 0; }
+  .na { margin-top: var(--sp-10); }
+  .na__intro { margin-top: var(--sp-1); color: var(--ink-2); }
+  .na__item { padding: var(--sp-3) 0; border-bottom: var(--hair) solid var(--rule); }
+  .na__item:last-child { border-bottom: 0; }
+  .na__head { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3); }
+  .na__item h3 { font-family: var(--font-ui); font-weight: var(--w-semibold); font-size: var(--fs-body); line-height: var(--lh-body); letter-spacing: var(--tr-body); }
+  .na__item p { margin-top: 2px; color: var(--ink-2); font-size: var(--fs-caption); line-height: var(--lh-caption); }
+</style>
+<body>
+{{ sprite() }}
+{{ device() }}
+{{ statusbar('21:20') }}
+<main class="page">
+  <header class="pagehead">
+    <h1 class="t-display" tabindex="-1">{{ K.COPY.EVIDENCE.title }}</h1>
+    <p class="folio"><span><b>174</b> 条出处，逐条核对</span><span>{{ NEW['EVIDENCE.reviewedShort'] }}</span></p>
+    <p class="lead intro">{{ K.keep(K.COPY.EVIDENCE.intro) }}</p>
+  </header>
+
+  <section class="method" aria-labelledby="method-h">
+    <div class="section-head"><h2 id="method-h">{{ K.COPY.EVIDENCE.method.title }}</h2></div>
+    <div class="method__body">
+      <p>{{ K.keep(K.COPY.EVIDENCE.method.lines[0]) }}</p>
+    </div>
+    <button class="disclose" type="button" aria-expanded="false">{{ NEW['EVIDENCE.methodMore'] }}{{ icon('chevron-down') }}</button>
+  </section>
+
+  <section class="claims-sec" aria-labelledby="claims-h">
+    <div class="section-head"><h2 id="claims-h">{{ K.COPY.EVIDENCE.card.conclusion }}</h2><span class="aside">呼吸 · 3 条</span></div>
+    <div class="filter-wrap">
+      <div class="filter" role="radiogroup" aria-label="分类">
+        {{ ['全部', '冥想', '呼吸', '声音', '安全'].map((l) => `<button role="radio" aria-checked="${l === '呼吸'}" type="button" data-label="${l}"${l === '呼吸' ? '' : ' tabindex="-1"'}>${l}</button>`).join('') }}
+      </div>
+    </div>
+
+    <article class="ecard" aria-labelledby="c1">
+      <p class="ecard__kicker"><span>呼吸练习 · 压力</span>{{ grade('B', { prefix: true }) }}</p>
+      <p id="c1" class="ecard__claim">与不做呼吸练习的对照相比，呼吸练习让自评压力小到中等程度减轻。</p>
+      <dl>
+        <div class="ecard__field ecard__field--wide"><dt>{{ K.COPY.EVIDENCE.card.effect }}</dt><dd class="es">
+          <div class="es__row"><span class="es__name">压力<span class="es__k">12 项试验 · 785 人</span></span><span class="es__val">g = −0.35（−0.55 至 −0.14）</span></div>
+          {{ ciBar({ g: -0.35, lo: -0.55, hi: -0.14 }) }}
+          <div class="es__row"><span class="es__name">焦虑<span class="es__k">20 项试验</span></span><span class="es__val">g = −0.32（−0.48 至 −0.16）</span></div>
+          {{ ciBar({ g: -0.32, lo: -0.48, hi: -0.16 }) }}
+          <div class="es__row"><span class="es__name">抑郁症状<span class="es__k">18 项试验</span></span><span class="es__val">g = −0.40（−0.58 至 −0.22）</span></div>
+          {{ ciBar({ g: -0.40, lo: -0.58, hi: -0.22 }) }}
+          {{ ciAxis() }}
+          <p class="es__note">{{ K.keep('小于 0 表示比对照减轻。效应量约 0.2 算小，约 0.5 算中等，0.8 以上算大。') }}</p>
+        </dd></div>
+        <div class="ecard__field"><dt>研究类型、<br>样本与对照</dt><dd>{{ K.keep(`随机对照试验的元分析，检索到2022年2月，纳入 12 项试验、785 人。对照组不做呼吸练习，多为等待或不活动对照。`) }}</dd></div>
+        <div class="ecard__field"><dt>{{ K.COPY.EVIDENCE.card.grade }}</dt><dd>{{ grade('B') }}<br>{{ K.COPY.EVIDENCE.grades.definitions.B }}</dd></div>
+        <div class="ecard__field"><dt>{{ K.COPY.EVIDENCE.card.limits }}</dt><dd>{{ K.keep(`把慢呼吸、快呼吸、瑜伽呼吸和生物反馈等不同做法合在一起算；参与者无法设盲；对照多为等待或不活动；多数研究有中等偏倚风险，很少有试验记录不良事件。`) }}</dd></div>
+        <div class="ecard__field"><dt>{{ K.COPY.EVIDENCE.card.contrary }}</dt><dd><p>{{ K.keep(`一项预注册、参与者设盲的 400 人随机对照试验里，每天约 10 分钟、练 4 周后，每分钟 5.5 次的慢呼吸与每分钟 12 次的安慰剂呼吸相比，压力的改善没有显著差别（ηp² &lt; 0.001，p = 0.765）。两组都有改善，但试验没有不练习的对照组，改善不能归功于练习。`) }}</p><span class="src">Fincham 等 2023 · <span lang="en">Scientific Reports</span><br><a href="https://doi.org/10.1038/s41598-023-49279-8" lang="en" data-hit>doi:10.1038/s41598-023-49279-8{{ icon('external') }}</a></span></dd></div>
+        <div class="ecard__field"><dt>{{ K.COPY.EVIDENCE.card.source }}</dt><dd><span class="src" style="margin-top:0">Fincham 等 2023 · <span lang="en">Scientific Reports</span><br><a href="https://doi.org/10.1038/s41598-022-27247-y" lang="en" data-hit>doi:10.1038/s41598-022-27247-y{{ icon('external') }}</a></span></dd></div>
+      </dl>
+    </article>
+
+    <article class="ecard ecard--closed" aria-labelledby="c2">
+      <p class="ecard__kicker"><span>慢呼吸 · 心率变异性</span><span class="grade"><span class="grade__box">B</span><span class="grade__word">中等</span></span></p>
+      <p id="c2" class="ecard__claim">与每分钟 10 次以上的呼吸相比，练慢呼吸时心率变异性中等程度增大；练完以后，差别变小。</p>
+      <p class="ecard__meta"><span>元分析 · 223 项研究</span><button class="disclose" type="button" aria-expanded="false" aria-label="展开：慢呼吸 · 心率变异性">展开{{ icon('chevron-down') }}</button></p>
+    </article>
+
+    <article class="ecard ecard--closed" aria-labelledby="c3">
+      <p class="ecard__kicker"><span>周期性叹息 · 情绪</span><span class="grade"><span class="grade__box">C</span><span class="grade__word">有限</span></span></p>
+      <p id="c3" class="ecard__claim">108 人的探索性试验里，每天 5 分钟的周期性叹息比正念冥想让日常积极情绪提高得略多，焦虑的减轻相近。</p>
+      <p class="ecard__meta"><span>探索性随机试验 · 108 人</span><button class="disclose" type="button" aria-expanded="false" aria-label="展开：周期性叹息 · 情绪">展开{{ icon('chevron-down') }}</button></p>
+    </article>
+  </section>
+
+  <section class="grades" aria-labelledby="grades-h">
+    <div class="section-head"><h2 id="grades-h">{{ K.COPY.EVIDENCE.grades.title }}</h2></div>
+    {{ ['A', 'B', 'C', 'D'].map(g => `<div class="gdef"><span class="grade__box">${g}</span><b>${K.COPY.EVIDENCE.grades.names[g]}</b><p>${K.keep(K.COPY.EVIDENCE.grades.definitions[g])}</p></div>`).join('') }}
+    <p class="scope">{{ K.keep(K.COPY.EVIDENCE.grades.scope) }}</p>
+  </section>
+
+  <section class="unknown" aria-labelledby="unknown-h">
+    <div class="section-head"><h2 id="unknown-h">{{ K.COPY.EVIDENCE.unknown.title }}</h2></div>
+    <ul>
+      {{ K.COPY.EVIDENCE.unknown.lines.map(t => `<li>${K.keep(t)}</li>`).join('') }}
+    </ul>
+  </section>
+
+  <section class="na" aria-labelledby="na-h">
+    <div class="section-head"><h2 id="na-h">{{ K.COPY.EVIDENCE.notAdopted.title }}</h2><span class="aside">{{ K.COPY.EVIDENCE.notAdopted.items.length }} 项</span></div>
+    <p class="na__intro">{{ K.COPY.EVIDENCE.notAdopted.intro }}</p>
+    {{ K.COPY.EVIDENCE.notAdopted.items.map(it => `<div class="na__item"><div class="na__head"><h3>${it.name}</h3>${grade(it.grade)}</div><p>${K.keep(it.reason)}</p></div>`).join('') }}
+  </section>
+</main>
+{{ tabbar('evidence') }}
+{{ homebar() }}
+</div>
+</body>
+</html>

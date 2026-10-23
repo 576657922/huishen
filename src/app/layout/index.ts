@@ -1,0 +1,12 @@
+/** 应用外壳给页面用的部件：页面外框、推入页面的导航条、标志、播放器外框、焦点 */
+export { AppFrame, type AppFrameProps } from './AppFrame'
+export { type Bars, documentTitle, useDocumentBars, useDocumentTitle } from './document'
+export { focusPageHeading } from './focus'
+export { Lockup, type LockupProps, Seal } from './Lockup'
+export { Dateline, Masthead } from './Masthead'
+export { NavBar, type NavBarProps } from './NavBar'
+export { NavRail, type NavRailProps } from './NavRail'
+export { FOOT_NAV, MAIN_NAV, type NavItem, type NavKey, railCurrent, tabCurrent } from './nav'
+export { PageFrame, type PageFrameProps, type PageVariant } from './PageFrame'
+export { PlayerFrame, type PlayerFrameProps } from './PlayerFrame'
+export { TabBar, type TabBarProps } from './TabBar'

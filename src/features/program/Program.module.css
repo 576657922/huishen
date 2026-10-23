@@ -1,0 +1,140 @@
+.layout {
+  display: flex;
+  flex-direction: column;
+}
+.intro,
+.content {
+  min-width: 0;
+}
+.intro > :first-child {
+  margin-top: var(--sp-3);
+}
+.progress {
+  display: block;
+  margin-top: var(--sp-8);
+  max-width: 100%;
+  overflow: visible;
+}
+.futureWeek {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 1;
+}
+.currentWeek {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 2;
+}
+.completeWeek,
+.day {
+  fill: var(--dot);
+}
+.tip {
+  color: var(--ink-3);
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+  margin: var(--sp-4) 0;
+}
+.reading {
+  font-size: var(--fs-reading);
+  line-height: var(--lh-reading);
+  color: var(--ink-2);
+}
+.reading p + p {
+  margin-top: var(--sp-4);
+}
+.practices li:not(:last-child) > :is(a, button) {
+  border-bottom: var(--hair) solid var(--rule);
+}
+.weeks {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.weeks li {
+  border-bottom: var(--hair) solid var(--rule);
+}
+.weeks button {
+  display: grid;
+  grid-template-columns: var(--sp-5) minmax(0, 1fr) auto;
+  gap: var(--sp-3);
+  align-items: center;
+  text-align: left;
+  width: 100%;
+  min-height: var(--hit);
+  padding: var(--sp-3) 0;
+}
+.weeks button > span:nth-child(2) {
+  display: flex;
+  flex-direction: column;
+}
+.weeks strong {
+  font-weight: var(--w-semibold);
+}
+.weeks button:hover {
+  background: var(--wash);
+}
+.management {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: var(--sp-6);
+  gap: var(--sp-3);
+}
+@media (min-width: 768px) {
+  .layout {
+    max-width: var(--reading-max);
+  }
+}
+@media (min-width: 1024px) {
+  .layout {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: var(--gutter);
+    max-width: none;
+    margin-top: var(--sp-4);
+  }
+  .content {
+    grid-column: 1 / 8;
+    grid-row: 1;
+  }
+  .intro {
+    grid-column: 9 / 13;
+    grid-row: 1;
+    align-self: start;
+    position: sticky;
+    top: var(--sp-10);
+  }
+  .progress {
+    margin-top: 0;
+  }
+  .dock {
+    margin-top: var(--sp-6);
+  }
+}
+@media (max-width: 1023px) {
+  .intro,
+  .content {
+    display: contents;
+  }
+  .progress {
+    order: 1;
+  }
+  .thisWeek {
+    order: 2;
+  }
+  .choice {
+    order: 3;
+  }
+  .stressPrompt {
+    order: 4;
+  }
+  .allWeeks {
+    order: 5;
+  }
+  .help {
+    order: 6;
+  }
+  .management {
+    order: 7;
+  }
+}

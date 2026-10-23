@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F3F5F1">
+<title>回神 · 练习</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="ui.css">
+<style>
+  .page { position: absolute; top: var(--status-h); left: 0; right: 0; bottom: 0; padding: 0 var(--gutter); }
+  .hd { padding-top: 14px; display: flex; align-items: baseline; justify-content: space-between; }
+  .hd .count { font-size: var(--fs-caption); color: var(--text-3); }
+  .seg { margin-top: 14px; }
+
+  .legend { display: flex; justify-content: space-between; align-items: baseline; margin-top: 20px; font-size: var(--fs-caption); line-height: var(--lh-caption); color: var(--text-2); }
+  .axis { display: block; margin-top: 6px; overflow: visible; }
+  .axis .tk line { stroke: var(--line-strong); }
+  .axis .lbl text { font-size: 11px; fill: var(--text-3); font-family: var(--font-ui); font-variant-numeric: tabular-nums; }
+
+  .list { margin-top: 4px; }
+  .item { display: block; padding: 14px 0 14px; border-top: var(--hairline) solid var(--line); }
+  .item .top { display: flex; justify-content: space-between; align-items: baseline; }
+  .item .nm { font-size: var(--fs-headline); line-height: var(--lh-headline); font-weight: var(--fw-medium); letter-spacing: 0.02em; }
+  .item .meta { font-size: var(--fs-caption); color: var(--text-2); font-variant-numeric: tabular-nums; }
+  .item .how { font-size: var(--fs-caption); line-height: var(--lh-caption); color: var(--text-2); margin-top: 2px; }
+  .wave { display: block; margin-top: 10px; overflow: visible; }
+  .wave path { fill: none; stroke: var(--text-1); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+  .wave .tg line { stroke: var(--line); stroke-width: 1; }
+  .wave .lbl text { font-size: 11px; fill: var(--text-3); font-family: var(--font-ui); text-anchor: middle; font-variant-numeric: tabular-nums; }
+  .item.tool .nm::after { content: "工具"; margin-left: 8px; font-size: 11px; font-weight: var(--fw-regular); color: var(--text-3); letter-spacing: 0.06em; vertical-align: 2px; }
+</style>
+</head>
+<body>
+<!--gen:sprite--><svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="i-today" viewBox="0 0 24 24"><path d="M3 18.5h18"/><path d="M5.5 18.5a6.5 6.5 0 0 1 13 0"/><circle cx="16.6" cy="13.9" r="1.6" fill="currentColor" stroke="none"/></symbol><symbol id="i-practice" viewBox="0 0 24 24"><path d="M2.75 12C5.3 6 6.2 6 8.75 12S12.2 18 14.75 12S18.2 6 20.75 12"/></symbol><symbol id="i-records" viewBox="0 0 24 24"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5" fill="currentColor"/></symbol><symbol id="i-evidence" viewBox="0 0 24 24"><path d="M12 6.8C10.2 5.4 7.2 5 4 5.6v12.6c3.2-.6 6.2-.2 8 1.2 1.8-1.4 4.8-1.8 8-1.2V5.6c-3.2-.6-6.2-.2-8 1.2z"/><path d="M12 6.8v12.6"/></symbol><symbol id="i-settings" viewBox="0 0 24 24"><path d="M4 8h8.5M16.5 8H20M4 16h3.5M11.5 16H20"/><circle cx="14.5" cy="8" r="2"/><circle cx="9.5" cy="16" r="2"/></symbol><symbol id="i-back" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></symbol><symbol id="i-chevron" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></symbol><symbol id="i-play" viewBox="0 0 24 24"><path d="M7.5 5.6v12.8a.6.6 0 0 0 .9.5l10.2-6.4a.6.6 0 0 0 0-1L8.4 5.1a.6.6 0 0 0-.9.5z"/></symbol><symbol id="i-pause" viewBox="0 0 24 24"><path d="M9 6v12M15 6v12"/></symbol><symbol id="i-stop" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2.5"/></symbol><symbol id="i-sound" viewBox="0 0 24 24"><path d="M4 9.5h3.2l4.3-3.7v12.4l-4.3-3.7H4z"/><path d="M15 9.2c1.2 1.4 1.2 4.2 0 5.6M17.6 6.8c2.8 2.8 2.8 7.6 0 10.4"/></symbol><symbol id="i-export" viewBox="0 0 24 24"><path d="M12 14.5v-11M7.5 8L12 3.5 16.5 8"/><path d="M5 12.5v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></symbol><symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5.25"/><path d="M12 7.9h.01" stroke-width="2"/></symbol><symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M9.7 9.6c.2-1.3 1.1-2.1 2.4-2.1 1.4 0 2.3.9 2.3 2.1 0 1.8-2.4 2-2.4 3.9"/><path d="M12 16.4h.01" stroke-width="2"/></symbol><symbol id="i-close" viewBox="0 0 24 24"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/></symbol><symbol id="i-moon" viewBox="0 0 24 24"><path d="M19.5 14.6A8 8 0 1 1 9.4 4.5a6.4 6.4 0 0 0 10.1 10.1z"/></symbol><symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l5 5 9-10.5"/></symbol><symbol id="i-timer" viewBox="0 0 24 24"><circle cx="12" cy="13" r="7.5"/><path d="M12 13V9.5M10 3.5h4"/></symbol><symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol><symbol id="logo" viewBox="0 0 24 24"><path d="M2 16H9.2C12.5 16 15.2 13.4 15.2 10.2C15.2 7.6 13.6 6 11.6 6C9.6 6 8.2 7.7 8.6 10.2C9.2 13.9 12.4 16 16 16H22"/></symbol></svg><!--/gen-->
+<main class="screen phone" data-theme="light">
+  <!--gen:status time=21:41--><div class="status"><span class="time">21:41</span><span class="sys"><svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="7.5" width="3" height="4.5" rx="0.8"/><rect x="5" y="5" width="3" height="7" rx="0.8"/><rect x="10" y="2.5" width="3" height="9.5" rx="0.8"/><rect x="15" y="0" width="3" height="12" rx="0.8"/></svg><svg width="16" height="12" viewBox="0 0 16 12"><path d="M5.41 9.1A3.6 3.6 0 0 1 10.59 9.1L8.01 11.59A0.01 0.01 0 0 0 7.99 11.59Z"/><path d="M2.25 6.04A8.0 8.0 0 0 1 13.75 6.04L11.88 7.85A5.4 5.4 0 0 0 4.12 7.85Z"/><path d="M-0.78 3.13A12.2 12.2 0 0 1 16.78 3.13L14.98 4.86A9.7 9.7 0 0 0 1.02 4.86Z"/></svg><svg width="27" height="13" viewBox="0 0 27 13"><rect x="0.5" y="0.5" width="23" height="12" rx="3.6" fill="none" stroke="currentColor" stroke-opacity=".4"/><rect x="2.5" y="2.5" width="13.68" height="8" rx="1.9"/><path d="M25 4.5c.9.3 1.5 1.1 1.5 2s-.6 1.7-1.5 2z" fill-opacity=".4"/></svg></span></div><!--/gen-->
+  <div class="page">
+    <header class="hd">
+      <h1 class="t-large">练习</h1>
+      <span class="count">共 19 项</span>
+    </header>
+    <div class="seg" role="group" aria-label="类别">
+      <button aria-pressed="false">冥想</button><button aria-pressed="true">呼吸</button><button aria-pressed="false">声音</button>
+    </div>
+
+    <p class="legend"><span>五种节奏，画在同一条时间轴上</span><span class="c3">40 秒</span></p>
+    <!--gen:axis w=350 window=40 step=10 unit=秒--><svg class="axis" width="350" height="20" viewBox="0 0 350 20" aria-hidden="true"><g class="tk"><line x1="0.5" x2="0.5" y1="0" y2="5"/><line x1="87.5" x2="87.5" y1="0" y2="5"/><line x1="175" x2="175" y1="0" y2="5"/><line x1="262.5" x2="262.5" y1="0" y2="5"/><line x1="349.5" x2="349.5" y1="0" y2="5"/></g><g class="lbl"><text x="0" y="17" text-anchor="start">0</text><text x="87.5" y="17" text-anchor="middle">10</text><text x="175" y="17" text-anchor="middle">20</text><text x="262.5" y="17" text-anchor="middle">30</text><text x="350" y="17" text-anchor="end">40 秒</text></g></svg><!--/gen-->
+
+    <div class="list">
+      <a class="item">
+        <div class="top"><span class="nm">周期性叹息</span><span class="meta">5 分钟<span class="sep">·</span>证据 <span class="grade">B</span></span></div>
+        <p class="how">鼻吸 2.5 秒，再补吸 1 秒，用嘴慢慢呼 7 秒</p>
+        <!--gen:wave name=sigh w=350 h=28 window=40 grid=10--><svg class="wave" width="350" height="28" viewBox="0 0 350 28" aria-hidden="true"><g class="tg"><line x1="87.5" x2="87.5" y1="0" y2="28"/><line x1="175" x2="175" y1="0" y2="28"/><line x1="262.5" x2="262.5" y1="0" y2="28"/></g><path d="M0 26C8.09 26 13.78 8.24 21.88 8.24C25.11 8.24 27.39 2 30.62 2C44.1 2 67.38 26 91.88 26C99.97 26 105.66 8.24 113.75 8.24C116.99 8.24 119.26 2 122.5 2C135.97 2 159.25 26 183.75 26C191.84 26 197.53 8.24 205.62 8.24C208.86 8.24 211.14 2 214.38 2C227.85 2 251.12 26 275.62 26C283.72 26 289.41 8.24 297.5 8.24C300.74 8.24 303.01 2 306.25 2C316.45 2 332.28 15.76 350 22.44"/></svg><!--/gen-->
+      </a>
+      <a class="item">
+        <div class="top"><span class="nm">共振呼吸</span><span class="meta">10 分钟<span class="sep">·</span>证据 <span class="grade">B</span></span></div>
+        <p class="how">每分钟 5.5 次，吸和呼一样长</p>
+        <!--gen:wave name=resonance w=350 h=28 window=40 grid=10--><svg class="wave" width="350" height="28" viewBox="0 0 350 28" aria-hidden="true"><g class="tg"><line x1="87.5" x2="87.5" y1="0" y2="28"/><line x1="175" x2="175" y1="0" y2="28"/><line x1="262.5" x2="262.5" y1="0" y2="28"/></g><path d="M0 26C17.66 26 30.07 2 47.73 2C65.39 2 77.8 26 95.45 26C113.11 26 125.52 2 143.18 2C160.84 2 173.25 26 190.91 26C208.57 26 220.98 2 238.64 2C256.3 2 268.7 26 286.36 26C304.02 26 316.43 2 334.09 2C339.83 2 345.01 4.53 350 7.95"/></svg><!--/gen-->
+      </a>
+      <a class="item">
+        <div class="top"><span class="nm">呼气延长</span><span class="meta">5 分钟<span class="sep">·</span>证据 <span class="grade">C</span></span></div>
+        <p class="how">吸 4 秒，呼 6 秒</p>
+        <!--gen:wave name=extended w=350 h=28 window=40 grid=10--><svg class="wave" width="350" height="28" viewBox="0 0 350 28" aria-hidden="true"><g class="tg"><line x1="87.5" x2="87.5" y1="0" y2="28"/><line x1="175" x2="175" y1="0" y2="28"/><line x1="262.5" x2="262.5" y1="0" y2="28"/></g><path d="M0 26C12.95 26 22.05 2 35 2C54.42 2 68.08 26 87.5 26C100.45 26 109.55 2 122.5 2C141.92 2 155.57 26 175 26C187.95 26 197.05 2 210 2C229.43 2 243.07 26 262.5 26C275.45 26 284.55 2 297.5 2C316.93 2 330.57 26 350 26"/></svg><!--/gen-->
+      </a>
+      <a class="item">
+        <div class="top"><span class="nm">箱式呼吸</span><span class="meta">5 分钟<span class="sep">·</span>证据 <span class="grade">C</span></span></div>
+        <p class="how">吸、停、呼、停，各 4 秒</p>
+        <!--gen:wave name=box w=350 h=28 window=40 grid=10--><svg class="wave" width="350" height="28" viewBox="0 0 350 28" aria-hidden="true"><g class="tg"><line x1="87.5" x2="87.5" y1="0" y2="28"/><line x1="175" x2="175" y1="0" y2="28"/><line x1="262.5" x2="262.5" y1="0" y2="28"/></g><path d="M0 26C12.95 26 22.05 2 35 2H70C82.95 2 92.05 26 105 26H140C152.95 26 162.05 2 175 2H210C222.95 2 232.05 26 245 26H280C292.95 26 302.05 2 315 2H350"/></svg><!--/gen-->
+      </a>
+      <a class="item tool">
+        <div class="top"><span class="nm">共振频率测定</span><span class="meta">12 分钟</span></div>
+        <p class="how">从每分钟 6.5 次放慢到 4.5 次，每档 2 分钟，选最舒服的一档</p>
+        <!--gen:finder w=350 h=28--><svg class="wave" width="350" height="47" viewBox="0 0 350 47" aria-hidden="true"><path d="M0 26C9.05 26 15.41 2 24.46 2C33.51 2 39.87 26 48.92 26M62.92 26C72.73 26 79.62 2 89.42 2C99.23 2 106.12 26 115.92 26M129.92 26C140.62 26 148.13 2 158.83 2C169.52 2 177.04 26 187.74 26M201.74 26C213.5 26 221.77 2 233.54 2C245.3 2 253.57 26 265.34 26M279.34 26C292.41 26 301.59 2 314.67 2C327.74 2 336.93 26 350 26"/><g class="lbl"><text x="24.46" y="43">6.5</text><text x="89.42" y="43">6.0</text><text x="158.83" y="43">5.5</text><text x="233.54" y="43">5.0</text><text x="314.67" y="43">4.5</text></g></svg><!--/gen-->
+      </a>
+    </div>
+  </div>
+  <!--gen:tabbar active=practice--><nav class="tabbar" aria-label="主导航"><a class="tab"><svg class="i" aria-hidden="true"><use href="#i-today"/></svg><span>今日</span></a><a class="tab" aria-current="page"><svg class="i" aria-hidden="true"><use href="#i-practice"/></svg><span>练习</span></a><a class="tab"><svg class="i" aria-hidden="true"><use href="#i-records"/></svg><span>记录</span></a><a class="tab"><svg class="i" aria-hidden="true"><use href="#i-evidence"/></svg><span>依据</span></a></nav><div class="home-ind"></div><!--/gen-->
+</main>
+</body>
+</html>

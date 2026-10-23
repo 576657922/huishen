@@ -1,0 +1,48 @@
+{{ head('专注呼吸 · 回神', { theme: 'dark', bars: 'player', surface: 'player' }) }}
+<style>
+  .timeline { margin-top: var(--sp-2); }
+  .guide { margin-top: var(--sp-8); min-height: 56px; font-size: var(--fs-reading); line-height: var(--lh-reading); letter-spacing: var(--tr-reading); color: var(--ink-2); }
+  .keywrap { flex: 1; display: flex; padding: var(--sp-6) 0 var(--sp-4); }
+  .huishen-key { flex: 1; min-height: 240px; }
+</style>
+<body>
+{{ sprite() }}
+{{ device() }}
+{{ statusbar('08:11') }}
+<main class="player" aria-label="专注呼吸练习">
+  <header class="hud">
+    <div>
+      <p class="hud__name">专注呼吸</p>
+      <p class="hud__meta">{{ D.FOCUS_PLAYER.minutes }} 分钟 · 溪流</p>
+    </div>
+    <button class="chip chip--unwell" type="button" aria-haspopup="dialog" data-unwell>{{ icon('help') }}{{ K.COPY.PLAYER.unwell }}</button>
+  </header>
+
+  <figure class="timeline">{{ focusTimeline({ width: 350, minutes: D.FOCUS_PLAYER.minutes, marks: D.FOCUS_PLAYER.marks, t: D.FOCUS_PLAYER.t }) }}</figure>
+
+  <p class="guide" aria-live="polite">{{ K.clauses('心走远了，就从下一次吸气重新开始。') }}</p>
+
+  <div class="keywrap">
+    <button class="huishen-key" type="button" aria-describedby="key-help">
+      <span class="huishen-key__label">{{ K.COPY.PLAYER.focus.mark }}</span>
+      <span class="huishen-key__hint" data-modality="touch">{{ NEW['PLAYER.focus.markHintTouch'] }}</span>
+      <span class="huishen-key__hint" data-modality="fine">{{ NEW['PLAYER.focus.markHintKeys'] }} <kbd>空格</kbd></span>
+    </button>
+  </div>
+  <p id="key-help" class="vh">{{ K.COPY.PLAYER.focus.markHelp }}</p>
+
+  <div class="readouts">
+    <p class="readout"><span class="readout__label">剩余</span><span class="readout__value">{{ fmtClock(D.FOCUS_PLAYER.minutes * 60 - D.FOCUS_PLAYER.t) }}</span></p>
+  </div>
+
+  <nav class="player-controls" aria-label="练习控制">
+    <button type="button">{{ icon('pause') }}{{ K.COPY.PLAYER.pause }}</button>
+    <button type="button">{{ icon('sound') }}{{ K.COPY.PLAYER.sound }}</button>
+    <button type="button" aria-haspopup="dialog" data-control="unwell" data-unwell>{{ icon('help') }}{{ NEW['PLAYER.unwellShort'] }}</button>
+    <button type="button">{{ icon('end') }}{{ K.COPY.PLAYER.end }}</button>
+  </nav>
+</main>
+{{ homebar() }}
+</div>
+</body>
+</html>

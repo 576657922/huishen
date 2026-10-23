@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>今日 · 回神</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="components.css">
+<style>
+  .hdr { display: flex; justify-content: space-between; align-items: flex-start; padding: 8px 8px 0 20px; }
+  .hdr p { margin-top: 2px; }
+  .sec { padding: 0 20px; }
+  .sec-h { display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 7px; border-bottom: var(--hair) solid var(--rule-strong); }
+  .now { margin-top: 24px; }
+  .now h2 { margin-top: 14px; }
+  .spec { display: flex; align-items: center; margin-top: 2px; font-size: var(--fs-small); line-height: var(--lh-small); color: var(--ink-2); }
+  .spec { gap: 16px; }
+  .spec .ev { display: inline-flex; align-items: center; gap: 6px; }
+  .program { margin-top: 14px; }
+  .program-svg { display: block; overflow: visible; }
+  .pg-line { fill: none; stroke: var(--trace); stroke-width: 1.5; stroke-linejoin: miter; }
+  .pg-band { fill: var(--trace-fill); }
+  .pg-edge { stroke: var(--trace); stroke-width: 1; }
+  .pg-lab text { font-family: var(--font-sans); font-size: 11px; fill: var(--ink-2); letter-spacing: .02em; }
+  .pg-axis { stroke: var(--rule-strong); stroke-width: 1; }
+  .pg-tick path { stroke: var(--ink-4); stroke-width: 1; }
+  .pg-tick text { font-family: var(--font-mono); font-size: 11px; fill: var(--ink-3); }
+  .desc { margin-top: 10px; }
+  .now .btn-key { margin-top: 16px; }
+  .quick li:last-child { border-bottom: 0; }
+  .quick { margin-top: 24px; }
+  .quick ul { margin-top: 0; }
+  .quick li { display: grid; grid-template-columns: 48px 1fr auto 16px; align-items: center; column-gap: 14px; height: 48px; border-bottom: var(--hair) solid var(--rule); }
+  
+  .glyph { display: block; fill: none; stroke: var(--ink-2); stroke-width: 1.5; }
+  .quick .dur { font-size: var(--fs-small); color: var(--ink-2); }
+  .quick .chev { color: var(--ink-3); }
+  .week { margin-top: 0; }
+  .week-b { display: flex; justify-content: space-between; align-items: flex-end; padding-top: 12px; border-top: var(--hair) solid var(--rule-strong); }
+  .week-b h3 { margin-bottom: 2px; }
+  .week-b p { font-size: var(--fs-body); color: var(--ink-2); }
+  .week-b .num.v { font-size: var(--fs-title); color: var(--ink); font-weight: 300; letter-spacing: 0; }
+  .weekbars .wb { fill: var(--ink-3); }
+  .weekbars .wb-today { fill: var(--ink); }
+  .weekbars .wb-zero { fill: var(--ink-4); }
+  .weekbars text { font-family: var(--font-sans); font-size: 11px; fill: var(--ink-3); }
+  .weekbars text.now { fill: var(--ink); font-weight: 500; }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><symbol id="i-today" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.25"/><path d="M12 12l3.75-3.75"/><path d="M12 3.75v2.25"/><rect x="10.75" y="10.75" width="2.5" height="2.5" fill="currentColor" stroke="none"/></symbol><symbol id="i-practice" viewBox="0 0 24 24"><path d="M3 12c2.5-8 6.5-8 9 0s6.5 8 9 0"/></symbol><symbol id="i-records" viewBox="0 0 24 24"><path d="M3.75 20.25h16.5"/><path d="M6.75 16.5V12M10.25 16.5V5.25M13.75 16.5v-2.25M17.25 16.5V9"/></symbol><symbol id="i-evidence" viewBox="0 0 24 24"><path d="M7.5 3.75h-3v16.5h3M16.5 3.75h3v16.5h-3"/><path d="M9.75 9.75h4.5M9.75 14.25h4.5"/></symbol><symbol id="i-settings" viewBox="0 0 24 24"><path d="M3.75 8.25h16.5M3.75 15.75h16.5"/><rect x="13.25" y="6" width="3" height="4.5" fill="currentColor"/><rect x="7.75" y="13.5" width="3" height="4.5" fill="currentColor"/></symbol><symbol id="i-back" viewBox="0 0 24 24"><path d="M14.25 5.25L7.5 12l6.75 6.75"/></symbol><symbol id="i-chevron" viewBox="0 0 24 24"><path d="M9.75 5.25L16.5 12l-6.75 6.75"/></symbol><symbol id="i-play" viewBox="0 0 24 24"><path d="M7.5 5.25v13.5L18.75 12z"/></symbol><symbol id="i-pause" viewBox="0 0 24 24"><path d="M9 5.25v13.5M15 5.25v13.5"/></symbol><symbol id="i-stop" viewBox="0 0 24 24"><rect x="6.75" y="6.75" width="10.5" height="10.5"/></symbol><symbol id="i-sound" viewBox="0 0 24 24"><path d="M4.5 9.75h3l4.5-4.5v13.5l-4.5-4.5h-3z"/><path d="M15.4 9.4a3.7 3.7 0 0 1 0 5.2M17.9 6.9a7.2 7.2 0 0 1 0 10.2"/></symbol><symbol id="i-cue" viewBox="0 0 24 24"><path d="M9 3.75v6.75a3 3 0 0 0 6 0V3.75"/><path d="M12 13.5v6.75"/></symbol><symbol id="i-export" viewBox="0 0 24 24"><path d="M12 3.75v10.5M7.5 8.25L12 3.75l4.5 4.5"/><path d="M4.5 13.5v6.75h15V13.5"/></symbol><symbol id="i-source" viewBox="0 0 24 24"><path d="M9.75 5.25h9v9"/><path d="M18.75 5.25L5.25 18.75"/></symbol><symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol><symbol id="i-sensor" viewBox="0 0 24 24"><path d="M3.75 12h3.5l2-4.5 3.5 9 2-4.5h5.5"/></symbol></defs></svg>
+<main class="phone">
+  <div class="statusbar"><span>21:12</span><span class="sys"><svg width="17" height="11" viewBox="0 0 17 11"><rect x="0" y="7" width="3" height="4" rx=".8"/><rect x="4.6" y="4.9" width="3" height="6.1" rx=".8"/><rect x="9.2" y="2.6" width="3" height="8.4" rx=".8"/><rect x="13.8" y="0" width="3" height="11" rx=".8"/></svg><svg width="16" height="11" viewBox="0 0 16 11"><path d="M8 2.2c2.3 0 4.4.9 6 2.4l1.2-1.2A10.2 10.2 0 0 0 8 .5 10.2 10.2 0 0 0 .8 3.4L2 4.6a8.5 8.5 0 0 1 6-2.4z"/><path d="M8 5.6c1.4 0 2.6.5 3.6 1.4l1.2-1.2A6.8 6.8 0 0 0 8 3.9a6.8 6.8 0 0 0-4.8 1.9L4.4 7C5.4 6.1 6.6 5.6 8 5.6z"/><path d="M8 11l2.4-2.4A3.4 3.4 0 0 0 8 7.6a3.4 3.4 0 0 0-2.4 1z"/></svg><svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="22.5" height="12" rx="3.6" fill="none" stroke="currentColor" opacity=".38"/><rect x="2.2" y="2.2" width="11.78" height="8.6" rx="1.9"/><path d="M24.6 4.4v4.2c.9-.3 1.5-1.1 1.5-2.1s-.6-1.8-1.5-2.1z" opacity=".42"/></svg></span></div>
+  <header class="hdr">
+    <div>
+      <h1 class="t-large">今日</h1>
+      <p class="t-small ink-2">10月22日 星期四<span class="sep">·</span>明日霜降</p>
+    </div>
+    <button class="iconbtn" aria-label="设置"><svg class="i" aria-hidden="true"><use href="#i-settings"/></svg></button>
+  </header>
+
+  <section class="sec now" aria-labelledby="now-t">
+    <div class="sec-h"><span class="t-label">现在适合</span><span class="t-micro">8 周计划<span class="sep">·</span>第 3 周第 2 天</span></div>
+    <h2 class="t-title" id="now-t">身体扫描</h2>
+    <p class="spec"><span><span class="num">15</span>&nbsp;分钟</span><span class="ev">证据<span class="grade">B</span></span></p>
+    <figure class="program"><svg class="program-svg" viewBox="0 0 350 96" width="350" height="96" aria-label="身体扫描结构：15 分钟内注意力从脚移到头，最后 1 分钟觉察全身"><rect class="pg-band" x="328.67" y="14" width="21.33" height="48"/><path class="pg-line" d="M0 70V70H23.33V62H70V54H116.67V46H163.33V38H210V30H256.67V22H291.67V14H326.67"/><g class="pg-lab"><text x="11.67" y="64" text-anchor="middle">呼吸</text><text x="46.67" y="56" text-anchor="middle">足</text><text x="93.33" y="48" text-anchor="middle">腿</text><text x="140" y="40" text-anchor="middle">腹</text><text x="186.67" y="32" text-anchor="middle">胸背</text><text x="233.33" y="24" text-anchor="middle">肩臂</text><text x="274.17" y="16" text-anchor="middle">颈</text><text x="309.17" y="8" text-anchor="middle">头</text><text x="350" y="8" text-anchor="end">全身</text></g><path class="pg-axis" d="M0 78H350"/><g class="pg-tick"><path d="M0 78v4"/><text class="ax" x="0" y="95" text-anchor="start">0</text><path d="M116.67 78v4"/><text class="ax" x="116.67" y="95" text-anchor="middle">5</text><path d="M233.33 78v4"/><text class="ax" x="233.33" y="95" text-anchor="middle">10</text><path d="M349.25 78v4"/><text class="ax" x="350" y="95" text-anchor="end">15 分钟</text><path d="M23.33 78v2"/><path d="M46.67 78v2"/><path d="M70 78v2"/><path d="M93.33 78v2"/><path d="M140 78v2"/><path d="M163.33 78v2"/><path d="M186.67 78v2"/><path d="M210 78v2"/><path d="M256.67 78v2"/><path d="M280 78v2"/><path d="M303.33 78v2"/><path d="M326.67 78v2"/></g></svg></figure>
+    <p class="desc t-body ink-2 pretty">从脚到头，逐处留意身体的感觉。<br>躺着做也行；睡着了，就当今天到这里。</p>
+    <button class="btn-key"><span class="lead"><i class="led"></i>开始</span><span class="num">15:00</span></button>
+  </section>
+
+  <section class="sec quick">
+    <div class="sec-h"><span class="t-label">快速开始</span></div>
+    <ul><li><span class="g"><svg class="glyph" viewBox="0 0 48 24" width="48" height="24" aria-hidden="true"><path d="M0 3C14.4 3 17.28 10.5 24 10.5S33.6 3 48 3"/><path d="M0 21C14.4 21 17.28 13.5 24 13.5S33.6 21 48 21"/></svg></span><span class="name">三分钟呼吸空间</span><span class="dur"><span class="num">3</span> 分钟</span><svg class="i s16 chev" aria-hidden="true"><use href="#i-chevron"/></svg></li><li><span class="g"><svg class="glyph" viewBox="0 0 48 24" width="48" height="24" aria-hidden="true"><path d="M0 20L0.33 18.64L0.67 17.29L1 15.98L1.33 14.72L1.67 13.54L2 12.43L2.33 11.43L2.67 10.54L3 9.78L3.33 9.15L3.67 8.66L4 8.32L4.33 8.14L4.67 8.1L5 8.1L5.33 7.88L5.67 6.51L6 5.27L6.33 4.23L6.67 3.48L7 3.07L7.33 3.31L7.67 4.08L8 4.83L8.33 5.57L8.67 6.28L9 6.97L9.33 7.65L9.67 8.3L10 8.94L10.33 9.56L10.67 10.16L11 10.74L11.33 11.31L11.67 11.85L12 12.38L12.33 12.89L12.67 13.37L13 13.85L13.33 14.3L13.67 14.73L14 15.15L14.33 15.55L14.67 15.93L15 16.29L15.33 16.64L15.67 16.97L16 17.28L16.33 17.57L16.67 17.85L17 18.1L17.33 18.35L17.67 18.57L18 18.78L18.33 18.97L18.67 19.14L19 19.3L19.33 19.44L19.67 19.56L20 19.67L20.33 19.76L20.67 19.84L21 19.9L21.33 19.94L21.67 19.98L22 19.99L22.33 20L22.67 20L23 20L23.33 20L23.67 20L24 20L24.33 18.64L24.67 17.29L25 15.98L25.33 14.72L25.67 13.54L26 12.43L26.33 11.43L26.67 10.54L27 9.78L27.33 9.15L27.67 8.66L28 8.32L28.33 8.14L28.67 8.1L29 8.1L29.33 7.88L29.67 6.51L30 5.27L30.33 4.23L30.67 3.48L31 3.07L31.33 3.31L31.67 4.08L32 4.83L32.33 5.57L32.67 6.28L33 6.97L33.33 7.65L33.67 8.3L34 8.94L34.33 9.56L34.67 10.16L35 10.74L35.33 11.31L35.67 11.85L36 12.38L36.33 12.89L36.67 13.37L37 13.85L37.33 14.3L37.67 14.73L38 15.15L38.33 15.55L38.67 15.93L39 16.29L39.33 16.64L39.67 16.97L40 17.28L40.33 17.57L40.67 17.85L41 18.1L41.33 18.35L41.67 18.57L42 18.78L42.33 18.97L42.67 19.14L43 19.3L43.33 19.44L43.67 19.56L44 19.67L44.33 19.76L44.67 19.84L45 19.9L45.33 19.94L45.67 19.98L46 19.99L46.33 20L46.67 20L47 20L47.33 20L47.67 20L48 20"/></svg></span><span class="name">周期性叹息</span><span class="dur"><span class="num">5</span> 分钟</span><svg class="i s16 chev" aria-hidden="true"><use href="#i-chevron"/></svg></li><li><span class="g"><svg class="glyph" viewBox="0 0 48 24" width="48" height="24" aria-hidden="true"><path d="M0 17H48"/><path d="M6 17V8"/><path d="M17 17V8"/><path d="M21 17V8"/><path d="M33 17V8"/></svg></span><span class="name">专注呼吸</span><span class="dur"><span class="num">10</span> 分钟</span><svg class="i s16 chev" aria-hidden="true"><use href="#i-chevron"/></svg></li></ul>
+  </section>
+
+  <section class="sec week">
+    <div class="week-b">
+      <div><h3 class="t-label">近 7 天</h3>
+      <p><span class="num v">64</span>&nbsp;分钟<span class="sep">·</span>练习 <span class="num">5</span> 天</p></div>
+      <svg class="weekbars" viewBox="0 0 102 50" width="102" height="50" aria-label="近 7 天每天分钟数"><rect class="wb" x="0" y="9.8" width="6" height="18.2"/><text class="wb-d" x="3" y="45" text-anchor="middle">五</text><rect class="wb-zero" x="16" y="26.5" width="6" height="1.5"/><text class="wb-d" x="19" y="45" text-anchor="middle">六</text><rect class="wb" x="32" y="0" width="6" height="28"/><text class="wb-d" x="35" y="45" text-anchor="middle">日</text><rect class="wb" x="48" y="14" width="6" height="14"/><text class="wb-d" x="51" y="45" text-anchor="middle">一</text><rect class="wb-zero" x="64" y="26.5" width="6" height="1.5"/><text class="wb-d" x="67" y="45" text-anchor="middle">二</text><rect class="wb" x="80" y="9.8" width="6" height="18.2"/><text class="wb-d" x="83" y="45" text-anchor="middle">三</text><rect class="wb-today" x="96" y="16.8" width="6" height="11.2"/><text class="wb-d now" x="99" y="45" text-anchor="middle">四</text></svg>
+    </div>
+  </section>
+
+  <nav class="tabbar" aria-label="主导航"><a class="tab" aria-current="page"><svg class="i" aria-hidden="true"><use href="#i-today"/></svg><span>今日</span></a><a class="tab"><svg class="i" aria-hidden="true"><use href="#i-practice"/></svg><span>练习</span></a><a class="tab"><svg class="i" aria-hidden="true"><use href="#i-records"/></svg><span>记录</span></a><a class="tab"><svg class="i" aria-hidden="true"><use href="#i-evidence"/></svg><span>依据</span></a></nav>
+  <div class="homebar"></div>
+</main>
+</body>
+</html>

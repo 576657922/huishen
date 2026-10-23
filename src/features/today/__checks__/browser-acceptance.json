@@ -1,0 +1,85 @@
+{
+  "results": [
+    {
+      "name": "heading and overflow: /",
+      "passed": true
+    },
+    {
+      "name": "heading and overflow: /practices",
+      "passed": true
+    },
+    {
+      "name": "heading and overflow: /practices/slow",
+      "passed": true
+    },
+    {
+      "name": "heading and overflow: /records",
+      "passed": true
+    },
+    {
+      "name": "heading and overflow: /evidence",
+      "passed": true
+    },
+    {
+      "name": "heading and overflow: /welcome",
+      "passed": true
+    },
+    {
+      "name": "heading and overflow: /program/mindfulness-8w",
+      "passed": true
+    },
+    {
+      "name": "heading and overflow: /program/breathing-4w",
+      "passed": true
+    },
+    {
+      "name": "real start flow: recommendation to player",
+      "passed": true
+    },
+    {
+      "name": "hard moment: Escape restores keyboard focus",
+      "passed": true
+    },
+    {
+      "name": "evidence citation: filter, expand, scroll and focus",
+      "passed": true
+    },
+    {
+      "name": "sound picker: Escape restores focus",
+      "passed": true
+    },
+    {
+      "name": "records: detail, delete confirmation, cancel and export JSON",
+      "passed": true
+    },
+    {
+      "name": "records: confirmed deletion and undo restore the real stored record",
+      "passed": true
+    },
+    {
+      "name": "safety notice scroll gate: phone light",
+      "passed": true
+    },
+    {
+      "name": "safety notice scroll gate: phone dark",
+      "passed": true
+    },
+    {
+      "name": "safety notice scroll gate: desktop light",
+      "passed": true
+    },
+    {
+      "name": "safety notice scroll gate: desktop dark",
+      "passed": true
+    },
+    {
+      "name": "first start: preserves the requested practice through the required notice",
+      "passed": true
+    },
+    {
+      "name": "200% notice: initially unread, scrollable, and confirms only after reaching the end",
+      "passed": true
+    }
+  ],
+  "errors": []
+}

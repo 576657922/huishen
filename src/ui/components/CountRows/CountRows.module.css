@@ -1,0 +1,97 @@
+/* DESIGN.md §8.9 CountRows · records-desktop.html .cr（桌面）/ records.html .crow（手机） */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+.table th,
+.table td {
+  padding: 0;
+  font-weight: var(--w-regular);
+  text-align: left;
+  white-space: nowrap;
+}
+.num {
+  font-family: var(--font-num);
+  font-variant-numeric: tabular-nums lining-nums;
+  letter-spacing: var(--tr-num);
+}
+.table .num {
+  text-align: right;
+}
+.table thead th,
+.table thead td {
+  padding-bottom: var(--sp-1);
+  border-bottom: var(--hair) solid var(--rule);
+  color: var(--ink-3);
+  font-family: var(--font-ui);
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+  letter-spacing: var(--tr-caption);
+}
+
+/* 桌面：日期 88 | 轨道 | 准确率 48 | 数乱了 72，栏间 12；行高 32，第一行上面留 4 */
+.desk .colDate {
+  width: calc(88px + var(--sp-3));
+}
+.desk .colAcc {
+  width: calc(48px + var(--sp-3));
+}
+.desk .colResets {
+  width: calc(72px + var(--sp-3));
+}
+.desk tbody th,
+.desk tbody td {
+  height: 32px;
+}
+.desk tbody tr:first-child > * {
+  padding-top: 4px;
+  height: 36px;
+}
+.desk .num {
+  padding-left: var(--sp-3);
+}
+.track {
+  padding-left: var(--sp-3);
+}
+.svg {
+  display: block;
+  overflow: visible;
+}
+.grid {
+  stroke: var(--rule);
+  stroke-width: 1;
+}
+.rail {
+  stroke: var(--line);
+  stroke-width: 1;
+}
+.dot {
+  fill: var(--ink);
+  stroke: var(--paper);
+  stroke-width: 2;
+}
+.axis {
+  fill: var(--ink-3);
+  font-family: var(--font-num);
+  font-size: var(--fs-axis);
+  font-variant-numeric: tabular-nums;
+}
+
+/* 手机：日期 | 准确率 64 | 数乱了 72；表头 28 高，每行至少 40 高，行间细线 */
+.phone .colAcc {
+  width: 64px;
+}
+.phone .colResets {
+  width: 72px;
+}
+.phone thead th {
+  height: 28px;
+  padding-bottom: 0;
+  vertical-align: middle;
+}
+.phone tbody th,
+.phone tbody td {
+  height: 40px;
+  border-bottom: var(--hair) solid var(--rule);
+}

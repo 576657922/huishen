@@ -1,0 +1,62 @@
+/**
+ * 图标名：与 icons.svg 里的 symbol id 一一对应（去掉 i- 前缀）。
+ * 顺序照抄雪碧图，icons.test.tsx 逐项核对；雪碧图改了，先改这里，类型检查会指出所有用错的地方。
+ */
+export const ICON_NAMES = [
+  'today',
+  'today-on',
+  'practice',
+  'practice-on',
+  'records',
+  'records-on',
+  'evidence',
+  'evidence-on',
+  'settings',
+  'play',
+  'pause',
+  'end',
+  'close',
+  'back',
+  'chevron-right',
+  'chevron-down',
+  'sound',
+  'sound-off',
+  'bell',
+  'timer',
+  'moon',
+  'sun',
+  'theme-auto',
+  'plus',
+  'minus',
+  'check',
+  'info',
+  'external',
+  'download',
+  'upload',
+  'calendar',
+  'phone',
+  'heart-rate',
+  'bluetooth',
+  'mark',
+  'skip',
+  'refresh',
+  'trash',
+  'edit',
+  'search',
+  'help',
+  'breath',
+  'wave',
+  'rain',
+  'wind',
+  'stream',
+  'bird',
+  'forest',
+  'noise',
+  'music',
+  'sleep',
+] as const
+
+export type IconName = (typeof ICON_NAMES)[number]
+
+/** DESIGN.md §9 的五档尺寸：24 标签栏与图标按钮，20 按钮与行，18 小标签，16 箭头，14 外链 */
+export type IconSize = 14 | 16 | 18 | 20 | 24

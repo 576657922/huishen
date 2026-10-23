@@ -1,0 +1,42 @@
+/* DESIGN.md §8.9 MonthCalendar · components.css .cal。栏窄于 350 时整张图按比例缩小，不横向滚动 */
+.cal {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  overflow: visible;
+}
+.weekday {
+  fill: var(--ink-3);
+  font-family: var(--font-ui);
+  font-size: var(--fs-axis);
+  letter-spacing: 0.02em;
+}
+.rule {
+  stroke: var(--rule);
+  stroke-width: 1;
+}
+.day {
+  fill: var(--ink-3);
+  font-family: var(--font-num);
+  font-size: var(--fs-axis);
+  font-variant-numeric: tabular-nums;
+}
+.today {
+  fill: var(--zhu);
+  font-weight: var(--w-semibold);
+}
+.todayRule {
+  fill: none;
+  stroke: var(--zhu);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+}
+.dot {
+  fill: var(--dot);
+}
+@media (forced-colors: active) {
+  .today,
+  .todayRule {
+    forced-color-adjust: none;
+  }
+}

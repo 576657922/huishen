@@ -1,0 +1,15 @@
+node_modules
+dist
+dev-dist
+*.local
+.DS_Store
+test-results
+playwright-report
+coverage
+.vite
+__pycache__/
+*.pyc
+
+# 页面验收时生成的截图和日志（可用同目录的 *.mjs 脚本重新生成）
+src/**/__checks__/*.png
+src/**/__checks__/*.log

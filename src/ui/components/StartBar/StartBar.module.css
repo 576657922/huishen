@@ -1,0 +1,48 @@
+/* DESIGN.md §8.4 · components.css .startbar。深色里是次级墨色的板（--fill-primary），不刺眼 */
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: var(--startbar-h);
+  padding: 0 var(--sp-5) 0 var(--sp-4);
+  border-radius: var(--r-2);
+  background: var(--fill-primary, var(--ink));
+  color: var(--on-ink);
+  text-decoration: none;
+  transition: background-color var(--dur-press) var(--ease-standard);
+}
+.bar:active {
+  background: var(--fill-primary-press, var(--ink-press));
+}
+.bar:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+.label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--fs-name);
+  line-height: var(--lh-name);
+  font-weight: var(--w-semibold);
+  letter-spacing: var(--tr-text);
+}
+.meta {
+  color: var(--on-ink-2);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+}
+.figure {
+  color: var(--on-ink);
+}
+@media (hover: hover) and (pointer: fine) {
+  .bar:hover {
+    background: var(--fill-primary-press, var(--ink-press));
+  }
+}
+@media (forced-colors: active) {
+  .bar {
+    border: 1px solid CanvasText;
+  }
+}

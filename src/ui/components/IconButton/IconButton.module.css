@@ -1,0 +1,24 @@
+/* DESIGN.md §8.3 icon · components.css .icon-btn */
+.btn {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: var(--hit);
+  height: var(--hit);
+  border-radius: var(--r-2);
+  color: var(--ink);
+  text-decoration: none;
+  transition: background-color var(--dur-press) var(--ease-standard);
+}
+.btn:active:not(:disabled) {
+  background: var(--wash-2);
+}
+.btn:disabled {
+  color: var(--line);
+}
+@media (hover: hover) and (pointer: fine) {
+  .btn:hover:not(:disabled, :active) {
+    background: var(--wash);
+  }
+}

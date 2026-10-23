@@ -1,0 +1,82 @@
+{{ head('这次练习 · 回神', { bars: 'dock' }) }}
+<style>
+  .sum-head { padding-top: var(--sp-1); }
+  .sum-head h1 { margin-top: var(--sp-1); }
+  .sum-head .lead { margin-top: var(--sp-1); }
+  .marks { margin-top: var(--sp-6); padding-top: var(--sp-2); border-top: 1px solid var(--ink); }
+  .marks__row { display: flex; align-items: baseline; justify-content: space-between; }
+  .marks__label { color: var(--ink-3); font-size: var(--fs-caption); line-height: var(--lh-caption); font-family: var(--font-ui); font-weight: var(--w-regular); letter-spacing: var(--tr-caption); }
+  .marks__value { font-size: var(--fs-body); color: var(--ink-2); }
+  .marks__value .pnum { font-size: var(--fs-readout); line-height: var(--lh-readout); font-weight: var(--w-light); color: var(--ink); }
+  .marks .ftl { margin-top: var(--sp-2); }
+  .marks .cap { margin-top: var(--sp-2); color: var(--ink-3); font-size: var(--fs-caption); line-height: var(--lh-caption); }
+  .week-sum { display: flex; justify-content: space-between; align-items: baseline; margin-top: var(--sp-4); padding: var(--sp-3) 0; border-top: var(--hair) solid var(--rule); border-bottom: var(--hair) solid var(--rule); color: var(--ink-2); }
+  .week-sum .v { color: var(--ink); }
+  .q { margin-top: var(--sp-8); }
+  .q__head { display: flex; align-items: center; justify-content: space-between; min-height: var(--hit); margin-bottom: var(--sp-2); }
+  .q__title { font-family: var(--font-display); font-weight: var(--w-display); font-size: var(--fs-name); line-height: var(--lh-name); letter-spacing: var(--tr-name); }
+  .q__skip { display: inline-flex; align-items: center; justify-content: flex-end; min-width: var(--hit); min-height: var(--hit); color: var(--ink-2); text-decoration: none; }
+  .gentler { margin-top: var(--sp-6); padding-top: var(--sp-3); border-top: 1px solid var(--ink); }
+  .gentler h3 { font-family: var(--font-display); font-weight: var(--w-display); font-size: var(--fs-name); line-height: var(--lh-name); letter-spacing: var(--tr-name); }
+  .gentler p { margin-top: var(--sp-2); color: var(--ink-2); }
+  .gentler .rows { margin-top: var(--sp-3); border-top: var(--hair) solid var(--rule); }
+</style>
+<body>
+{{ sprite() }}
+{{ device() }}
+{{ statusbar('08:15') }}
+<main class="page page--dock">
+  <nav class="navbar" aria-label="小结">
+    <span></span>
+    <a class="icon-btn" href="/" aria-label="关闭小结，回到今日">{{ icon('close') }}</a>
+  </nav>
+  <header class="sum-head">
+    <p class="kicker"><span>10月22日 08:05–08:15</span><span>{{ K.COPY.SUMMARY.title }}</span></p>
+    <h1 class="t-display" tabindex="-1">{{ K.practice('focus').name }}</h1>
+    <p class="lead">{{ K.COPY.SUMMARY.practiced('10 分钟') }}</p>
+  </header>
+
+  <section class="marks" aria-labelledby="marks-h">
+    <div class="marks__row">
+      <h2 id="marks-h" class="marks__label">回神</h2>
+      <p class="marks__value"><span class="pnum">{{ D.FOCUS_TODAY.marks.length }}</span> 次</p>
+    </div>
+    {{ focusTimeline({ width: 350, minutes: 10, marks: D.FOCUS_TODAY.marks }) }}
+    <p class="cap">{{ K.keep(NEW['SUMMARY.marksCaption'] + K.COPY.SUMMARY.marksNote) }}</p>
+  </section>
+
+  <p class="week-sum"><span>本周累计</span><span class="v">{{ K.COPY.SUMMARY.week(3, 41).replace('本周累计 ', '').replace(/(\d+)/g, '<span class="pnum">$1</span>') }}</span></p>
+
+  <section class="q" aria-labelledby="feel-h">
+    <div class="q__head"><h2 id="feel-h" class="q__title">{{ K.SAFETY.AFTER_PRACTICE.question }}</h2><a class="q__skip" href="#">{{ K.SAFETY.AFTER_PRACTICE.skip }}</a></div>
+    <div class="choice" role="radiogroup" aria-labelledby="feel-h">
+      {{ K.SAFETY.AFTER_PRACTICE.options.map(o => `<button role="radio" aria-checked="${o.value === 'tenser'}" type="button"${o.value === 'tenser' ? '' : ' tabindex="-1"'}${o.value === 'unwell' ? ' aria-haspopup="dialog"' : ''}>${o.label}</button>`).join('') }}
+    </div>
+    <section class="gentler" aria-labelledby="gentler-h">
+      <h3 id="gentler-h">{{ K.SAFETY.AFTER_PRACTICE.gentler.title }}</h3>
+      {{ K.SAFETY.AFTER_PRACTICE.gentler.paragraphs.map(t => `<p>${K.keep(t)}</p>`).join('') }}
+      <div class="rows">
+        {{ K.SAFETY.AFTER_PRACTICE.gentler.suggestions.map(sg => { const p = K.practice(sg.practiceId); return `<a class="prow" href="/practices/${sg.practiceId}">${glyph(sg.practiceId)}<span><span class="prow__name">${p.name}</span><span class="prow__desc">${K.keep(p.short)}</span></span><span class="prow__end"><span class="prow__dur"><span class="pnum">${sg.minutes}</span> 分钟</span></span></a>` }).join('') }}
+      </div>
+      <a class="link-more" href="/help">{{ K.SAFETY.AFTER_PRACTICE.gentler.help }}{{ icon('chevron-right') }}</a>
+    </section>
+  </section>
+
+  <section class="q" aria-labelledby="ck-h">
+    <div class="q__head"><h2 id="ck-h" class="q__title">{{ K.COPY.SUMMARY.checkin.question }}</h2><a class="q__skip" href="#">{{ K.COPY.SUMMARY.checkin.skip }}</a></div>
+    <div class="scale" role="radiogroup" aria-labelledby="ck-h" aria-describedby="ck-anchors">
+      {{ Array.from({ length: 11 }, (_, i) => `<button role="radio" aria-checked="false" type="button"${i ? ' tabindex="-1"' : ''}>${i}</button>`).join('') }}
+    </div>
+    <p class="scale-anchors" id="ck-anchors"><span class="pnum">0</span> {{ K.COPY.SUMMARY.checkin.low }} · <span class="pnum">10</span> {{ K.COPY.SUMMARY.checkin.high }}</p>
+  </section>
+
+  <section class="q" aria-labelledby="note-h">
+    <div class="q__head"><h2 id="note-h" class="q__title">{{ K.COPY.SUMMARY.note.label }}</h2></div>
+    <div class="field is-placeholder" role="textbox" aria-labelledby="note-h" aria-multiline="true" tabindex="0">{{ K.COPY.SUMMARY.note.placeholder }}</div>
+  </section>
+</main>
+<div class="dock"><a class="btn btn--primary btn--block" href="/">{{ K.COPY.SUMMARY.done }}</a></div>
+{{ homebar() }}
+</div>
+</body>
+</html>

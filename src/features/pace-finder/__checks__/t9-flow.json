@@ -1,0 +1,23 @@
+{
+  "errors": [],
+  "record": {
+    "v": 1,
+    "id": "mvl9m6rr-1hviqs",
+    "practiceId": "pace-finder",
+    "kind": "assessment",
+    "startedAt": "2026-10-23T17:49:45.457Z",
+    "date": "2026-10-24",
+    "plannedSec": 300,
+    "actualSec": 300,
+    "completed": true,
+    "sound": {
+      "ambience": "none",
+      "music": "none"
+    },
+    "params": {
+      "steps": 5,
+      "rate": 5.5
+    }
+  },
+  "applied": 5.5
+}

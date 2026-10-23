@@ -1,0 +1,76 @@
+/* DESIGN.md §8.8 field · §8.16 备注 · §3.5 错误 */
+.label {
+  display: block;
+  margin-bottom: var(--sp-2);
+  font-family: var(--font-display);
+  font-weight: var(--w-display);
+  font-size: var(--fs-name);
+  line-height: var(--lh-name);
+  letter-spacing: var(--tr-name);
+}
+.field {
+  display: block;
+  width: 100%;
+  min-height: 48px;
+  margin: 0;
+  padding: var(--sp-3);
+  border: 0;
+  border-radius: var(--r-2);
+  background: var(--paper-raised);
+  box-shadow: inset 0 0 0 1px var(--line);
+  color: var(--ink);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  letter-spacing: var(--tr-body);
+  resize: none;
+  appearance: none;
+}
+/* 多行的备注随内容长高（不支持 field-sizing 的浏览器保持一行高、内部滚动） */
+textarea.field {
+  field-sizing: content;
+  overflow-wrap: break-word;
+}
+.field::placeholder {
+  color: var(--ink-3);
+  opacity: 1;
+}
+.field:focus-visible,
+.field:focus {
+  outline: none;
+  box-shadow: inset 0 0 0 2px var(--ink);
+}
+.invalid {
+  box-shadow: inset 0 0 0 2px var(--ink);
+}
+.error {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-1);
+  margin-top: var(--sp-2);
+  color: var(--ink);
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+  letter-spacing: var(--tr-caption);
+}
+.error svg {
+  margin-top: 2px;
+}
+.counter {
+  margin-top: var(--sp-1);
+  color: var(--ink-3);
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+  text-align: right;
+}
+/* 强制颜色（高对比度）：底色和阴影都会被清掉，靠线框和系统色把边界、状态画出来（DESIGN.md §3.7） */
+@media (forced-colors: active) {
+  .field {
+    border: 1px solid CanvasText;
+  }
+  .field:focus-visible,
+  .field:focus,
+  .invalid {
+    outline: 2px solid CanvasText;
+    outline-offset: 0;
+  }
+}

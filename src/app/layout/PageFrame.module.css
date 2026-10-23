@@ -1,0 +1,28 @@
+/* 页面外框（DESIGN.md §8.0、§5.2，components.css .page / .page--dock / .page--bare） */
+.page {
+  padding: var(--safe-top) var(--margin) calc(var(--tabbar-h) + var(--safe-bottom) + var(--sp-6));
+}
+.dock {
+  padding-bottom: calc(var(--dock-h) + var(--safe-bottom) + var(--sp-6));
+}
+.bare {
+  padding-bottom: calc(var(--safe-bottom) + var(--sp-6));
+}
+
+@media (min-width: 768px) {
+  .page {
+    padding: var(--sp-8) var(--margin-tablet) var(--sp-16);
+  }
+}
+/* 平板上停靠栏仍固定在底部，内容要给它让出位置（桌面上开始条就地排在内容里） */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .dock {
+    padding-bottom: calc(var(--dock-h) + var(--safe-bottom) + var(--sp-6));
+  }
+}
+@media (min-width: 1024px) {
+  .page {
+    padding: var(--sp-10) var(--margin-desk) var(--sp-16);
+    max-width: calc(var(--content-max) + 2 * var(--margin-desk));
+  }
+}

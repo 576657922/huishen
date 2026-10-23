@@ -1,0 +1,54 @@
+{{ head('慢呼吸 · 回神', { theme: 'dark', bars: 'player', surface: 'player' }) }}
+<style>
+  .phase-row { display: flex; align-items: flex-end; justify-content: space-between; }
+  .phase-row .phase { margin-left: -0.04em; }
+  .phase-next { padding-bottom: var(--sp-5); color: var(--ink-2); }
+  .phase-next .pnum { color: var(--ink); }
+  .curve { margin: var(--sp-4) calc(-1 * var(--margin)) 0; }
+  .pace { display: flex; align-items: center; justify-content: flex-end; gap: var(--sp-3); margin-top: var(--sp-3); }
+  .pace__hint { color: var(--ink-3); font-size: var(--fs-caption); line-height: var(--lh-caption); }
+</style>
+<body>
+{{ sprite() }}
+{{ device() }}
+{{ statusbar('21:43') }}
+<main class="player" aria-label="慢呼吸练习">
+  <header class="hud">
+    <div>
+      <p class="hud__name">慢呼吸</p>
+      <p class="hud__meta">10 分钟 · 雨 + 长音</p>
+    </div>
+    <button class="chip chip--unwell" type="button" aria-haspopup="dialog" data-unwell>{{ icon('help') }}{{ K.COPY.PLAYER.unwell }}</button>
+  </header>
+
+  <div class="stage">
+    <section class="phase-row" aria-hidden="true">
+      <p class="phase">呼</p>
+      <p class="phase-next"><span class="pnum">3</span> 秒后吸气</p>
+    </section>
+    <p class="vh">跟着节拍呼吸：吸 4.5 秒，呼 6.5 秒，每分钟 5.5 次。</p>
+    <figure class="curve" aria-hidden="true">{{ breathCurve({ p: withWarmup(resonance(5.5, 'long')), t: 225.5, width: V.LANDSCAPE ? 446 : 390, height: V.LANDSCAPE ? 150 : 216, past: 24, future: 14, padTop: 18, padBot: 18, labels: false }) }}</figure>
+    <div class="pace">
+      <span class="pace__hint" id="hurry-hint">{{ NEW['PLAYER.paced.hurryHint'] }}</span>
+      <button class="chip chip--quiet" type="button" aria-describedby="hurry-help">{{ K.COPY.PLAYER.paced.hurry }}</button>
+    </div>
+    <p id="hurry-help" class="vh">{{ K.COPY.PLAYER.paced.hurryHelp }}</p>
+  </div>
+
+  <div class="readouts">
+    <p class="readout"><span class="readout__label">剩余</span><span class="readout__value">{{ fmtClock(600 - 225.5) }}</span></p>
+    <p class="readout"><span class="readout__label">节律</span><span class="readout__value">5.5<span class="unit">次/分</span></span></p>
+    <p class="readout"><span class="readout__label">轮数</span><span class="readout__value">23</span></p>
+  </div>
+
+  <nav class="player-controls" aria-label="练习控制">
+    <button type="button">{{ icon('pause') }}{{ K.COPY.PLAYER.pause }}</button>
+    <button type="button">{{ icon('sound') }}{{ K.COPY.PLAYER.sound }}</button>
+    <button type="button" aria-haspopup="dialog" data-control="unwell" data-unwell>{{ icon('help') }}{{ NEW['PLAYER.unwellShort'] }}</button>
+    <button type="button">{{ icon('end') }}{{ K.COPY.PLAYER.end }}</button>
+  </nav>
+</main>
+{{ homebar() }}
+</div>
+</body>
+</html>

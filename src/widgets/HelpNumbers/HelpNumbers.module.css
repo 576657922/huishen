@@ -1,0 +1,39 @@
+/* 求助电话（DESIGN.md §8.17，distress.html 的 .help） */
+.help {
+  margin-top: var(--sp-5);
+}
+
+/* 小节头里的标题是宋体 17（名称字号），整个标题是去 /help 的链接，44 高 */
+.head {
+  min-height: var(--hit);
+}
+.head h2,
+.head h3 {
+  font-size: var(--fs-name);
+  line-height: var(--lh-name);
+  letter-spacing: var(--tr-name);
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  min-height: var(--hit);
+  color: inherit;
+  text-decoration: none;
+}
+.chevron {
+  color: var(--ink-3);
+}
+
+.rows {
+  border-top: var(--hair) solid var(--rule);
+}
+
+.verified {
+  margin-top: var(--sp-3);
+  color: var(--ink-3);
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+  letter-spacing: var(--tr-caption);
+}

@@ -1,0 +1,51 @@
+/* DESIGN.md §8.17 DialGrid · components.css .dial */
+/* 两栏等宽；栏宽放不下一格的号码和图标时（360、320 的手机里的 400-161-9995），那一栏取它需要的宽度，
+   另一栏让出来——号码从不折行，也不撑出横向滚动 */
+.dial {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(min-content, 1fr));
+}
+.cell {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 64px;
+  padding: var(--sp-2) 0;
+  color: inherit;
+  text-decoration: none;
+}
+.cell:active {
+  background: var(--wash-2);
+}
+.cell:nth-child(even) {
+  padding-left: var(--sp-4);
+  border-left: var(--hair) solid var(--rule);
+}
+.cell:nth-child(n + 3) {
+  border-top: var(--hair) solid var(--rule);
+}
+.cell:focus-visible {
+  outline-offset: 2px;
+  position: relative;
+  z-index: 1;
+}
+.name {
+  color: var(--ink-3);
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+  letter-spacing: var(--tr-caption);
+}
+.num {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-family: var(--font-num);
+  font-variant-numeric: tabular-nums lining-nums;
+  font-size: var(--fs-name);
+  line-height: var(--lh-name);
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+.icon {
+  color: var(--ink-3);
+}

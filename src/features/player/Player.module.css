@@ -1,0 +1,223 @@
+.hud {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  min-height: var(--controls-h);
+  padding-top: var(--sp-2);
+}
+.name {
+  font-weight: var(--w-semibold);
+}
+.hudUnwell {
+  display: none;
+}
+.stage {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: var(--sp-6) 0;
+  min-height: 0;
+}
+.idle {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--sp-8);
+}
+.notice {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+}
+.controls {
+  display: flex;
+  border-top: var(--hair) solid var(--rule);
+  border-bottom: var(--hair) solid var(--rule);
+}
+.controls > button {
+  flex: 1;
+  min-width: 0;
+  min-height: var(--controls-h);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--sp-1);
+  font-size: var(--fs-body);
+}
+.controls > :where(button) + button {
+  border-left: var(--hair) solid var(--rule);
+}
+.controls > button:active {
+  background: var(--wash-2);
+}
+.focusStage {
+  justify-content: flex-start;
+  gap: var(--sp-4);
+}
+.focusKey,
+.countPad > button {
+  background: var(--paper-raised);
+  border: var(--hair) solid var(--line);
+  border-radius: var(--r-3);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: var(--sp-3);
+}
+.focusKey {
+  flex: 1;
+  width: 100%;
+  min-height: calc(var(--sp-20) * 3);
+  margin-top: var(--sp-2);
+}
+.focusKey > span:first-child {
+  font-family: var(--font-display);
+  font-size: var(--fs-title);
+  font-weight: var(--w-semibold);
+  letter-spacing: var(--tr-key);
+}
+.focusKey:active,
+.countPad > button:active {
+  background: var(--wash-2);
+}
+.focusCaption {
+  min-height: calc(var(--sp-4) * 3.5);
+  margin-top: var(--sp-4);
+  color: var(--ink-2);
+}
+.countPad {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: var(--sp-3);
+  min-height: 280px;
+  flex: 1;
+  margin-block: var(--sp-3);
+}
+.countPad > button > span:first-child {
+  font-family: var(--font-num);
+  font-size: var(--fs-timer);
+  font-weight: var(--w-light);
+}
+.where {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-5);
+}
+.where h1 {
+  font-size: var(--fs-title);
+  line-height: var(--lh-title);
+  margin-top: var(--sp-1);
+}
+.guidedCaption {
+  min-height: var(--sp-24);
+  font-size: var(--fs-head);
+  line-height: var(--lh-title);
+  margin-top: var(--sp-10);
+}
+.progress {
+  display: block;
+  width: 100%;
+  margin-block: var(--sp-4);
+}
+.track {
+  stroke: var(--line);
+  stroke-width: 1;
+  fill: none;
+}
+.trace {
+  stroke: var(--trace);
+  stroke-width: 2;
+  fill: none;
+}
+.dot {
+  fill: var(--now);
+}
+.sleepDim {
+  opacity: 0.5;
+  transition: opacity var(--dur-move);
+}
+.summary {
+  max-width: none;
+}
+.summaryBody {
+  max-width: var(--reading-max);
+}
+.close {
+  display: flex;
+  justify-content: flex-end;
+}
+.data {
+  margin-top: var(--sp-6);
+  border-top: var(--hair) solid var(--ink);
+  padding-top: var(--sp-3);
+}
+.week {
+  margin-top: var(--sp-6);
+  padding-block: var(--sp-3);
+  border-block: var(--hair) solid var(--rule);
+}
+.gentler {
+  border-top: var(--hair) solid var(--ink);
+  margin-top: var(--sp-6);
+  padding-top: var(--sp-4);
+}
+.gentler h2 {
+  font-size: var(--fs-name);
+  line-height: var(--lh-name);
+}
+.gentler p {
+  margin-top: var(--sp-3);
+  color: var(--ink-2);
+}
+.note {
+  margin-top: var(--sp-8);
+}
+.summaryDock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+@media (min-width: 768px) {
+  .hudUnwell {
+    display: inline-flex;
+  }
+  .controls .controlUnwell {
+    display: none;
+  }
+}
+@media (orientation: landscape) and (max-height: 499px) {
+  .hudUnwell {
+    display: inline-flex;
+  }
+  .controls .controlUnwell {
+    display: none;
+  }
+  .stage {
+    padding: 0;
+  }
+  .focusKey {
+    min-height: 150px;
+  }
+  .countPad {
+    min-height: 180px;
+  }
+}
+.dataHead,
+.week {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--sp-4);
+}
+.readout {
+  font-family: var(--font-num);
+  font-size: var(--fs-readout);
+  font-weight: var(--w-light);
+  line-height: var(--lh-readout);
+}

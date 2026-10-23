@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <title>回神</title>
+  <!-- maskable: full-bleed paper; the seal (50 % of the side) sits inside the central 80 % circle -->
+  <rect width="1024" height="1024" fill="#F4F1EA"/>
+  <path fill="#B33A21" d="M256 247.47H768V295.82H256ZM256 711.11H768V759.47H256ZM256 247.47H335.64V793.6H256ZM688.36 247.47H768V759.47H688.36ZM393.96 375.47H630.04V412.44H393.96ZM393.96 571.73H630.04V608.71H393.96ZM393.96 375.47H448V628.62H393.96ZM576 375.47H630.04V608.71H576Z"/>
+</svg>

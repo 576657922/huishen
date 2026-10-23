@@ -1,0 +1,38 @@
+{{ head('开始之前 · 回神', { bars: 'none' }) }}
+<style>
+  .welcome { padding: calc(var(--safe-top) + 48px) var(--margin) 0; }
+  .welcome .lockup .seal { width: 24px; height: 25.6px; }
+  .welcome .lockup .wordmark { font-size: var(--fs-title); line-height: var(--lh-title); }
+  .sheet { top: calc(47px + var(--sp-3)); max-height: none; }
+  .notice section + section { margin-top: var(--sp-5); }
+  .notice h3 { font-family: var(--font-display); font-weight: var(--w-display); font-size: var(--fs-name); line-height: var(--lh-name); letter-spacing: var(--tr-name); margin-bottom: var(--sp-2); }
+  .notice p { color: var(--ink); }
+  .notice p + p { margin-top: var(--sp-2); }
+  .notice ul { margin-top: var(--sp-1); }
+  .notice .stoplist li { color: var(--ink); }
+  .sheet__foot { display: block; }
+  .readnote { margin-bottom: var(--sp-2); color: var(--ink-3); font-size: var(--fs-caption); line-height: var(--lh-caption); }
+</style>
+<body>
+{{ sprite() }}
+{{ device() }}
+{{ statusbar('20:31') }}
+<div class="welcome" aria-hidden="true" inert data-audit-skip>
+  {{ lockup('/') }}
+</div>
+<div class="scrim"></div>
+<section class="sheet" role="dialog" aria-modal="true" aria-labelledby="notice-h">
+  <div class="sheet__head"><h2 id="notice-h" tabindex="-1">{{ K.SAFETY.FIRST_RUN_NOTICE.title }}</h2></div>
+  <div class="sheet__body notice">
+    {{ K.SAFETY.FIRST_RUN_NOTICE.sections.map(sec => `<section>${sec.heading ? `<h3>${sec.heading}</h3>` : ''}${(sec.paragraphs ?? []).filter(() => !sec.items).map(t => `<p>${K.keep(t)}</p>`).join('')}${sec.items ? `<ul class="stoplist stoplist--dots">${sec.items.map(t => `<li><span>${K.keep(t)}</span></li>`).join('')}</ul>` : ''}${sec.items && sec.paragraphs ? sec.paragraphs.map(t => `<p style="margin-top: var(--sp-2)">${K.keep(t)}</p>`).join('') : ''}</section>`).join('') }}
+    <a class="link-more" href="/help">{{ K.SAFETY.FIRST_RUN_NOTICE.help }}{{ icon('chevron-right') }}</a>
+  </div>
+  <div class="sheet__foot">
+    <p class="readnote" id="readnote">{{ K.SAFETY.FIRST_RUN_NOTICE.readToEnd }}</p>
+    <button class="btn btn--primary btn--block" type="button" aria-disabled="true" aria-describedby="readnote">{{ K.SAFETY.FIRST_RUN_NOTICE.confirm }}</button>
+  </div>
+</section>
+{{ homebar() }}
+</div>
+</body>
+</html>

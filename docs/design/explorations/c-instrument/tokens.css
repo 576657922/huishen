@@ -1,0 +1,203 @@
+/* =====================================================================
+   回神 · 方向 C「器」 — Design tokens
+   ---------------------------------------------------------------------
+   Layering: primitives (--p-*) → semantic tokens (used by components).
+   Components never reference a primitive directly, so a theme is only
+   a remap of the semantic layer.
+   Fonts: mock-ups load the local OFL files below; the app ships
+   build-time subsets of the same families (no CDN).
+   ===================================================================== */
+
+@font-face {
+  font-family: "HS Sans";                     /* 思源黑体 Noto Sans SC VF */
+  src: url("file:///private/tmp/claude-501/-Users-user-Workspace-projects---/f22b5159-9a91-45f0-86f3-be240492ba74/scratchpad/fonts/NotoSansSC-VF.ttf") format("truetype");
+  font-weight: 100 900;
+  font-display: swap;
+}
+@font-face {
+  font-family: "HS Mono";                     /* IBM Plex Mono Light */
+  src: url("file:///private/tmp/claude-501/-Users-user-Workspace-projects---/f22b5159-9a91-45f0-86f3-be240492ba74/scratchpad/fonts/IBMPlexMono-Light.ttf") format("truetype");
+  font-weight: 300;
+  font-display: swap;
+}
+@font-face {
+  font-family: "HS Mono";                     /* IBM Plex Mono Regular */
+  src: url("file:///private/tmp/claude-501/-Users-user-Workspace-projects---/f22b5159-9a91-45f0-86f3-be240492ba74/scratchpad/fonts/IBMPlexMono-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-display: swap;
+}
+
+:root {
+  /* ---------- Primitives: warm grey (hue ≈ 60°, chroma < 0.01) ---------- */
+  --p-grey-0:   #FBFAF8;
+  --p-grey-50:  #F7F6F3;
+  --p-grey-100: #EFEEEA;   /* paper */
+  --p-grey-150: #E6E4DF;
+  --p-grey-200: #DCD9D2;
+  --p-grey-300: #C6C2BA;
+  --p-grey-400: #A9A49B;
+  --p-grey-500: #8C8880;
+  --p-grey-600: #6B6761;
+  --p-grey-700: #57544F;
+  --p-grey-800: #34322F;
+  --p-grey-850: #262422;
+  --p-grey-900: #1B1A18;   /* ink */
+  --p-grey-950: #121110;   /* night */
+
+  /* ---------- Primitives: the one signal colour (朱 / vermilion) ---------- */
+  --p-signal-500: #E5501A; /* light themes: ≥3:1 on paper as a mark; ink text on it 4.6:1 */
+  --p-signal-400: #FF6A33; /* dark themes: 6.6:1 on night */
+
+  /* ---------- Semantic · light (default) ---------- */
+  --bg:            var(--p-grey-100);  /* page */
+  --bg-raised:     var(--p-grey-50);   /* bars, sheets, inputs */
+  --bg-sunken:     var(--p-grey-150);  /* tracks, wells, selected nav */
+  --ink:           var(--p-grey-900);  /* primary text        15.0:1 */
+  --ink-2:         var(--p-grey-700);  /* secondary text       6.5:1 */
+  --ink-3:         var(--p-grey-600);  /* captions, axes       4.8:1 */
+  --ink-4:         var(--p-grey-400);  /* disabled · non-text marks only */
+  --rule:          var(--p-grey-200);  /* hairlines */
+  --rule-strong:   var(--p-grey-300);  /* control outlines */
+  --grid-minor:    #E3E1DB;            /* recorder paper, 1 s */
+  --grid-major:    #D3D0C8;            /* recorder paper, 5 s */
+  --trace:         var(--p-grey-900);  /* drawn breath / data line */
+  --trace-fill:    rgb(27 26 24 / 0.07);
+  --trace-future:  var(--p-grey-500);
+  --signal:        var(--p-signal-500);
+  --on-signal:     #141311;            /* 4.9:1 — label on the signal key */
+  --on-ink:        var(--p-grey-50);
+  --focus-ring:    var(--p-grey-900);
+  /* sequential ramp for minutes/day (one hue, light → dark) */
+  --heat-0: transparent;
+  --heat-1: #DAD6CE;
+  --heat-2: #B5AFA5;
+  --heat-3: #827C73;
+  --heat-4: #34322F;
+
+  /* ---------- Type ---------- */
+  --font-sans: "HS Sans", "PingFang SC", "HarmonyOS Sans SC", "MiSans", "Microsoft YaHei UI", "Noto Sans SC", sans-serif;
+  --font-mono: "HS Mono", "HS Sans", "PingFang SC", ui-monospace, monospace;
+  --font-system: -apple-system, "SF Pro Text", "PingFang SC", system-ui, sans-serif; /* OS chrome in mock-ups only */
+
+  /* scale — size / line-height (4 px baseline) */
+  --fs-micro: 11px;   --lh-micro: 16px;   /* mono labels, axes, tab labels   */
+  --fs-small: 13px;   --lh-small: 20px;   /* captions, notes, section labels */
+  --fs-body:  15px;   --lh-body:  24px;   /* body (1.6), list rows           */
+  --fs-head:  17px;   --lh-head:  28px;   /* headlines, key labels           */
+  --fs-title: 22px;   --lh-title: 32px;   /* section / item titles           */
+  --fs-large: 28px;   --lh-large: 36px;   /* screen titles                   */
+  /* display (mono, light) — readouts only */
+  --fs-readout: 28px;
+  --fs-figure:  40px;
+  --fs-display: 64px;
+  --fs-phase:   112px;
+
+  --fw-regular: 400;
+  --fw-medium:  500;
+  --fw-strong:  600;
+  --track-cjk-title: 0.04em;   /* 22–28 px CJK headings */
+  --track-cjk-label: 0.06em;   /* 13 px section labels */
+  --track-mono:      0.02em;
+  --track-phase:     0.02em;
+
+  /* ---------- Space (4 px grid) ---------- */
+  --s-1: 4px;  --s-2: 8px;   --s-3: 12px;  --s-4: 16px;  --s-5: 20px;
+  --s-6: 24px; --s-8: 32px;  --s-10: 40px; --s-12: 48px; --s-16: 64px;
+  --gutter: 20px;              /* phone side margin */
+  --gutter-desk: 48px;
+
+  /* ---------- Shape ---------- */
+  --r-1: 2px;    /* marks, grade box   */
+  --r-2: 4px;    /* toggle, keycaps    */
+  --r-3: 8px;    /* buttons, segmented */
+  --r-4: 12px;   /* large keys, sheets */
+  --hair: 1px;
+  --stroke-icon: 1.5px;        /* all icons: 24 px grid, 1.5 stroke, square caps, miter joins */
+  --stroke-trace: 2px;
+
+  /* ---------- Layout ---------- */
+  --safe-top: 47px;
+  --safe-bottom: 34px;
+  --tabbar-h: 49px;
+  --touch: 44px;
+  --rail-w: 232px;
+
+  /* ---------- Motion ---------- */
+  --dur-press:  90ms;     /* key down */
+  --dur-state: 180ms;     /* toggles, segmented, tab change */
+  --dur-sheet: 320ms;     /* sheets, page push */
+  --dur-phase: 600ms;     /* 吸/呼 word cross-fade */
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-exit:     cubic-bezier(0.3, 0, 1, 1);
+  --ease-linear:   linear; /* breath curves always move in real time */
+  color-scheme: light;
+}
+
+@media (min-resolution: 2dppx) {
+  :root { --hair: 0.5px; }
+}
+
+/* ---------- Semantic · dark ---------- */
+:root[data-theme="dark"] {
+  --bg:            var(--p-grey-950);
+  --bg-raised:     #1A1917;
+  --bg-sunken:     #201F1D;
+  --ink:           #ECEAE5;            /* 15.7:1 */
+  --ink-2:         #A39F97;            /*  7.2:1 */
+  --ink-3:         #8C8880;            /*  5.3:1 */
+  --ink-4:         #57544F;
+  --rule:          #2A2826;
+  --rule-strong:   #3A3835;
+  --grid-minor:    #1D1C1A;
+  --grid-major:    #2B2927;
+  --trace:         #ECEAE5;
+  --trace-fill:    rgb(236 234 229 / 0.06);
+  --trace-future:  #7A766F;
+  --signal:        var(--p-signal-400);
+  --on-signal:     var(--p-grey-950);  /* 6.6:1 */
+  --on-ink:        var(--p-grey-950);
+  --focus-ring:    #ECEAE5;
+  --heat-1: #2B2927;
+  --heat-2: #4A4743;
+  --heat-3: #807B73;
+  --heat-4: #D2CDC4;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: var(--p-grey-950); --bg-raised: #1A1917; --bg-sunken: #201F1D;
+    --ink: #ECEAE5; --ink-2: #A39F97; --ink-3: #8C8880; --ink-4: #57544F;
+    --rule: #2A2826; --rule-strong: #3A3835; --grid-minor: #1D1C1A; --grid-major: #2B2927;
+    --trace: #ECEAE5; --trace-fill: rgb(236 234 229 / 0.06); --trace-future: #7A766F;
+    --signal: var(--p-signal-400); --on-signal: var(--p-grey-950); --on-ink: var(--p-grey-950);
+    --focus-ring: #ECEAE5;
+    --heat-1: #2B2927; --heat-2: #4A4743; --heat-3: #807B73; --heat-4: #D2CDC4;
+    color-scheme: dark;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --dur-state: 0ms; --dur-sheet: 0ms; --dur-phase: 0ms; }
+}
+
+/* ---------- Base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  font-weight: var(--fw-regular);
+  font-synthesis: none;            /* never fake bold/italic on CJK */
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-kerning: normal;
+}
+h1, h2, h3, h4, p, ol, ul, figure, dl, dd { margin: 0; padding: 0; }
+ol, ul { list-style: none; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+.num, .mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; letter-spacing: var(--track-mono); }

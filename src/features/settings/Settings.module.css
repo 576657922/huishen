@@ -1,0 +1,128 @@
+.layout {
+  display: grid;
+}
+.contents {
+  display: none;
+}
+.body,
+.reading {
+  min-width: 0;
+}
+.reading {
+  max-width: var(--reading-max);
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  margin-block: var(--sp-4);
+}
+.group {
+  margin-top: var(--sp-8);
+}
+.group > :first-child {
+  border-top: var(--hair) solid var(--ink);
+  padding-top: var(--sp-3);
+}
+.note {
+  color: var(--ink-3);
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+  margin-top: var(--sp-3);
+}
+.field {
+  display: block;
+  min-height: var(--sp-12);
+  width: 100%;
+  padding: var(--sp-3);
+  border: var(--hair) solid var(--line);
+  border-radius: var(--r-2);
+  background: var(--paper-raised);
+  color: var(--ink);
+  font: inherit;
+}
+.sentence {
+  font-size: var(--fs-reading);
+  line-height: var(--lh-reading);
+  margin-block: var(--sp-6);
+}
+.blank {
+  display: inline;
+  min-height: var(--hit);
+  padding: var(--sp-3) var(--sp-1);
+  color: var(--ink);
+  font-weight: var(--w-semibold);
+  text-decoration: underline;
+  text-underline-offset: var(--sp-1);
+  text-decoration-color: var(--line);
+}
+.helpList {
+  padding-left: var(--sp-5);
+  margin-top: var(--sp-4);
+  color: var(--ink-3);
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+}
+.helpList li + li {
+  margin-top: var(--sp-3);
+}
+.adaptation {
+  padding: var(--sp-4);
+  border-left: var(--hair) solid var(--line);
+  background: var(--wash);
+}
+.adaptation > p + p {
+  margin-top: var(--sp-3);
+}
+.question {
+  margin-top: var(--sp-6);
+}
+.question > :first-child {
+  margin-bottom: var(--sp-3);
+}
+.monthlyChoices > button {
+  white-space: normal;
+  padding: var(--sp-3) var(--sp-2);
+}
+.result {
+  border-top: var(--hair) solid var(--ink);
+  margin-top: var(--sp-6);
+  padding-top: var(--sp-4);
+}
+.license {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+  margin-block: var(--sp-6);
+}
+@media (min-width: 1024px) {
+  .layout {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--gutter);
+    margin-top: var(--sp-6);
+  }
+  .contents {
+    display: flex;
+    flex-direction: column;
+    grid-column: 1 / 4;
+    align-self: start;
+    position: sticky;
+    top: var(--sp-10);
+  }
+  .contents a {
+    min-height: var(--hit);
+    display: flex;
+    align-items: center;
+    color: var(--ink-2);
+  }
+  .contents a:hover {
+    color: var(--ink);
+  }
+  .body {
+    grid-column: 4 / 11;
+  }
+  .group:first-child {
+    margin-top: 0;
+  }
+}

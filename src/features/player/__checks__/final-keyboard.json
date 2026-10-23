@@ -1,0 +1,27 @@
+{
+  "checks": [
+    "phone /: one h1, no horizontal overflow, Tab reaches visible controls",
+    "phone /practices: one h1, no horizontal overflow, Tab reaches visible controls",
+    "phone /practices/slow: one h1, no horizontal overflow, Tab reaches visible controls",
+    "phone /records: one h1, no horizontal overflow, Tab reaches visible controls",
+    "phone /evidence: one h1, no horizontal overflow, Tab reaches visible controls",
+    "phone /settings: one h1, no horizontal overflow, Tab reaches visible controls",
+    "phone /help: one h1, no horizontal overflow, Tab reaches visible controls",
+    "phone /welcome: one h1, no horizontal overflow, Tab reaches visible controls",
+    "phone /program/mindfulness-8w: one h1, no horizontal overflow, Tab reaches visible controls",
+    "phone /practices/sleep: one h1, no horizontal overflow, Tab reaches visible controls",
+    "phone /pace-finder: one h1, no horizontal overflow, Tab reaches visible controls",
+    "desktop /: one h1, no horizontal overflow, Tab reaches visible controls",
+    "desktop /practices: one h1, no horizontal overflow, Tab reaches visible controls",
+    "desktop /practices/slow: one h1, no horizontal overflow, Tab reaches visible controls",
+    "desktop /records: one h1, no horizontal overflow, Tab reaches visible controls",
+    "desktop /evidence: one h1, no horizontal overflow, Tab reaches visible controls",
+    "desktop /settings: one h1, no horizontal overflow, Tab reaches visible controls",
+    "desktop /help: one h1, no horizontal overflow, Tab reaches visible controls",
+    "desktop /welcome: one h1, no horizontal overflow, Tab reaches visible controls",
+    "desktop /program/mindfulness-8w: one h1, no horizontal overflow, Tab reaches visible controls",
+    "desktop /practices/sleep: one h1, no horizontal overflow, Tab reaches visible controls",
+    "desktop /pace-finder: one h1, no horizontal overflow, Tab reaches visible controls"
+  ],
+  "errors": []
+}

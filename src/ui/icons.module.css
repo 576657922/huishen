@@ -1,0 +1,6 @@
+/* 图标只按 size 属性取宽高；颜色来自文字（currentColor），在 flex 行里不被压缩 */
+.icon {
+  display: block;
+  flex: none;
+  color: inherit;
+}

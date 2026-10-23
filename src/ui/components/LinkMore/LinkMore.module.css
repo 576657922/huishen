@@ -1,0 +1,26 @@
+/* DESIGN.md §8.3 link-more · components.css .link-more */
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  min-height: var(--hit);
+  color: var(--ink-2);
+  text-decoration: none;
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+}
+.link:active {
+  color: var(--ink);
+}
+.caption {
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+}
+.icon {
+  color: var(--ink-3);
+}
+@media (hover: hover) and (pointer: fine) {
+  .link:hover {
+    color: var(--ink);
+  }
+}

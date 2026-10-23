@@ -1,0 +1,115 @@
+.grid {
+  display: grid;
+}
+.main,
+.aside {
+  min-width: 0;
+}
+.recommendation {
+  padding-top: var(--sp-4);
+}
+.title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  margin-top: var(--sp-1);
+  margin-right: calc(-1 * var(--sp-1));
+}
+.title h2 {
+  margin: 0;
+}
+.description {
+  margin-top: var(--sp-2);
+  color: var(--ink-2);
+}
+.figure {
+  margin: var(--sp-4) 0 var(--sp-5);
+}
+.plot {
+  display: block;
+  width: 100%;
+  overflow: visible;
+}
+.plot text {
+  fill: var(--ink-3);
+  font-family: var(--font-ui);
+  font-size: var(--fs-axis);
+}
+.trace {
+  fill: none;
+  stroke: var(--trace);
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+.axis {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 1;
+}
+.quick {
+  margin-top: var(--sp-8);
+}
+.week {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: var(--sp-3);
+  margin-top: var(--sp-6);
+  padding-top: var(--sp-3);
+  border-top: var(--hair) solid var(--rule);
+}
+.week h2 {
+  font-family: var(--font-ui);
+  font-weight: var(--w-regular);
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+  color: var(--ink-3);
+}
+.week p {
+  margin-top: var(--sp-1);
+  font-size: var(--fs-name);
+  line-height: var(--lh-name);
+}
+.hardDesktop {
+  display: none;
+}
+@media (min-width: 768px) {
+  .grid {
+    max-width: var(--reading-max);
+  }
+}
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: var(--gutter);
+    max-width: none;
+  }
+  .main {
+    grid-column: 1 / 8;
+  }
+  .aside {
+    grid-column: 9 / 13;
+  }
+  .quick {
+    margin-top: 0;
+  }
+  .hardRow {
+    display: none;
+  }
+  .hardDesktop {
+    display: block;
+  }
+  .start {
+    max-width: calc(var(--sp-20) * 5);
+  }
+}
+.quick li:not(:last-child) > button {
+  border-bottom: var(--hair) solid var(--rule);
+}
+.weekActions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--sp-1);
+}

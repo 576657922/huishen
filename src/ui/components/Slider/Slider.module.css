@@ -1,0 +1,121 @@
+/* DESIGN.md §8.8 slider · components.css .slider：轨道两端各收 12，钮 24，刻度在轨道下 */
+.slider {
+  position: relative;
+  height: 56px;
+  touch-action: pan-y;
+  cursor: pointer;
+}
+.slider:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+.slider[aria-disabled="true"] {
+  cursor: default;
+}
+.track {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  top: 21px;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--line);
+}
+.fill {
+  position: absolute;
+  left: 12px;
+  top: 21px;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--ink);
+}
+.thumb {
+  position: absolute;
+  top: 10px;
+  width: 24px;
+  height: 24px;
+  margin-left: -12px;
+  border-radius: var(--r-full);
+  background: var(--paper-raised);
+  box-shadow:
+    var(--shadow-knob),
+    inset 0 0 0 1px var(--line);
+}
+.ticks {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  top: 31px;
+  height: 6px;
+}
+.ticks i {
+  position: absolute;
+  top: 0;
+  width: 1px;
+  height: 4px;
+  margin-left: -0.5px;
+  background: var(--line);
+}
+.ticks i.major {
+  height: 6px;
+  background: var(--ink-3);
+}
+.scale {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  top: 38px;
+  height: 16px;
+  font-family: var(--font-num);
+  font-size: var(--fs-axis);
+  line-height: 16px;
+  letter-spacing: var(--tr-num);
+  font-variant-numeric: tabular-nums lining-nums;
+  color: var(--ink-3);
+}
+.scale span {
+  position: absolute;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+/* 两端的标签贴着轨道两端，不伸出栏外 */
+.scale span[data-edge="start"] {
+  transform: none;
+}
+.scale span[data-edge="end"] {
+  transform: translateX(-100%);
+}
+.scale span[aria-current] {
+  color: var(--ink);
+  font-weight: var(--w-semibold);
+}
+/* 强制颜色（高对比度）：底色和阴影都会被清掉，靠线框和系统色把边界、状态画出来（DESIGN.md §3.7） */
+/* 轨道、已选部分、钮和刻度都是底色画的，会整个消失：改用系统色画出来 */
+@media (forced-colors: active) {
+  .track,
+  .fill,
+  .thumb,
+  .ticks i {
+    forced-color-adjust: none;
+  }
+  .track,
+  .ticks i,
+  .ticks i.major {
+    background: CanvasText;
+  }
+  .fill {
+    background: Highlight;
+  }
+  .thumb {
+    border: 2px solid CanvasText;
+    background: Canvas;
+    box-shadow: none;
+  }
+  .slider[aria-disabled="true"] .fill,
+  .slider[aria-disabled="true"] .track {
+    background: GrayText;
+  }
+  .slider[aria-disabled="true"] .thumb {
+    border-color: GrayText;
+  }
+}

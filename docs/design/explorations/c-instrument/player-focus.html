@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>专注呼吸 · 练习中</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="components.css">
+<style>
+  .top { display: flex; justify-content: space-between; align-items: flex-start; padding: 12px 20px 0; height: 64px; }
+  .top .meta { margin-top: 2px; }
+  .rem { text-align: right; }
+  .rem .num { display: block; font-size: var(--fs-readout); line-height: 32px; font-weight: 300; letter-spacing: 0; }
+  .count { display: flex; justify-content: space-between; align-items: flex-end; padding: 64px 20px 0; }
+  .count .big { display: flex; align-items: baseline; gap: 10px; }
+  .count .big .num { font-size: var(--fs-display); line-height: 64px; font-weight: 300; letter-spacing: 0; }
+  .count .big span:last-child { font-size: var(--fs-body); color: var(--ink-2); }
+  .count .last { text-align: right; padding-bottom: 6px; }
+  .count .last .num { color: var(--ink-2); }
+  .tl { display: block; margin: 28px 20px 0; overflow: visible; }
+  .gm { stroke: var(--ink-4); stroke-width: 1; }
+  .gM { stroke: var(--ink-3); stroke-width: 1; }
+  .tl-past { stroke: var(--ink-2); stroke-width: 1.5; }
+  .tl-fut { stroke: var(--trace-future); stroke-width: 1.5; stroke-dasharray: 3 4; }
+  .tk { stroke: var(--ink); stroke-width: 2; }
+  .nowring { fill: var(--bg); }
+  .nowdot { fill: var(--signal); }
+  .ax { font-family: var(--font-mono); font-size: 11px; fill: var(--ink-3); }
+  .cue { margin: 20px 20px 0; color: var(--ink-3); }
+  .catch { position: absolute; left: 20px; right: 20px; top: 420px; bottom: 124px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 8px; border: 1px solid var(--rule-strong); border-radius: var(--r-4); background: var(--bg-raised); }
+  .catch .lbl { font-size: var(--fs-large); line-height: var(--lh-large); font-weight: 400; letter-spacing: .12em; padding-left: .12em; }
+  .catch .sub { color: var(--ink-3); }
+  .catch .alt { position: absolute; bottom: 16px; left: 0; right: 0; display: flex; justify-content: center; align-items: center; gap: 6px; color: var(--ink-3); }
+  .catch .alt .kbd { border-color: var(--rule-strong); color: var(--ink-2); }
+  .catch .led { position: absolute; top: 16px; left: 16px; width: 8px; height: 8px; background: var(--ink-4); }
+  .ctrl { position: absolute; left: 20px; right: 20px; bottom: 52px; display: flex; justify-content: space-between; }
+  .ctrl button { display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 16px 0 12px; border: 1px solid var(--rule-strong); border-radius: var(--r-3); color: var(--ink); font-size: var(--fs-small); letter-spacing: .06em; }
+  .ctrl button small { font-size: inherit; color: var(--ink-3); letter-spacing: 0; }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><symbol id="i-today" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.25"/><path d="M12 12l3.75-3.75"/><path d="M12 3.75v2.25"/><rect x="10.75" y="10.75" width="2.5" height="2.5" fill="currentColor" stroke="none"/></symbol><symbol id="i-practice" viewBox="0 0 24 24"><path d="M3 12c2.5-8 6.5-8 9 0s6.5 8 9 0"/></symbol><symbol id="i-records" viewBox="0 0 24 24"><path d="M3.75 20.25h16.5"/><path d="M6.75 16.5V12M10.25 16.5V5.25M13.75 16.5v-2.25M17.25 16.5V9"/></symbol><symbol id="i-evidence" viewBox="0 0 24 24"><path d="M7.5 3.75h-3v16.5h3M16.5 3.75h3v16.5h-3"/><path d="M9.75 9.75h4.5M9.75 14.25h4.5"/></symbol><symbol id="i-settings" viewBox="0 0 24 24"><path d="M3.75 8.25h16.5M3.75 15.75h16.5"/><rect x="13.25" y="6" width="3" height="4.5" fill="currentColor"/><rect x="7.75" y="13.5" width="3" height="4.5" fill="currentColor"/></symbol><symbol id="i-back" viewBox="0 0 24 24"><path d="M14.25 5.25L7.5 12l6.75 6.75"/></symbol><symbol id="i-chevron" viewBox="0 0 24 24"><path d="M9.75 5.25L16.5 12l-6.75 6.75"/></symbol><symbol id="i-play" viewBox="0 0 24 24"><path d="M7.5 5.25v13.5L18.75 12z"/></symbol><symbol id="i-pause" viewBox="0 0 24 24"><path d="M9 5.25v13.5M15 5.25v13.5"/></symbol><symbol id="i-stop" viewBox="0 0 24 24"><rect x="6.75" y="6.75" width="10.5" height="10.5"/></symbol><symbol id="i-sound" viewBox="0 0 24 24"><path d="M4.5 9.75h3l4.5-4.5v13.5l-4.5-4.5h-3z"/><path d="M15.4 9.4a3.7 3.7 0 0 1 0 5.2M17.9 6.9a7.2 7.2 0 0 1 0 10.2"/></symbol><symbol id="i-cue" viewBox="0 0 24 24"><path d="M9 3.75v6.75a3 3 0 0 0 6 0V3.75"/><path d="M12 13.5v6.75"/></symbol><symbol id="i-export" viewBox="0 0 24 24"><path d="M12 3.75v10.5M7.5 8.25L12 3.75l4.5 4.5"/><path d="M4.5 13.5v6.75h15V13.5"/></symbol><symbol id="i-source" viewBox="0 0 24 24"><path d="M9.75 5.25h9v9"/><path d="M18.75 5.25L5.25 18.75"/></symbol><symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol><symbol id="i-sensor" viewBox="0 0 24 24"><path d="M3.75 12h3.5l2-4.5 3.5 9 2-4.5h5.5"/></symbol></defs></svg>
+<main class="phone">
+  <div class="statusbar"><span>07:58</span><span class="sys"><svg width="17" height="11" viewBox="0 0 17 11"><rect x="0" y="7" width="3" height="4" rx=".8"/><rect x="4.6" y="4.9" width="3" height="6.1" rx=".8"/><rect x="9.2" y="2.6" width="3" height="8.4" rx=".8"/><rect x="13.8" y="0" width="3" height="11" rx=".8"/></svg><svg width="16" height="11" viewBox="0 0 16 11"><path d="M8 2.2c2.3 0 4.4.9 6 2.4l1.2-1.2A10.2 10.2 0 0 0 8 .5 10.2 10.2 0 0 0 .8 3.4L2 4.6a8.5 8.5 0 0 1 6-2.4z"/><path d="M8 5.6c1.4 0 2.6.5 3.6 1.4l1.2-1.2A6.8 6.8 0 0 0 8 3.9a6.8 6.8 0 0 0-4.8 1.9L4.4 7C5.4 6.1 6.6 5.6 8 5.6z"/><path d="M8 11l2.4-2.4A3.4 3.4 0 0 0 8 7.6a3.4 3.4 0 0 0-2.4 1z"/></svg><svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="22.5" height="12" rx="3.6" fill="none" stroke="currentColor" opacity=".38"/><rect x="2.2" y="2.2" width="15.96" height="8.6" rx="1.9"/><path d="M24.6 4.4v4.2c.9-.3 1.5-1.1 1.5-2.1s-.6-1.8-1.5-2.1z" opacity=".42"/></svg></span></div>
+  <div class="top">
+    <div>
+      <p class="t-body">专注呼吸</p>
+      <p class="meta t-small ink-3"><span class="num">20</span> 分钟<span class="sep">·</span>溪流</p>
+    </div>
+    <div class="rem"><span class="t-micro">剩余</span><span class="num">08:15</span></div>
+  </div>
+
+  <div class="count">
+    <p class="big"><span class="t-micro" style="align-self:flex-start;margin-top:6px">回神</span><span class="num">7</span><span>次</span></p>
+    <p class="last t-small ink-3">上一次 <span class="num">11:02</span><br><span class="num">43</span> 秒前</p>
+  </div>
+  <svg class="tl" viewBox="0 0 350 64" width="350" height="64" aria-label="时间线：已回神 7 次"><g><path class="gM" d="M0 42v6"/><path class="gm" d="M17.5 42v3"/><path class="gm" d="M35 42v3"/><path class="gm" d="M52.5 42v3"/><path class="gm" d="M70 42v3"/><path class="gM" d="M87.5 42v6"/><path class="gm" d="M105 42v3"/><path class="gm" d="M122.5 42v3"/><path class="gm" d="M140 42v3"/><path class="gm" d="M157.5 42v3"/><path class="gM" d="M175 42v6"/><path class="gm" d="M192.5 42v3"/><path class="gm" d="M210 42v3"/><path class="gm" d="M227.5 42v3"/><path class="gm" d="M245 42v3"/><path class="gM" d="M262.5 42v6"/><path class="gm" d="M280 42v3"/><path class="gm" d="M297.5 42v3"/><path class="gm" d="M315 42v3"/><path class="gm" d="M332.5 42v3"/><path class="gM" d="M350 42v6"/></g><path class="tl-past" d="M0 40H205.62"/><path class="tl-fut" d="M205.62 40H350"/><path class="tk" d="M21 38V18"/><path class="tk" d="M46.67 38V18"/><path class="tk" d="M53.96 38V18"/><path class="tk" d="M93.62 38V18"/><path class="tk" d="M121.92 38V18"/><path class="tk" d="M166.25 38V18"/><path class="tk" d="M193.08 38V18"/><rect class="nowring" x="198.62" y="33" width="14" height="14"/><rect class="nowdot" x="200.62" y="35" width="10" height="10"/><text class="ax" x="0" y="62" text-anchor="start">0</text><text class="ax" x="87.5" y="62" text-anchor="middle">5</text><text class="ax" x="175" y="62" text-anchor="middle">10</text><text class="ax" x="262.5" y="62" text-anchor="middle">15</text><text class="ax" x="350" y="62" text-anchor="end">20 分</text></svg>
+  <p class="cue t-small pretty">留意鼻端的气流。走神了就轻点一下，再回到呼吸。</p>
+
+  <button class="catch" aria-label="回神：记一次发现走神">
+    <span class="lbl">回神</span>
+    <span class="sub t-small">发现走神时，轻点这里</span>
+    <span class="alt t-micro">也可以点屏幕任意处，或按<span class="kbd">空格</span></span>
+  </button>
+
+  <div class="ctrl">
+    <button><svg class="i" aria-hidden="true"><use href="#i-pause"/></svg><span>暂停</span></button>
+    <button><svg class="i" aria-hidden="true"><use href="#i-stop"/></svg><span>结束 <small>长按</small></span></button>
+  </div>
+  <div class="homebar"></div>
+</main>
+</body>
+</html>

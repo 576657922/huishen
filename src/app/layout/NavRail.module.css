@@ -1,0 +1,101 @@
+/* 导航栏（DESIGN.md §5.4、§5.5、§8.12，components.css .rail） */
+.rail {
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  padding: var(--sp-8) var(--sp-4) var(--sp-6);
+  border-right: var(--hair) solid var(--rule);
+}
+
+.lockup {
+  margin: 0 var(--sp-3) var(--sp-10);
+}
+
+.list {
+  display: grid;
+  gap: 2px;
+}
+
+.item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  height: var(--hit);
+  padding: 0 var(--sp-3);
+  border-radius: var(--r-2);
+  color: var(--ink-2);
+  text-decoration: none;
+}
+.item:active {
+  background: var(--wash-2);
+}
+.item[aria-current="page"] {
+  background: var(--paper-sunk);
+  color: var(--ink);
+  font-weight: var(--w-semibold);
+}
+@media (hover: hover) and (pointer: fine) {
+  .item:not([aria-current="page"]):hover {
+    background: var(--wash);
+    color: var(--ink);
+  }
+}
+
+.foot {
+  margin-top: auto;
+  display: grid;
+  gap: 2px;
+}
+
+.note {
+  margin-top: var(--sp-4);
+  padding: var(--sp-3) var(--sp-3) 0;
+  border-top: var(--hair) solid var(--rule);
+  color: var(--ink-3);
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+  letter-spacing: var(--tr-caption);
+}
+
+@media (max-width: 767px) {
+  .rail {
+    display: none;
+  }
+}
+/* 播放器开着时没有导航（舒适节律探索的每一档在应用外框里跑） */
+:global(html[data-bars="player"]) .rail {
+  display: none;
+}
+
+/* 平板：80 宽，图标在 11 / 16 的字上，每项 64 × 64；只留印章（24 × 25.6），不要字和底部那句 */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .rail {
+    align-items: center;
+    padding: var(--sp-8) var(--sp-2) var(--sp-6);
+  }
+  .lockup {
+    margin: 0 0 var(--sp-8);
+  }
+  .lockup > svg {
+    width: 24px;
+    height: 25.6px;
+  }
+  .lockup > span,
+  .note {
+    display: none;
+  }
+  .item {
+    flex-direction: column;
+    justify-content: center;
+    gap: 2px;
+    width: 64px;
+    height: 64px;
+    padding: 0;
+    font-size: var(--fs-micro);
+    line-height: var(--lh-micro);
+    letter-spacing: var(--tr-micro);
+  }
+}

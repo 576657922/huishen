@@ -1,0 +1,83 @@
+/* DESIGN.md §8.13 dialog · components.css .dialog。进场：透明度和 8 px 上移，240 标准；退场 180 */
+.layer {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-sheet);
+  display: grid;
+  place-items: center;
+  padding: var(--margin);
+  color: var(--ink);
+}
+.layer[data-state="closing"] {
+  pointer-events: none;
+}
+.scrim {
+  position: absolute;
+  inset: 0;
+  background: var(--scrim);
+  animation: fade-in var(--dur-sheet) var(--ease-standard);
+}
+.layer[data-state="closing"] .scrim {
+  animation: fade-out var(--dur-state) var(--ease-exit) forwards;
+}
+.dialog {
+  position: relative;
+  width: min(400px, calc(100vw - 2 * var(--margin)));
+  max-height: calc(100dvh - 2 * var(--margin));
+  overflow-y: auto;
+  padding: var(--sp-6);
+  border-radius: var(--r-4);
+  background: var(--paper-raised);
+  box-shadow: var(--shadow-pop);
+  animation: dialog-in var(--dur-move) var(--ease-standard);
+}
+.layer[data-state="closing"] .dialog {
+  animation: dialog-out var(--dur-state) var(--ease-exit) forwards;
+}
+.title {
+  font-size: var(--fs-head);
+  line-height: var(--lh-head);
+  letter-spacing: var(--tr-head);
+}
+.body {
+  margin-top: var(--sp-2);
+  color: var(--ink-2);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--sp-3);
+  margin-top: var(--sp-6);
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+@keyframes dialog-out {
+  to {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+/* 强制颜色（高对比度）：底色和阴影都会被清掉，靠线框和系统色把边界、状态画出来（DESIGN.md §3.7） */
+@media (forced-colors: active) {
+  .dialog {
+    border: 1px solid CanvasText;
+  }
+}

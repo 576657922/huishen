@@ -1,0 +1,45 @@
+/* DESIGN.md §8.9 PracticeBars · records.html .pb */
+.bars {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.row {
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr) 128px;
+  column-gap: var(--sp-3);
+  align-items: center;
+  min-height: 32px;
+}
+.name {
+  min-width: 0;
+}
+.track {
+  display: block;
+  height: 6px;
+}
+/* 根部方、数据端圆 3（§8.9：横条最粗 8，数据端圆 2–3） */
+.bar {
+  display: block;
+  height: 100%;
+  border-radius: 0 3px 3px 0;
+  background: var(--bar);
+}
+.value {
+  color: var(--ink-2);
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+  letter-spacing: var(--tr-caption);
+  text-align: right;
+  white-space: nowrap;
+}
+.figure {
+  color: var(--ink);
+  font-size: var(--fs-body);
+}
+@media (forced-colors: active) {
+  .bar {
+    forced-color-adjust: none;
+    background: CanvasText;
+  }
+}

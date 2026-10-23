@@ -1,0 +1,146 @@
+{{ head('记录 · 回神', { bars: 'tabs' }) }}
+<style>
+  .main { padding: var(--sp-10) var(--margin-desk) var(--sp-16); }
+  .wrap { max-width: var(--content-max); }
+  .grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); }
+  .span-4 { grid-column: span 4; } .span-5 { grid-column: span 5; } .span-7 { grid-column: span 7; } .span-8 { grid-column: span 8; }
+
+  .page-head { display: flex; align-items: flex-end; justify-content: space-between; padding-bottom: var(--sp-4); border-bottom: 1px solid var(--ink); }
+  .page-head .sub { margin-top: var(--sp-1); color: var(--ink-3); font-size: var(--fs-caption); line-height: var(--lh-caption); }
+  .actions { display: flex; gap: var(--sp-2); }
+
+  .figs { padding: var(--sp-5) 0 var(--sp-6); }
+  .figs > * + * { padding-left: var(--gutter); border-left: var(--hair) solid var(--rule); margin-left: calc(-1 * var(--gutter) / 2); }
+  .figs .weekdots { margin-top: var(--sp-3); }
+  .why__body { margin-top: var(--sp-1); color: var(--ink-2); }
+  .why__src { margin-top: var(--sp-2); color: var(--ink-3); font-size: var(--fs-caption); line-height: var(--lh-caption); }
+
+  .block { margin-top: var(--sp-4); }
+  .block .section-head { margin-bottom: var(--sp-3); }
+  .month-nav { display: flex; margin-right: calc(-1 * var(--sp-3)); }
+  .cap { margin-top: var(--sp-3); color: var(--ink-3); font-size: var(--fs-caption); line-height: var(--lh-caption); }
+  .cap + .cap { margin-top: var(--sp-1); }
+
+  .pb { display: grid; grid-template-columns: 112px minmax(0, 1fr) 128px; align-items: center; column-gap: var(--sp-3); }
+  .pb__names, .pb__vals { display: grid; grid-auto-rows: 32px; align-items: center; }
+  .pb__names span { white-space: nowrap; }
+  .pb__vals span { text-align: right; color: var(--ink-2); font-size: var(--fs-caption); white-space: nowrap; }
+  .pb__vals .pnum { color: var(--ink); font-size: var(--fs-body); }
+
+  .ck-meds { display: flex; gap: var(--sp-6); margin-bottom: var(--sp-3); }
+  .ck-meds .pnum { font-size: var(--fs-figure); line-height: var(--lh-figure); font-weight: var(--w-light); color: var(--ink); }
+  .ck-meds .lab { color: var(--ink-3); font-size: var(--fs-caption); line-height: var(--lh-caption); }
+
+  .cr, .cr-head { display: grid; grid-template-columns: 88px minmax(0, 1fr) 48px 72px; column-gap: var(--sp-3); }
+  .cr { align-items: start; }
+  .cr__col { display: grid; grid-auto-rows: 32px; align-items: center; padding-top: 4px; }
+  .cr__col span { white-space: nowrap; }
+  .cr__acc { text-align: right; font-family: var(--font-num); font-variant-numeric: tabular-nums; }
+  .cr-head { color: var(--ink-3); font-size: var(--fs-caption); line-height: var(--lh-caption); padding-bottom: var(--sp-1); border-bottom: var(--hair) solid var(--rule); }
+  .cr-head .r { text-align: right; }
+  .table th.data, .table td.data, .table th.memo, .table td.memo { padding-left: var(--sp-6); }
+  .table td.data, .table td.memo { color: var(--ink-2); }
+  .table .day { color: var(--ink); }
+  .table .wd { color: var(--ink-3); margin-left: 0.4em; }
+</style>
+<body>
+{{ sprite() }}
+<div class="desktop app">
+  {{ rail('records') }}
+  <main class="main">
+    <div class="wrap">
+      <header class="page-head">
+        <div>
+          <h1 class="t-display" tabindex="-1">{{ K.COPY.RECORDS.title }}</h1>
+          <p class="sub">10月1日–22日 · {{ D.month().sessions }} 次练习</p>
+        </div>
+        <div class="actions">
+          <button class="btn btn--secondary btn--small" type="button">{{ icon('download') }}导出 CSV</button>
+          <button class="btn btn--secondary btn--small" type="button">{{ icon('download') }}导出 JSON</button>
+        </div>
+      </header>
+
+      <section class="grid figs" aria-label="概览">
+        <div class="span-4 overview__cell">
+          <p class="overview__label">{{ K.COPY.RECORDS.week.title }}</p>
+          <p class="overview__value"><span class="pnum">{{ D.week().practisedDays }}</span> 天</p>
+          <p class="overview__note">共 {{ D.week().minutes }} 分钟</p>
+          {{ weekDots(D.week().days, { col: 30, dot: 10 }) }}
+        </div>
+        <div class="span-4 overview__cell">
+          <p class="overview__label">10月</p>
+          <p class="overview__value"><span class="pnum">{{ D.month().days }}</span> 天</p>
+          <p class="overview__note">{{ D.month().sessions }} 次练习 · 共 {{ D.month().minutes }} 分钟</p>
+        </div>
+        <div class="span-4 overview__cell why">
+          <button class="disclose" type="button" aria-expanded="false" aria-controls="why-body">{{ NEW['RECORDS.streakNote.title'] }}{{ icon('chevron-down') }}</button>
+          <div id="why-body" hidden>
+            <p class="why__body">{{ K.keep(NEW['RECORDS.streakNote.body']) }}</p>
+            <p class="why__src" lang="en">{{ NEW['RECORDS.streakNote.source'] }}</p>
+          </div>
+        </div>
+      </section>
+
+      <div class="grid">
+        <section class="span-4 block" aria-labelledby="cal-h">
+          <div class="section-head"><h2 id="cal-h">10月</h2><span class="month-nav"><button class="icon-btn" type="button" aria-label="{{ NEW['RECORDS.prevMonth'] }}">{{ icon('back') }}</button><button class="icon-btn" type="button" aria-label="{{ NEW['RECORDS.nextMonth'] }}" disabled>{{ icon('chevron-right') }}</button></span></div>
+          {{ monthCalendar({ byDay: D.month().byDay, cellW: 50, cellH: 44 }) }}
+          <p class="cap">{{ K.keep(K.COPY.RECORDS.calendar) }}</p>
+        </section>
+
+        <section class="span-4 block" aria-labelledby="pb-h">
+          <div class="section-head"><h2 id="pb-h">{{ K.COPY.RECORDS.byPractice.title }}</h2><span class="aside">10月 · 分钟</span></div>
+          <div class="pb">
+            <div class="pb__names">{{ D.byPractice().map(r => `<span>${r.name}</span>`).join('') }}</div>
+            {{ practiceBars(D.byPractice(), { width: 88, rowH: 32, th: 6 }) }}
+            <div class="pb__vals">{{ D.byPractice().map(r => `<span><span class="pnum">${r.minutes}</span> 分钟 · ${r.sessions} 次</span>`).join('') }}</div>
+          </div>
+        </section>
+
+        <section class="span-4 block" aria-labelledby="ck-h">
+          <div class="section-head"><h2 id="ck-h">{{ K.COPY.RECORDS.checkin.title }}</h2><span class="tag">{{ K.COPY.RECORDS.checkin.tag }}</span></div>
+          <div class="ck-meds">
+            <p><span class="lab">{{ K.COPY.RECORDS.checkin.before }} · {{ K.COPY.RECORDS.checkin.median }}</span><br><span class="pnum">{{ D.checkins().medBefore }}</span></p>
+            <p><span class="lab">{{ K.COPY.RECORDS.checkin.after }} · {{ K.COPY.RECORDS.checkin.median }}</span><br><span class="pnum">{{ D.checkins().medAfter }}</span></p>
+          </div>
+          {{ checkinStrips(D.checkins(), { width: 352, rowH: 52, dot: 6, gap: 1.5 }) }}
+          <p class="cap">{{ K.keep(`「此刻有多紧张？」0–10，共 ${D.checkins().n} 次，竖线是中位数。${K.COPY.RECORDS.checkin.noise}`) }}</p>
+          <p class="cap">{{ K.keep(K.COPY.RECORDS.checkin.caveat) }}</p>
+        </section>
+      </div>
+
+      <div class="grid">
+        <section class="span-7 block" aria-labelledby="fc-h">
+          <div class="section-head"><h2 id="fc-h">{{ K.COPY.RECORDS.focus.title }}</h2><span class="aside">专注呼吸 · {{ K.COPY.RECORDS.focus.unit }} · 共 {{ D.focusRates().length }} 次</span></div>
+          {{ focusDotPlot(D.focusRates(), { width: 640, height: 176 }) }}
+          <p class="cap">{{ K.keep(K.COPY.RECORDS.focus.note + '朱色的点是今天。') }}</p>
+        </section>
+
+        <section class="span-5 block" aria-labelledby="cn-h">
+          <div class="section-head"><h2 id="cn-h">{{ K.COPY.RECORDS.count.title }}</h2><span class="aside">共 {{ D.countStats().length }} 次</span></div>
+          <div class="cr-head"><span>日期</span><span></span><span class="r">{{ K.COPY.RECORDS.count.accuracy }}</span><span class="r">{{ K.COPY.RECORDS.count.resets }}</span></div>
+          <div class="cr">
+            <div class="cr__col">{{ D.countStats().map(r => `<span>${D.fmtDay(r.date)}</span>`).join('') }}</div>
+            {{ countRows(D.countStats(), { width: 200, rowH: 32 }) }}
+            <div class="cr__col cr__acc">{{ D.countStats().map(r => `<span>${Math.round(r.accuracy * 100)}%</span>`).join('') }}</div>
+            <div class="cr__col cr__acc">{{ D.countStats().map(r => `<span>${r.resets} 次</span>`).join('') }}</div>
+          </div>
+          <p class="cap">{{ K.keep(K.COPY.RECORDS.count.explain[1] + '10月18日另有 1 轮点得过快，不计入。' + K.COPY.RECORDS.count.explain[4].split('。')[0] + '。') }}</p>
+        </section>
+      </div>
+
+      <section class="block" aria-labelledby="ls-h" style="margin-top: var(--sp-8)">
+        <div class="section-head"><h2 id="ls-h">{{ K.COPY.RECORDS.list.title }}</h2><span class="aside" data-modality="fine">点一行看详情</span></div>
+        <table class="table">
+          <colgroup><col style="width:128px"><col style="width:64px"><col style="width:120px"><col style="width:72px"><col style="width:232px"><col style="width:88px"><col style="width:64px"><col style="width:64px"><col><col style="width:104px"></colgroup>
+          <thead><tr><th>日期</th><th>开始</th><th>练习</th><th class="num">时长</th><th class="data">记录</th><th>练完感觉</th><th class="num">练习前</th><th class="num">练习后</th><th class="memo">备注</th><th><span class="vh">操作</span></th></tr></thead>
+          <tbody>
+          {{ [...D.SESSIONS].reverse().slice(0, 12).map((s, i) => `<tr${i === 3 ? ' data-force="hover"' : ''}><td><span class="day">${D.fmtDay(s.date)}</span><span class="wd">周${D.weekday(s.date)}</span></td><td class="tnum">${s.start}</td><td>${D.NAMES[s.practice]}</td><td class="num">${s.minutes} 分钟</td><td class="data">${D.sessionData(s)}</td><td>${s.feeling ? D.FEELING[s.feeling] : '<span class="muted">—</span>'}</td><td class="num">${s.before ?? '<span class="muted">—</span>'}</td><td class="num">${s.after ?? '<span class="muted">—</span>'}</td><td class="memo">${s.note ?? ''}</td><td class="act"><a href="#">详情</a><a href="#">${K.COPY.RECORDS.list.delete}</a></td></tr>`).join('') }}
+          </tbody>
+        </table>
+      </section>
+    </div>
+  </main>
+</div>
+</body>
+</html>

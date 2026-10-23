@@ -1,0 +1,34 @@
+/* DESIGN.md §8.19 · components.css .disclose */
+.disclose {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  min-height: var(--hit);
+  color: var(--ink-2);
+  text-align: left;
+}
+.icon {
+  color: var(--ink-3);
+  transition: transform var(--dur-move) var(--ease-standard);
+}
+.disclose[aria-expanded="true"] .icon {
+  transform: rotate(180deg);
+}
+@media (hover: hover) and (pointer: fine) {
+  .disclose:hover {
+    color: var(--ink);
+  }
+}
+
+.reveal {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--dur-move) var(--ease-standard);
+}
+.reveal[data-expanded] {
+  grid-template-rows: 1fr;
+}
+.inner {
+  min-height: 0;
+  overflow: hidden;
+}

@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>练习 · 回神</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="components.css">
+<style>
+  /* type sizes on this screen: 11 · 13 · 15 · 17 · 20 · 32 */
+  .page-head { padding-top: 20px; }
+  .page-title {
+    font-family: var(--font-song); font-weight: var(--wt-song-display);
+    font-size: var(--fs-32); line-height: var(--lh-32); letter-spacing: var(--track-display);
+  }
+  .lede { margin-top: 4px; font-size: var(--fs-13); line-height: var(--lh-13); color: var(--ink-2); }
+  .index { display: grid; margin-top: 16px; width: 100%; }
+
+  .chapter { margin-top: 24px; }
+  .chapter .sec-head { align-items: baseline; }
+  .chapter .sec-no { font-family: var(--font-song); font-size: var(--fs-15); color: var(--ink); width: auto; margin-right: 2px; }
+  .cols { margin-left: auto; display: flex; gap: 0; font-size: var(--fs-11); line-height: var(--lh-11); color: var(--ink-3); letter-spacing: .06em; }
+  .cols span:first-child { width: 56px; text-align: right; }
+  .cols span:last-child { width: 28px; text-align: right; }
+
+  .toc { margin-top: 4px; }
+  .entry {
+    display: grid; grid-template-columns: var(--glyph-w) 1fr; column-gap: var(--sp-4);
+    align-items: center; padding: 11px 0 10px;
+    border-bottom: var(--hair) solid var(--rule);
+  }
+  .entry:last-child { border-bottom: 0; }
+  .entry-line { display: flex; align-items: baseline; }
+  .entry-title {
+    font-family: var(--font-song); font-weight: var(--wt-song-display);
+    font-size: var(--fs-17); line-height: 24px; letter-spacing: .04em; white-space: nowrap;
+  }
+  .leader {
+    flex: 1; align-self: flex-end; margin: 0 6px 7px 8px; height: 1px; min-width: 12px;
+    background-image: radial-gradient(circle, var(--line) .7px, transparent .8px);
+    background-size: 5px 2px; background-repeat: repeat-x; background-position: 0 50%;
+  }
+  .dur { width: 56px; text-align: right; font-size: var(--fs-13); color: var(--ink-2); white-space: nowrap; }
+  .dur .fig { font-size: var(--fs-15); color: var(--ink); }
+  .entry .grade { width: 28px; text-align: right; }
+  .entry-desc { font-size: var(--fs-13); line-height: var(--lh-13); color: var(--ink-2); margin-top: 1px; }
+  .entry .glyph { color: var(--ink); }
+</style>
+</head>
+<body>
+{{ sprite() }}
+<div class="phone">
+  {{ statusbar('21:14') }}
+  <main class="screen">
+    <header class="page-head">
+      <h1 class="page-title optical">练习</h1>
+      <p class="lede">不知道选哪个，就从专注呼吸开始。</p>
+      <div class="seg index" role="radiogroup" aria-label="跳到">
+        <button role="radio" aria-checked="true">冥想</button>
+        <button role="radio" aria-checked="false">呼吸</button>
+        <button role="radio" aria-checked="false">声音</button>
+      </div>
+    </header>
+
+    <section class="chapter" aria-labelledby="c1">
+      <header class="sec-head"><span class="sec-no">一</span><h2 id="c1" class="sec-title">冥想</h2>
+        <p class="cols" aria-hidden="true"><span>时长</span><span>证据</span></p></header>
+      <ul class="toc">
+        <li class="entry">{{ glyph('focus') }}<div>
+          <p class="entry-line"><span class="entry-title">专注呼吸</span><i class="leader"></i><span class="dur"><span class="fig">10</span> 分钟</span><span class="grade">A</span></p>
+          <p class="entry-desc">自然呼吸，发现走神就记一下</p></div></li>
+        <li class="entry">{{ glyph('count') }}<div>
+          <p class="entry-line"><span class="entry-title">数息</span><i class="leader"></i><span class="dur"><span class="fig">10</span> 分钟</span><span class="grade">B</span></p>
+          <p class="entry-desc">数到九，再从一开始</p></div></li>
+        <li class="entry">{{ glyph('body-scan') }}<div>
+          <p class="entry-line"><span class="entry-title">身体扫描</span><i class="leader"></i><span class="dur"><span class="fig">15</span> 分钟</span><span class="grade">B</span></p>
+          <p class="entry-desc">从脚到头，一处一处地觉察</p></div></li>
+        <li class="entry">{{ glyph('loving-kindness') }}<div>
+          <p class="entry-line"><span class="entry-title">慈心</span><i class="leader"></i><span class="dur"><span class="fig">12</span> 分钟</span><span class="grade">B</span></p>
+          <p class="entry-desc">把善意给自己，再给身边的人</p></div></li>
+        <li class="entry">{{ glyph('breathing-space') }}<div>
+          <p class="entry-line"><span class="entry-title">三分钟呼吸空间</span><i class="leader"></i><span class="dur"><span class="fig">3</span> 分钟</span><span class="grade">B</span></p>
+          <p class="entry-desc">觉察、集中、扩展</p></div></li>
+        <li class="entry">{{ glyph('open-awareness') }}<div>
+          <p class="entry-line"><span class="entry-title">开放觉察</span><i class="leader"></i><span class="dur"><span class="fig">15</span> 分钟</span><span class="grade">C</span></p>
+          <p class="entry-desc">声音、身体、念头，来什么看什么</p></div></li>
+        <li class="entry">{{ glyph('timer') }}<div>
+          <p class="entry-line"><span class="entry-title">静坐计时</span><i class="leader"></i><span class="dur">自定</span><span class="grade none">—</span></p>
+          <p class="entry-desc">没有引导，可设间隔钟声</p></div></li>
+      </ul>
+    </section>
+
+    <section class="chapter" aria-labelledby="c2">
+      <header class="sec-head"><span class="sec-no">二</span><h2 id="c2" class="sec-title">呼吸</h2>
+        <p class="cols" aria-hidden="true"><span>时长</span><span>证据</span></p></header>
+      <ul class="toc">
+        <li class="entry">{{ glyph('sigh') }}<div>
+          <p class="entry-line"><span class="entry-title">周期性叹息</span><i class="leader"></i><span class="dur"><span class="fig">5</span> 分钟</span><span class="grade">B</span></p>
+          <p class="entry-desc">两次鼻吸，一次长长地呼出</p></div></li>
+        <li class="entry">{{ glyph('resonance') }}<div>
+          <p class="entry-line"><span class="entry-title">共振呼吸</span><i class="leader"></i><span class="dur"><span class="fig">10</span> 分钟</span><span class="grade">B</span></p>
+          <p class="entry-desc">每分钟 5.5 次，吸和呼一样长</p></div></li>
+        <li class="entry">{{ glyph('long-exhale') }}<div>
+          <p class="entry-line"><span class="entry-title">呼气延长</span><i class="leader"></i><span class="dur"><span class="fig">5</span> 分钟</span><span class="grade">C</span></p>
+          <p class="entry-desc">吸 4 秒，呼 6 秒</p></div></li>
+        <li class="entry">{{ glyph('box') }}<div>
+          <p class="entry-line"><span class="entry-title">箱式呼吸</span><i class="leader"></i><span class="dur"><span class="fig">5</span> 分钟</span><span class="grade">C</span></p>
+          <p class="entry-desc">吸、停、呼、停，各 4 秒</p></div></li>
+        <li class="entry">{{ glyph('pace-finder') }}<div>
+          <p class="entry-line"><span class="entry-title">共振频率测定</span><i class="leader"></i><span class="dur"><span class="fig">12</span> 分钟</span><span class="grade none">—</span></p>
+          <p class="entry-desc">从每分钟 6.5 次慢到 4.5 次，选最轻松的一档</p></div></li>
+      </ul>
+    </section>
+  </main>
+  {{ tabbar('practice') }}
+  {{ homebar() }}
+</div>
+</body>
+</html>

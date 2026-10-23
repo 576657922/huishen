@@ -1,0 +1,75 @@
+/* 选背景声（DESIGN.md §8.7 的列表行；§13.4「radio rows with sound icons」） */
+.mode {
+  margin-top: var(--sp-4);
+}
+
+/* 每一层之前的组标题自带上 32、下 4 */
+.list {
+  border-top: var(--hair) solid var(--rule);
+}
+
+/* 单选行：至少 52 高，上下 12，细线分隔；20 的声音图标、名称和标注，选中的行尾有 16 的 ✓ */
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  width: 100%;
+  min-height: 52px;
+  padding: var(--sp-3) 0;
+  border-bottom: var(--hair) solid var(--rule);
+  color: var(--ink);
+  text-align: left;
+  transition: background-color var(--dur-press) var(--ease-standard);
+}
+.row:active {
+  background: var(--wash-2);
+}
+.row:focus-visible {
+  outline-offset: 2px;
+}
+@media (hover: hover) and (pointer: fine) {
+  .row:hover {
+    background: var(--wash);
+  }
+  .row:active {
+    background: var(--wash-2);
+  }
+}
+
+.icon {
+  display: inline-flex;
+  flex: none;
+  width: 20px;
+  color: var(--ink-2);
+}
+
+.label {
+  flex: 1;
+  min-width: 0;
+}
+
+.tag {
+  display: block;
+  margin-top: 2px;
+  color: var(--ink-3);
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+  letter-spacing: var(--tr-caption);
+}
+
+.check {
+  color: var(--ink);
+}
+
+.volume {
+  padding: var(--sp-3) 0;
+  border-bottom: var(--hair) solid var(--rule);
+}
+
+/* 强制配色：选中的行仍然看得出来（✓ 之外再加一道高亮色的框） */
+@media (forced-colors: active) {
+  .row[aria-checked="true"] {
+    outline: 2px solid Highlight;
+    outline-offset: -2px;
+  }
+}

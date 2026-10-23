@@ -1,0 +1,15 @@
+/* 离开播放器去小结：深色的底在 900 ms 里退去，露出应用主题的小结（DESIGN.md §7.2，与进入时相反） */
+.leave {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-sheet);
+  background: var(--paper);
+  pointer-events: none;
+  animation: scene-out var(--dur-scene) var(--ease-standard) forwards;
+}
+@keyframes scene-out {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}

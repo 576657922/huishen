@@ -1,0 +1,93 @@
+/* DESIGN.md §8.10 · components.css .cite / .note */
+.cite {
+  padding: 0 1px;
+  font-family: var(--font-num);
+  font-size: var(--fs-micro);
+  line-height: 0;
+  letter-spacing: var(--tr-num);
+  vertical-align: 0.55em;
+  color: var(--ink-3);
+  text-decoration: none;
+}
+
+.notes {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.note {
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr);
+  column-gap: var(--sp-2);
+  padding: var(--sp-3) 0;
+  border-top: var(--hair) solid var(--rule);
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+  letter-spacing: var(--tr-caption);
+}
+.no {
+  font-family: var(--font-num);
+  color: var(--ink-3);
+}
+.who {
+  color: var(--ink);
+  font-weight: var(--w-semibold);
+}
+.type {
+  margin-left: 0.5em;
+  color: var(--ink-3);
+  font-weight: var(--w-regular);
+}
+.what {
+  margin-top: 2px;
+  color: var(--ink-2);
+}
+.src {
+  margin-top: 2px;
+  color: var(--ink-3);
+}
+.venue {
+  display: block;
+}
+
+/* 长 DOI 在窄栏里换行（§4.3 overflow-wrap: break-word）：先在斜线后断开，实在放不下再在词中断开；
+   链接本身不超出所在的栏，图标留在右边 */
+.doi {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  max-width: 100%;
+  min-height: 24px;
+  color: var(--ink-2);
+  font-family: var(--font-num);
+  letter-spacing: 0;
+  text-decoration: none;
+}
+.doiText {
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+/* 24 高的一行，点按区域上下各补 10 到 44 */
+.doi::before {
+  content: "";
+  position: absolute;
+  inset: -10px 0;
+}
+.external {
+  flex: none;
+  color: var(--ink-3);
+}
+
+/* 证据卡片的出处行：13 号三级墨色，引文和 DOI 各占一行（components.css .src） */
+.source {
+  display: block;
+  margin-top: var(--sp-1);
+  color: var(--ink-3);
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+  letter-spacing: var(--tr-caption);
+}
+.sourceCite {
+  display: block;
+}

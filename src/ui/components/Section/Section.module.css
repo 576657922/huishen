@@ -1,0 +1,29 @@
+/* DESIGN.md §8.2 · components.css .section / .section-head */
+.section {
+  margin-top: var(--sp-10);
+}
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  min-height: 48px;
+  padding-top: var(--sp-1);
+  border-top: 1px solid var(--ink);
+}
+.head > :first-child {
+  flex: 0 1 auto;
+  min-width: 0;
+}
+.h3 {
+  font-size: var(--fs-head);
+  line-height: var(--lh-head);
+  letter-spacing: var(--tr-head);
+}
+.aside {
+  color: var(--ink-3);
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+  letter-spacing: var(--tr-caption);
+  text-align: right;
+}

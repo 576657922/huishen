@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <title>回神</title>
+  <rect width="32" height="32" rx="7" fill="#F4F1EA"/>
+  <g fill="#B33A21">
+    <path d="M6 6H26V8.2H6Z M6 23.8H26V26H6Z M6 6H9.2V27.4H6Z M22.8 6H26V26H22.8Z"/>
+    <path d="M11.4 11H20.6V13H11.4Z M11.4 18.2H20.6V20.2H11.4Z M11.4 11H13.8V21H11.4Z M18.2 11H20.6V20.2H18.2Z"/>
+  </g>
+</svg>

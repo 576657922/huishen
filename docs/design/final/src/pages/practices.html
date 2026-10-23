@@ -1,0 +1,42 @@
+{{ head('练习 · 回神', { bars: 'tabs' }) }}
+<style>
+  .filter-wrap { margin-top: var(--sp-4); }
+  .plans { margin-top: var(--sp-6); }
+  .cat { margin-top: var(--sp-10); }
+  .cat .group-title:first-of-type { margin-top: var(--sp-2); }
+  .legend { margin-top: var(--sp-8); padding-top: var(--sp-3); border-top: var(--hair) solid var(--rule); color: var(--ink-3); font-size: var(--fs-caption); line-height: var(--lh-caption); }
+</style>
+<body>
+{{ sprite() }}
+{{ device() }}
+{{ statusbar('21:13') }}
+<main class="page">
+  <header class="pagehead">
+    <h1 class="t-display" tabindex="-1">练习</h1>
+    <p class="folio"><span><b>17</b> 项练习</span><span>{{ NEW['PRACTICES.folioEnd'] }}</span></p>
+    <div class="filter-wrap">
+      <div class="filter" role="radiogroup" aria-label="分类">
+        {{ ['全部', '冥想', '呼吸', '声音'].map((l, i) => `<button role="radio" aria-checked="${i === 0}" type="button" data-label="${l}"${i ? ' tabindex="-1"' : ''}>${l}</button>`).join('') }}
+      </div>
+    </div>
+  </header>
+
+  <section class="plans" aria-labelledby="plans-h">
+    <div class="section-head"><h2 id="plans-h">计划</h2><span class="aside">{{ NEW['PRACTICES.programsAside'] }}</span></div>
+    <a class="prow" href="/program/mindfulness-8w">{{ programGlyph(8) }}<span><span class="prow__name">八周正念</span><span class="prow__desc">进行中 · 第 3 周第 2 天</span></span><span class="prow__end"><span class="prow__dur"><span class="pnum">8</span> 周</span></span></a>
+    <a class="prow" href="/program/breathing-4w">{{ programGlyph(4) }}<span><span class="prow__name">四周呼吸</span><span class="prow__desc">节律逐周放慢，每天 5–10 分钟</span></span><span class="prow__end"><span class="prow__dur"><span class="pnum">4</span> 周</span></span></a>
+  </section>
+
+  {{ K.PRACTICES.catalogueSections().map(sec => `
+  <section class="cat" id="${sec.category}" aria-labelledby="${sec.category}-h">
+    <div class="section-head"><h2 id="${sec.category}-h">${sec.title}</h2><span class="aside">${sec.groups.reduce((a, g) => a + g.ids.length, 0)} 项</span></div>
+    ${sec.groups.map(g => `${g.title ? `<h3 class="group-title">${g.title}</h3>` : ''}<div>${g.ids.map(id => { const p = K.practice(id); return `<a class="prow" href="/practices/${id}">${glyph(id)}<span><span class="prow__name">${p.name}${p.grade ? `<span class="grade__box" aria-hidden="true">${p.grade}</span><span class="vh">，证据等级 ${p.grade}，${D.GRADE_NAMES[p.grade]}</span>` : ''}</span><span class="prow__desc">${K.keep(p.short)}</span></span><span class="prow__end"><span class="prow__dur">${id === 'pace-finder' ? '约 ' : ''}<span class="pnum">${id === 'pace-finder' ? 7 : p.defaultMinutes}</span> 分钟</span></span></a>` }).join('')}</div>`).join('')}
+  </section>`).join('') }}
+
+  <p class="legend">{{ K.keep(NEW['PRACTICES.legend']) }}<br><a class="link-more link-more--caption" href="/evidence">全部依据{{ icon('chevron-right') }}</a></p>
+</main>
+{{ tabbar('practice') }}
+{{ homebar() }}
+</div>
+</body>
+</html>

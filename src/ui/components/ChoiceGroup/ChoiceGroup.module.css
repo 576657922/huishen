@@ -1,0 +1,63 @@
+/* DESIGN.md §8.16 · components.css .choice：同分段控件的线框，格高 48、墨色标签 */
+.choice {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  border-radius: var(--r-2);
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+.cell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0 var(--sp-2);
+  color: var(--ink);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  letter-spacing: var(--tr-body);
+  white-space: nowrap;
+  transition:
+    background-color var(--dur-state) var(--ease-standard),
+    color var(--dur-state) var(--ease-standard);
+}
+.cell + .cell {
+  box-shadow: inset 1px 0 0 var(--rule);
+}
+.cell:first-child {
+  border-radius: var(--r-2) 0 0 var(--r-2);
+}
+.cell:last-child {
+  border-radius: 0 var(--r-2) var(--r-2) 0;
+}
+.cell[aria-checked="true"] {
+  background: var(--ink);
+  color: var(--on-ink);
+  font-weight: var(--w-semibold);
+  box-shadow: none;
+}
+.cell[aria-checked="true"] + .cell {
+  box-shadow: none;
+}
+.cell:active:not([aria-checked="true"]) {
+  background: var(--wash-2);
+}
+.cell:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  z-index: 1;
+}
+/* 强制颜色（高对比度）：底色和阴影都会被清掉，靠线框和系统色把边界、状态画出来（DESIGN.md §3.7） */
+@media (forced-colors: active) {
+  .choice {
+    border: 1px solid CanvasText;
+  }
+  .cell + .cell,
+  .cell[aria-checked="true"] + .cell {
+    border-left: 1px solid CanvasText;
+  }
+  .cell[aria-checked="true"] {
+    outline: 2px solid Highlight;
+  }
+}

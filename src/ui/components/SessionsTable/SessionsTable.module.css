@@ -1,0 +1,121 @@
+/* DESIGN.md §8.18 · components.css .table · records-desktop.html */
+/* 表头里只给读屏的「操作」是绝对定位的：让它定位在表格里，表格放在横向滚动的容器里时不会撑宽页面 */
+.root {
+  position: relative;
+}
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+/* records-desktop.html 的列宽：128 · 64 · 120 · 72 · 232 · 88 · 64 · 64 · 其余 · 96 */
+.cDate {
+  width: 128px;
+}
+.cStart {
+  width: 64px;
+}
+.cPractice {
+  width: 120px;
+}
+.cDuration {
+  width: 72px;
+}
+.cData {
+  width: 232px;
+}
+.cFeeling {
+  width: 88px;
+}
+.cScore {
+  width: 64px;
+}
+.cActions {
+  width: 96px;
+}
+.table th,
+.table td {
+  overflow: hidden;
+  padding: 0 var(--sp-3) 0 0;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+.table thead th {
+  padding-bottom: var(--sp-2);
+  border-bottom: 1px solid var(--ink);
+  color: var(--ink-3);
+  font-weight: var(--w-regular);
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+  letter-spacing: var(--tr-caption);
+}
+.table tbody th,
+.table tbody td {
+  height: 44px;
+  border-bottom: var(--hair) solid var(--rule);
+  font-weight: var(--w-regular);
+  transition: background-color var(--dur-press) var(--ease-standard);
+}
+.row {
+  cursor: pointer;
+}
+.row:active > * {
+  background: var(--wash-2);
+}
+.table .num {
+  font-family: var(--font-num);
+  font-variant-numeric: tabular-nums lining-nums;
+  letter-spacing: var(--tr-num);
+  text-align: right;
+}
+/* 跟在数字栏后面的文字栏左边留 24 */
+.table .text {
+  padding-left: var(--sp-6);
+}
+.soft {
+  color: var(--ink-2);
+}
+.muted {
+  color: var(--ink-3);
+}
+.day {
+  color: var(--ink);
+}
+.weekday {
+  margin-left: 0.4em;
+  color: var(--ink-3);
+}
+
+/* 详情 · 删除：指针停在行上或焦点在行里时出现 */
+.table .actions {
+  padding-right: 0;
+  text-align: right;
+}
+.action {
+  min-height: var(--hit);
+  margin-left: var(--sp-3);
+  color: var(--ink-2);
+  opacity: 0;
+}
+.row:focus-within .action {
+  opacity: 1;
+}
+.action:focus-visible {
+  outline-offset: -2px;
+}
+@media (hover: hover) and (pointer: fine) {
+  .row:hover > * {
+    background: var(--wash);
+  }
+  .row:hover .action {
+    opacity: 1;
+  }
+  .action:hover {
+    color: var(--ink);
+  }
+}
+.more {
+  margin-top: var(--sp-2);
+}

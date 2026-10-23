@@ -1,0 +1,28 @@
+/* DESIGN.md §8.10 · components.css .claims */
+.claims {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.item {
+  padding: var(--sp-3) 0;
+  border-bottom: var(--hair) solid var(--rule);
+}
+.text {
+  font-size: var(--fs-reading);
+  line-height: var(--lh-reading);
+  letter-spacing: var(--tr-reading);
+  font-weight: var(--w-semibold);
+  text-wrap: pretty;
+}
+.grade {
+  margin-top: var(--sp-1);
+}
+.scope {
+  margin-top: var(--sp-2);
+  color: var(--ink-3);
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+  letter-spacing: var(--tr-caption);
+  text-wrap: pretty;
+}

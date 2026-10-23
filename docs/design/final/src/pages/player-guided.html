@@ -1,0 +1,49 @@
+{{ head('身体扫描 · 回神', { theme: 'dark', bars: 'player', surface: 'player' }) }}
+<style>
+  .player .stage { padding-bottom: var(--sp-6); }
+  .where .chip { margin-bottom: 2px; }
+  .strip { margin-top: var(--sp-5); }
+</style>
+<body>
+{{ sprite() }}
+{{ device() }}
+{{ statusbar('21:58') }}
+<main class="player" aria-label="身体扫描练习">
+  <header class="hud">
+    <div>
+      <p class="hud__name">身体扫描</p>
+      <p class="hud__meta">10 分钟 · 溪流</p>
+    </div>
+    <button class="chip chip--unwell" type="button" aria-haspopup="dialog" data-unwell>{{ icon('help') }}{{ K.COPY.PLAYER.unwell }}</button>
+  </header>
+
+  <div class="stage">
+    <div class="where">
+      <div>
+        <p class="where__label">现在 · 第 4 处，共 6 处</p>
+        <h1 class="where__name">胸口、后背和肩膀</h1>
+      </div>
+      <button class="chip chip--quiet" type="button" aria-describedby="skip-help">{{ icon('skip') }}{{ K.COPY.PLAYER.guided.skip }}</button>
+    </div>
+    <p id="skip-help" class="vh">{{ K.COPY.PLAYER.guided.skipHelp }}</p>
+    <figure class="strip">{{ stepChart({ width: 350, step: 6, now: 372, label: '身体扫描进度' }) }}</figure>
+    <p class="caption" aria-live="polite">{{ K.clauses('想保持清醒，可以睁开眼睛，或者坐起来。') }}</p>
+  </div>
+
+  <div class="readouts">
+    <p class="readout"><span class="readout__label">剩余</span><span class="readout__value">{{ fmtClock(600 - 372) }}</span></p>
+    <p class="readout"><span class="readout__label">{{ NEW['PLAYER.guided.sectionLeft'] }}</span><span class="readout__value">{{ fmtClock(384.8 - 372) }}</span></p>
+    <p class="readout"><span class="readout__label">下一处</span><span class="readout__value readout__value--text">双手和手臂</span></p>
+  </div>
+
+  <nav class="player-controls" aria-label="练习控制">
+    <button type="button">{{ icon('pause') }}{{ K.COPY.PLAYER.pause }}</button>
+    <button type="button">{{ icon('sound') }}{{ K.COPY.PLAYER.sound }}</button>
+    <button type="button" aria-haspopup="dialog" data-control="unwell" data-unwell>{{ icon('help') }}{{ NEW['PLAYER.unwellShort'] }}</button>
+    <button type="button">{{ icon('end') }}{{ K.COPY.PLAYER.end }}</button>
+  </nav>
+</main>
+{{ homebar() }}
+</div>
+</body>
+</html>

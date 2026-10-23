@@ -1,0 +1,55 @@
+/* DESIGN.md §8.0 页头与 folio · §5.5 桌面页头 */
+.head {
+  padding-top: var(--sp-3);
+}
+.title {
+  font-size: var(--fs-display);
+  line-height: var(--lh-display);
+  letter-spacing: var(--tr-display);
+}
+/* 路由切换时程序把焦点放到 h1 上；它不是控件，不画焦点框 */
+.title:focus {
+  outline: none;
+}
+.folio {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  margin-top: var(--sp-3);
+  padding: var(--sp-1) 0;
+  border-top: 1px solid var(--ink);
+  border-bottom: var(--hair) solid var(--rule);
+  color: var(--ink-3);
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+  letter-spacing: var(--tr-caption);
+}
+.folio b {
+  color: var(--ink-2);
+  font-weight: var(--w-regular);
+}
+.folio > :last-child {
+  text-align: right;
+}
+
+.subline {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  padding-top: 0;
+  padding-bottom: var(--sp-4);
+  border-bottom: 1px solid var(--ink);
+}
+.sub {
+  margin-top: var(--sp-1);
+  color: var(--ink-3);
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+  letter-spacing: var(--tr-caption);
+}
+.actions {
+  display: flex;
+  gap: var(--sp-2);
+}

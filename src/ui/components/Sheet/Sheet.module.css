@@ -1,0 +1,231 @@
+/* DESIGN.md §8.13 · components.css 8.13。手机：底部面板；平板和桌面：居中 480 的对话框；
+   播放器里的面板：平板上仍在底部（最宽 560），桌面上是右侧 420 的整高面板 */
+.layer {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-sheet);
+  color: var(--ink);
+}
+.layer[data-state="closing"] {
+  pointer-events: none;
+}
+.scrim {
+  position: absolute;
+  inset: 0;
+  background: var(--scrim);
+  animation: fade-in var(--dur-sheet) var(--ease-standard);
+}
+.layer[data-state="closing"] .scrim {
+  animation: fade-out var(--dur-move) var(--ease-exit) forwards;
+}
+
+.sheet {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100dvh - var(--safe-top) - var(--sp-3));
+  padding: var(--sp-2) var(--margin) 0;
+  border-radius: var(--r-4) var(--r-4) 0 0;
+  background: var(--paper-raised);
+  box-shadow: var(--shadow-sheet);
+  outline: none;
+  animation: sheet-in var(--dur-sheet) var(--ease-standard);
+  transition: transform var(--dur-move) var(--ease-standard);
+}
+/* 占满：开始之前从安全区下 12 起；播放器里从顶部 112 起，变暗的 HUD 和「已暂停」仍露在上面（§5.3） */
+.full {
+  top: calc(var(--safe-top) + var(--sp-3));
+  max-height: none;
+}
+.player .sheet {
+  max-height: calc(100dvh - 112px);
+}
+.player .full {
+  top: 112px;
+  max-height: none;
+}
+/* 拖动时跟手，不要过渡 */
+.sheet[data-dragging] {
+  transform: translateY(var(--drag, 0px));
+  transition: none;
+}
+.layer[data-state="closing"] .sheet {
+  animation: sheet-out var(--dur-move) var(--ease-exit) forwards;
+}
+
+/* 拖动条 36 × 5，下面 8；拖动的区域是面板最上面一整条 */
+.grab {
+  flex: none;
+  display: flex;
+  justify-content: center;
+  margin: calc(-1 * var(--sp-2)) calc(-1 * var(--margin)) 0;
+  padding: var(--sp-2) 0;
+  touch-action: none;
+  cursor: grab;
+}
+.grabber {
+  width: 36px;
+  height: 5px;
+  border-radius: var(--r-full);
+  background: var(--line);
+}
+
+.head {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  min-height: var(--hit);
+  margin-right: calc(-1 * var(--sp-3));
+}
+.title {
+  font-size: var(--fs-title);
+  line-height: var(--lh-title);
+  letter-spacing: var(--tr-title);
+}
+/* 打开时焦点落在标题上（读屏从标题读起）；标题不是控件，不画焦点框 */
+.title:focus {
+  outline: none;
+}
+.headEnd {
+  display: flex;
+  align-items: center;
+  margin-right: 0;
+}
+
+/* 正文先滚动，底部操作区从不滚走 */
+.body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-bottom: var(--sp-4);
+}
+.body:last-child {
+  padding-bottom: calc(var(--safe-bottom) + var(--sp-4));
+}
+.foot {
+  flex: none;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  gap: var(--sp-3);
+  padding: var(--sp-3) 0 calc(var(--safe-bottom) + var(--sp-2));
+  border-top: var(--hair) solid var(--rule);
+  background: var(--paper-raised);
+}
+
+@media (min-width: 768px) {
+  /* 播放器里的面板仍在底部，最宽 560，居中 */
+  .player .sheet {
+    margin-inline: auto;
+    width: min(560px, 100vw);
+  }
+  /* 应用里的面板变成居中的对话框：480 宽、四角圆 14、浮起的阴影、没有拖动条；进出场同对话框 */
+  .layer:not(.player) .sheet {
+    inset: 0;
+    margin: auto;
+    width: min(480px, calc(100vw - 64px));
+    height: fit-content;
+    max-height: min(760px, calc(100dvh - 64px));
+    border-radius: var(--r-4);
+    box-shadow: var(--shadow-pop);
+    animation: dialog-in var(--dur-move) var(--ease-standard);
+  }
+  .layer:not(.player) .full {
+    height: min(760px, calc(100dvh - 64px));
+  }
+  /* 开始之前：560 宽的对话框，正文在里面滚动（§13.12） */
+  .layer:not(.player) .wide {
+    width: min(560px, calc(100vw - 64px));
+  }
+  .layer:not(.player) .grab {
+    display: none;
+  }
+  .layer:not(.player) .foot {
+    padding-bottom: var(--sp-4);
+  }
+  .layer:not(.player)[data-state="closing"] .sheet {
+    animation: dialog-out var(--dur-state) var(--ease-exit) forwards;
+  }
+}
+@media (min-width: 1024px) {
+  /* 桌面播放器：右侧 420 的整高面板，左边一条细线，没有圆角和阴影 */
+  .player .sheet,
+  .player .full {
+    top: 0;
+    bottom: 0;
+    left: auto;
+    right: 0;
+    margin: 0;
+    width: 420px;
+    max-height: none;
+    padding-top: var(--sp-6);
+    border-radius: 0;
+    box-shadow: none;
+    border-left: var(--hair) solid var(--rule);
+    animation: panel-in var(--dur-sheet) var(--ease-standard);
+  }
+  .player .grab {
+    display: none;
+  }
+  .player[data-state="closing"] .sheet {
+    animation: panel-out var(--dur-move) var(--ease-exit) forwards;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes sheet-in {
+  from {
+    transform: translateY(100%);
+  }
+}
+@keyframes sheet-out {
+  from {
+    transform: translateY(var(--drag, 0px));
+  }
+  to {
+    transform: translateY(100%);
+  }
+}
+@keyframes dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+@keyframes dialog-out {
+  to {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+@keyframes panel-in {
+  from {
+    transform: translateX(100%);
+  }
+}
+@keyframes panel-out {
+  to {
+    transform: translateX(100%);
+  }
+}
+/* 强制颜色（高对比度）：底色和阴影都会被清掉，靠线框和系统色把边界、状态画出来（DESIGN.md §3.7） */
+@media (forced-colors: active) {
+  .sheet {
+    border: 1px solid CanvasText;
+  }
+}

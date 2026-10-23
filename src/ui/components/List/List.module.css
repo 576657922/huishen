@@ -1,0 +1,118 @@
+/* DESIGN.md §8.7 · components.css 8.7 */
+.groupTitle {
+  margin: var(--sp-8) 0 var(--sp-1);
+  font-family: var(--font-ui);
+  font-weight: var(--w-regular);
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+  letter-spacing: var(--tr-caption);
+  color: var(--ink-3);
+  text-wrap: pretty;
+}
+
+.list {
+  border-top: var(--hair) solid var(--rule);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  width: 100%;
+  min-height: 52px;
+  padding: var(--sp-3) 0;
+  border-bottom: var(--hair) solid var(--rule);
+  color: inherit;
+  text-align: left;
+  text-decoration: none;
+}
+.interactive {
+  cursor: pointer;
+  transition: background-color var(--dur-press) var(--ease-standard);
+}
+.interactive:active {
+  background: var(--wash-2);
+}
+.row:focus-visible {
+  outline-offset: 2px;
+}
+
+.label {
+  flex: 1;
+  min-width: 0;
+}
+.hint {
+  display: block;
+  margin-top: 2px;
+  color: var(--ink-3);
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+  letter-spacing: var(--tr-caption);
+}
+.value {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+.chevron {
+  color: var(--ink-3);
+}
+
+/* 上下排：标签在上，控件在 12 之下，提示再往下 8 */
+.stack {
+  display: block;
+}
+.top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-4);
+}
+.topValue {
+  color: var(--ink);
+  white-space: nowrap;
+}
+.control {
+  margin-top: var(--sp-3);
+}
+.stackHint {
+  display: block;
+  margin-top: var(--sp-2);
+  color: var(--ink-3);
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+  letter-spacing: var(--tr-caption);
+}
+
+/* 展开：箭头转 180°，内容区从 0fr 展开到 1fr（§7.2） */
+.turn {
+  color: var(--ink-3);
+  transition: transform var(--dur-move) var(--ease-standard);
+}
+[aria-expanded="true"] > .turn {
+  transform: rotate(180deg);
+}
+.panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--dur-move) var(--ease-standard);
+}
+.panel[data-expanded] {
+  grid-template-rows: 1fr;
+}
+.panelInner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .interactive:hover {
+    background: var(--wash);
+  }
+  .interactive:active {
+    background: var(--wash-2);
+  }
+}

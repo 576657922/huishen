@@ -1,0 +1,16 @@
+/* DESIGN.md §8.9 · components.css .figure / .figcaption */
+.figure {
+  margin: 0;
+}
+.caption {
+  margin-top: var(--sp-2);
+  color: var(--ink-3);
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+  letter-spacing: var(--tr-caption);
+}
+.number {
+  margin-right: 0.5em;
+  color: var(--ink-2);
+  font-weight: var(--w-semibold);
+}

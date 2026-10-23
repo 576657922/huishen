@@ -1,0 +1,107 @@
+/* =====================================================================
+   回神 · 方向 C「器」 — shared components (mock-up layer)
+   Uses semantic tokens from tokens.css only.
+   ===================================================================== */
+
+/* ---------- Type roles ---------- */
+.t-large  { font-size: var(--fs-large); line-height: var(--lh-large); font-weight: var(--fw-medium); letter-spacing: var(--track-cjk-title); }
+.t-title  { font-size: var(--fs-title); line-height: var(--lh-title); font-weight: var(--fw-medium); letter-spacing: var(--track-cjk-title); }
+.t-head   { font-size: var(--fs-head);  line-height: var(--lh-head);  font-weight: var(--fw-medium); letter-spacing: 0.02em; }
+.t-body   { font-size: var(--fs-body);  line-height: var(--lh-body); }
+.t-small  { font-size: var(--fs-small); line-height: var(--lh-small); }
+.t-label  { font-size: var(--fs-small); line-height: var(--lh-small); font-weight: var(--fw-medium); color: var(--ink-3); letter-spacing: var(--track-cjk-label); }
+.t-micro  { font-size: var(--fs-micro); line-height: var(--lh-micro); color: var(--ink-3); letter-spacing: 0.04em; }
+.t-axis   { font-family: var(--font-mono); font-size: var(--fs-micro); line-height: var(--lh-micro); color: var(--ink-3); letter-spacing: var(--track-mono); font-variant-numeric: tabular-nums; }
+.ink-2 { color: var(--ink-2); }
+.ink-3 { color: var(--ink-3); }
+.pretty { text-wrap: pretty; }
+.balance { text-wrap: balance; }
+.sep { color: var(--ink-4); padding: 0 0.35em; }
+
+/* ---------- Icons: 24 grid · 1.5 stroke · square caps · miter joins ---------- */
+svg.i { width: 24px; height: 24px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square; stroke-linejoin: miter; overflow: visible; }
+/* stroke-width is in symbol units (24); compensate so every size draws a 1.5 px line */
+svg.i.s16 { width: 16px; height: 16px; stroke-width: 2.25; }
+svg.i.s20 { width: 20px; height: 20px; stroke-width: 1.8; }
+
+/* ---------- Phone chrome ---------- */
+.phone { position: relative; width: 390px; min-height: 844px; overflow: hidden; background: var(--bg); }
+.statusbar {
+  height: var(--safe-top); display: flex; align-items: center; justify-content: space-between;
+  padding: 3px 26px 0 36px; font-family: var(--font-system); font-weight: 600; font-size: 17px;
+  letter-spacing: -0.02em; color: var(--ink); font-variant-numeric: tabular-nums;
+}
+.statusbar svg { display: block; fill: currentColor; }
+.statusbar .sys { display: flex; gap: 6px; align-items: center; }
+.homebar { position: absolute; left: 50%; bottom: 8px; width: 134px; height: 5px; margin-left: -67px; border-radius: 3px; background: var(--ink); }
+
+.navbar { height: 44px; display: flex; align-items: center; justify-content: space-between; padding: 0 8px; }
+.iconbtn { width: var(--touch); height: var(--touch); display: inline-grid; place-items: center; border-radius: var(--r-3); color: var(--ink); }
+.backbtn { height: var(--touch); display: inline-flex; align-items: center; gap: 2px; padding: 0 12px 0 4px; color: var(--ink); font-size: var(--fs-head); }
+
+.tabbar {
+  position: absolute; left: 0; right: 0; bottom: 0; height: calc(var(--tabbar-h) + var(--safe-bottom));
+  padding-bottom: var(--safe-bottom); display: grid; grid-template-columns: repeat(4, 1fr);
+  background: var(--bg-raised); border-top: var(--hair) solid var(--rule-strong);
+}
+.tab { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; color: var(--ink-3); font-size: 11px; line-height: 14px; letter-spacing: 0.04em; }
+.tab[aria-current="page"] { color: var(--ink); font-weight: var(--fw-medium); }
+.tab[aria-current="page"]::before { content: ""; position: absolute; top: -1px; left: 50%; width: 24px; height: 2px; margin-left: -12px; background: var(--ink); }
+
+/* ---------- Keys & buttons ---------- */
+/* Primary key: ink body + one signal "LED" square (the 回 core). Colour stays a signal, never a slab. */
+.btn-key {
+  display: flex; align-items: center; justify-content: space-between; width: 100%; height: 52px;
+  padding: 0 18px 0 20px; border-radius: var(--r-3); background: var(--ink); color: var(--on-ink);
+  font-size: var(--fs-head); font-weight: var(--fw-medium); letter-spacing: 0.08em;
+}
+.btn-key .lead { display: inline-flex; align-items: center; gap: 12px; }
+.btn-key .led { width: 8px; height: 8px; background: var(--signal); flex: none; }
+.btn-key .num { font-size: var(--fs-head); font-weight: 300; letter-spacing: 0.02em; }
+.btn-signal {
+  display: flex; align-items: center; justify-content: space-between; width: 100%; height: 52px;
+  padding: 0 16px 0 14px; border-radius: var(--r-3); background: var(--signal); color: var(--on-signal);
+  font-size: var(--fs-head); font-weight: var(--fw-medium); letter-spacing: 0.06em;
+}
+.btn-signal .lead { display: inline-flex; align-items: center; gap: 8px; }
+.btn-signal .num { font-size: var(--fs-head); letter-spacing: 0.02em; font-weight: 400; }
+.btn-signal svg.i { stroke-width: 1.5; }
+.btn-line {
+  display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 14px 0 10px;
+  border: var(--hair) solid var(--rule-strong); border-radius: var(--r-3); color: var(--ink); font-size: var(--fs-small);
+  background: var(--bg-raised);
+}
+.kbd { display: inline-grid; place-items: center; min-width: 18px; height: 18px; padding: 0 4px; border: var(--hair) solid var(--rule-strong); border-bottom-width: 1.5px; border-radius: var(--r-2); font: 400 11px/1 var(--font-mono); color: var(--ink-3); }
+
+/* ---------- Segmented control ---------- */
+.seg { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; height: 36px; padding: 2px; gap: 2px; border: var(--hair) solid var(--rule-strong); border-radius: var(--r-3); background: var(--bg-raised); }
+.seg > span { display: grid; place-items: center; border-radius: 6px; color: var(--ink-2); font-size: var(--fs-body); letter-spacing: 0.04em; }
+.seg > span[aria-pressed="true"] { background: var(--ink); color: var(--on-ink); font-weight: var(--fw-medium); }
+.seg.compact { height: 32px; }
+.seg.compact > span { font-size: var(--fs-small); }
+
+/* ---------- Toggle (slide switch) ---------- */
+.toggle { position: relative; width: 44px; height: 26px; border-radius: var(--r-2); background: var(--ink); flex: none; }
+.toggle::after { content: ""; position: absolute; top: 3px; right: 3px; width: 20px; height: 20px; border-radius: var(--r-1); background: var(--bg-raised); }
+.toggle.off { background: var(--bg-sunken); box-shadow: inset 0 0 0 var(--hair) var(--rule-strong); }
+.toggle.off::after { right: auto; left: 3px; background: var(--ink-4); }
+
+/* ---------- Evidence grade mark ---------- */
+.grade { display: inline-grid; place-items: center; width: 18px; height: 18px; border: 1px solid currentColor; border-radius: var(--r-1); font: 400 11px/1 var(--font-mono); color: var(--ink-2); flex: none; }
+.grade.none { border-color: transparent; color: var(--ink-4); }
+
+/* ---------- Lists ---------- */
+.hr { height: 0; border-top: var(--hair) solid var(--rule); }
+.hr-strong { height: 0; border-top: 1px solid var(--ink); }
+
+/* ---------- Desktop rail ---------- */
+.desk { position: relative; width: 1440px; height: 900px; overflow: hidden; background: var(--bg); display: grid; grid-template-columns: var(--rail-w) 1fr; }
+.rail { display: flex; flex-direction: column; padding: 28px 16px 24px; border-right: 1px solid var(--rule); background: var(--bg); }
+.rail .brand { display: flex; align-items: center; height: 36px; padding: 0 12px; color: var(--ink); }
+.rail nav { margin-top: 36px; display: grid; gap: 2px; }
+.rail nav a, .rail .foot a { display: flex; align-items: center; gap: 12px; height: 40px; padding: 0 12px; border-radius: 6px; color: var(--ink-2); font-size: var(--fs-body); letter-spacing: 0.04em; text-decoration: none; }
+.rail nav a[aria-current="page"] { background: var(--bg-sunken); color: var(--ink); font-weight: var(--fw-medium); }
+.rail nav a .kbd { margin-left: auto; }
+.rail .foot { margin-top: auto; display: grid; gap: 12px; }
+.rail .status { display: flex; align-items: flex-start; gap: 8px; padding: 0 12px; color: var(--ink-3); font-size: var(--fs-micro); line-height: var(--lh-micro); }
+.rail .status i { width: 6px; height: 6px; margin-top: 5px; background: var(--ink-3); flex: none; }

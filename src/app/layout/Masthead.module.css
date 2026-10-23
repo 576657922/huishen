@@ -1,0 +1,29 @@
+/* 报头与日期行（DESIGN.md §8.0，components.css .masthead / .dateline） */
+.masthead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--navbar-h);
+  margin-right: calc(-1 * var(--sp-3));
+}
+@media (min-width: 768px) {
+  .masthead {
+    display: none;
+  }
+}
+
+.dateline {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: var(--sp-1) 0;
+  border-top: 1px solid var(--ink);
+  border-bottom: var(--hair) solid var(--rule);
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+  letter-spacing: var(--tr-caption);
+  color: var(--ink-2);
+}
+.dateline time {
+  color: var(--ink);
+}

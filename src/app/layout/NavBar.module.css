@@ -1,0 +1,43 @@
+/* 推入页面的导航条（DESIGN.md §8.0，components.css .navbar / .back） */
+.navbar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--navbar-h);
+  margin: 0 calc(-1 * var(--sp-3)) 0 calc(-1 * var(--sp-2));
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  height: var(--hit);
+  padding: 0 var(--sp-3) 0 0;
+  color: var(--ink);
+  text-decoration: none;
+}
+.icon {
+  margin-right: -2px;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+}
+
+/* 桌面：导航栏还在，返回是 h1 上方一行说明字号的链接（44 高的点按区域） */
+@media (min-width: 1024px) {
+  .navbar {
+    height: auto;
+    margin-left: calc(-1 * var(--sp-1));
+  }
+  .back {
+    font-size: var(--fs-caption);
+    line-height: var(--lh-caption);
+    letter-spacing: var(--tr-caption);
+  }
+  .icon {
+    width: 16px;
+    height: 16px;
+  }
+}

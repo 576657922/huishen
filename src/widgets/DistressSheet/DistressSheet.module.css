@@ -1,0 +1,57 @@
+/* 「不舒服？」面板（DESIGN.md §8.15.17，distress.html） */
+.lead {
+  color: var(--ink-2);
+}
+.lead b {
+  color: var(--ink);
+  font-weight: var(--w-semibold);
+}
+
+.stop {
+  margin-top: var(--sp-3);
+}
+
+/* 「停下以后：」和「停止指引全文 ›」在同一行，44 高 */
+.stopHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: var(--hit);
+  margin: calc(-1 * var(--sp-2)) 0 calc(-1 * var(--sp-1));
+  color: var(--ink);
+}
+.fullLink {
+  margin-right: calc(-1 * var(--sp-1));
+}
+
+/* 1 2 3 的列表（components.css .stoplist） */
+.list {
+  counter-reset: s;
+}
+.list li {
+  display: grid;
+  grid-template-columns: 1.375em minmax(0, 1fr);
+  padding: 3px 0;
+  color: var(--ink-2);
+}
+.list li::before {
+  counter-increment: s;
+  content: counter(s);
+  font-family: var(--font-num);
+  color: var(--ink-3);
+}
+
+.emergency {
+  margin-top: var(--sp-3);
+  padding-top: var(--sp-2);
+  border-top: var(--hair) solid var(--rule);
+}
+
+.ground {
+  margin-top: var(--sp-4);
+}
+
+/* 这个面板底部的两个按钮都是 48 高（「继续」是安静按钮，平时 44 高） */
+.footButton {
+  min-height: 48px;
+}

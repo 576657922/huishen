@@ -1,0 +1,26 @@
+/* DESIGN.md §8.9 Sparkline · components.css .spark */
+.spark {
+  display: block;
+  flex: none;
+  overflow: visible;
+}
+.line {
+  fill: none;
+  stroke: var(--trace);
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+.dot {
+  fill: var(--ink);
+  stroke: var(--paper);
+  stroke-width: 2;
+}
+.now {
+  fill: var(--now);
+}
+@media (forced-colors: active) {
+  .now {
+    forced-color-adjust: none;
+  }
+}

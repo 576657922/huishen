@@ -1,0 +1,51 @@
+/* 标签栏（DESIGN.md §8.11，components.css .tabbar / .tab） */
+.tabbar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: var(--z-bar);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  height: calc(var(--tabbar-h) + var(--safe-bottom));
+  padding-bottom: var(--safe-bottom);
+  background: var(--paper);
+  border-top: var(--hair) solid var(--rule);
+}
+
+.tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 2px;
+  padding-top: 6px;
+  color: var(--ink-3);
+  text-decoration: none;
+  font-size: var(--fs-micro);
+  line-height: var(--lh-micro);
+  letter-spacing: var(--tr-micro);
+}
+.tab:active {
+  background: var(--wash-2);
+}
+.tab[aria-current="page"] {
+  color: var(--ink);
+  font-weight: var(--w-semibold);
+}
+.tab:focus-visible {
+  outline-offset: -4px;
+  border-radius: var(--r-2);
+}
+
+/* 平板和桌面由导航栏代替；有停靠栏的页面、播放器和首次使用页上不显示（DESIGN.md §5.3） */
+@media (min-width: 768px) {
+  .tabbar {
+    display: none;
+  }
+}
+:global(html[data-bars="dock"]) .tabbar,
+:global(html[data-bars="player"]) .tabbar,
+:global(html[data-bars="none"]) .tabbar {
+  display: none;
+}

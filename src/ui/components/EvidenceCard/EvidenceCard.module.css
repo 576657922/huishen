@@ -1,0 +1,147 @@
+/* DESIGN.md §8.10 · components.css .ecard / .es / .ci */
+.card {
+  padding-top: var(--sp-3);
+  border-top: 1px solid var(--ink);
+}
+.kicker {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  color: var(--ink-3);
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+  letter-spacing: var(--tr-caption);
+}
+.claim {
+  margin-top: var(--sp-2);
+  padding-bottom: var(--sp-3);
+  border-bottom: var(--hair) solid var(--rule);
+  font-size: var(--fs-reading);
+  line-height: var(--lh-reading);
+  letter-spacing: var(--tr-reading);
+  font-weight: var(--w-semibold);
+}
+/* 收起的卡片：结论 15 / 24，下面一行研究类型和「展开」 */
+.closed .claim {
+  padding-bottom: 0;
+  border-bottom: 0;
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  letter-spacing: var(--tr-body);
+}
+.meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  margin-top: var(--sp-1);
+  border-bottom: var(--hair) solid var(--rule);
+  color: var(--ink-3);
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+  letter-spacing: var(--tr-caption);
+}
+
+.fields {
+  margin: 0;
+}
+.field {
+  display: grid;
+  grid-template-columns: 76px minmax(0, 1fr);
+  column-gap: var(--sp-3);
+  padding: var(--sp-3) 0;
+  border-bottom: var(--hair) solid var(--rule);
+}
+.field:last-child {
+  border-bottom: 0;
+}
+.field dt {
+  color: var(--ink-3);
+  font-size: var(--fs-caption);
+  line-height: var(--lh-body);
+  letter-spacing: var(--tr-caption);
+}
+.field dd {
+  margin: 0;
+  color: var(--ink-2);
+}
+.field dd p + p {
+  margin-top: var(--sp-2);
+}
+.field dd :global(.tnum),
+.field dd :global(.pnum) {
+  color: var(--ink);
+}
+.wide {
+  display: block;
+}
+.wide dt {
+  margin-bottom: var(--sp-2);
+}
+
+.esRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+  letter-spacing: var(--tr-caption);
+}
+.esName {
+  color: var(--ink);
+}
+.esDetail {
+  margin-left: 0.4em;
+  color: var(--ink-3);
+}
+.esValue {
+  color: var(--ink);
+  font-family: var(--font-num);
+  font-variant-numeric: tabular-nums lining-nums;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+.ci,
+.axis {
+  display: block;
+  width: calc(100% - 10px);
+  margin: 2px 5px var(--sp-2);
+  overflow: visible;
+  fill: none;
+}
+.axis {
+  margin-bottom: 0;
+}
+.zero {
+  stroke: var(--ink-3);
+  stroke-width: 1;
+}
+.range {
+  stroke: var(--ink);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+.est {
+  fill: var(--ink);
+  stroke: var(--paper);
+  stroke-width: 2;
+}
+.axisLine {
+  stroke: var(--line);
+  stroke-width: 1;
+}
+.axisLabel {
+  fill: var(--ink-3);
+  font-family: var(--font-num);
+  font-size: var(--fs-axis);
+  font-variant-numeric: tabular-nums;
+}
+.esNote {
+  margin-top: var(--sp-1);
+  color: var(--ink-3);
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+  letter-spacing: var(--tr-caption);
+}

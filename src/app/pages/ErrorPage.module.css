@@ -1,0 +1,7 @@
+/* 两个操作并排，间距 12（DESIGN.md §5.1 的按钮间距） */
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-3);
+}

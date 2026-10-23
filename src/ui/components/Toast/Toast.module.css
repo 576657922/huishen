@@ -1,0 +1,109 @@
+/* DESIGN.md §8.13 toast · components.css .toast：墨色底、--on-ink 15 / 24、圆角 8、至少 48 高。
+   在标签栏、停靠条或播放器控制条上方 12，左右各 20；桌面在内容区左下，最宽 400 */
+.region {
+  position: fixed;
+  left: var(--margin);
+  right: var(--margin);
+  bottom: calc(var(--tabbar-h) + var(--safe-bottom) + var(--sp-3));
+  z-index: var(--z-toast);
+  pointer-events: none;
+}
+:global(html[data-bars="dock"]) .region {
+  bottom: calc(var(--dock-h) + var(--safe-bottom) + var(--sp-3));
+}
+:global(html[data-bars="player"]) .region {
+  bottom: calc(var(--controls-h) + var(--safe-bottom) + var(--sp-2) + var(--sp-3));
+}
+:global(html[data-bars="none"]) .region {
+  bottom: calc(var(--safe-bottom) + var(--sp-3));
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  min-height: 48px;
+  padding: var(--sp-1) var(--sp-2) var(--sp-1) var(--sp-4);
+  border-radius: var(--r-3);
+  background: var(--ink);
+  color: var(--on-ink);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  letter-spacing: var(--tr-body);
+  pointer-events: auto;
+  animation: toast-in var(--dur-move) var(--ease-standard);
+}
+.toast[data-state="closing"] {
+  animation: toast-out var(--dur-move) var(--ease-exit) forwards;
+}
+.message {
+  min-width: 0;
+}
+.action {
+  flex: none;
+  min-height: var(--hit);
+  padding: 0 var(--sp-2);
+  color: var(--on-ink);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.3em;
+  text-decoration-color: var(--on-ink-2);
+}
+/* 墨色底上的墨色焦点框看不见：这里用 --on-ink，画在按钮里面 */
+.action:focus-visible {
+  outline: 2px solid var(--on-ink);
+  outline-offset: -2px;
+  border-radius: var(--r-2);
+}
+
+/* 平板、桌面：没有标签栏；贴在内容区左下（紧凑导航 80 / 导航 240 之后，再加页边距） */
+@media (min-width: 768px) {
+  .region,
+  :global(html[data-bars]) .region {
+    right: auto;
+    left: calc(var(--rail-w-compact) + var(--margin-tablet));
+    width: min(400px, calc(100vw - var(--rail-w-compact) - 2 * var(--margin-tablet)));
+    bottom: calc(var(--safe-bottom) + var(--sp-6));
+  }
+  /* 平板上停靠条仍固定在底部（1024 起才回到页面里），提示条留在它上方 12 */
+  :global(html[data-bars="dock"]) .region {
+    bottom: calc(var(--dock-h) + var(--safe-bottom) + var(--sp-3));
+  }
+  :global(html[data-bars="player"]) .region {
+    left: max(var(--margin-tablet), calc((100vw - var(--reading-max)) / 2));
+    bottom: calc(var(--controls-h) + var(--safe-bottom) + var(--sp-2) + var(--sp-3));
+  }
+}
+@media (min-width: 1024px) {
+  .region,
+  :global(html[data-bars]) .region {
+    left: calc(var(--rail-w) + var(--margin-desk));
+    width: min(400px, calc(100vw - var(--rail-w) - 2 * var(--margin-desk)));
+  }
+  :global(html[data-bars="dock"]) .region {
+    bottom: calc(var(--safe-bottom) + var(--sp-6));
+  }
+  :global(html[data-bars="player"]) .region {
+    left: max(var(--margin-tablet), calc((100vw - var(--reading-max)) / 2));
+  }
+}
+
+@media (forced-colors: active) {
+  .toast {
+    border: 1px solid CanvasText;
+  }
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+@keyframes toast-out {
+  to {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}

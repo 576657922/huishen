@@ -1,0 +1,34 @@
+/* DESIGN.md §8.9 WeekDots · components.css .weekdots：一张图里至多一个朱色标记（今天） */
+.weekdots {
+  display: block;
+  flex: none;
+  overflow: visible;
+}
+.dot {
+  fill: var(--dot);
+}
+.label {
+  fill: var(--ink-2);
+  font-family: var(--font-ui);
+  font-size: var(--fs-axis);
+  letter-spacing: 0.02em;
+}
+.future {
+  fill: var(--ink-3);
+}
+.today {
+  fill: var(--zhu);
+  font-weight: var(--w-semibold);
+}
+.rule {
+  fill: none;
+  stroke: var(--zhu);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+}
+@media (forced-colors: active) {
+  .today,
+  .rule {
+    forced-color-adjust: none;
+  }
+}

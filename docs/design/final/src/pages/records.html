@@ -1,0 +1,120 @@
+{{ head('记录 · 回神', { bars: 'tabs' }) }}
+<style>
+  .overview { margin-top: var(--sp-5); }
+  .overview .weekdots { margin-top: var(--sp-3); }
+  .why { margin-top: var(--sp-2); border-bottom: var(--hair) solid var(--rule); }
+  .cap { margin-top: var(--sp-3); color: var(--ink-3); font-size: var(--fs-caption); line-height: var(--lh-caption); }
+  .cap + .cap { margin-top: var(--sp-1); }
+  .section .figure, .section .cal, .section .dotplot { margin-top: var(--sp-2); }
+  .month-nav { display: flex; margin-right: calc(-1 * var(--sp-3)); }
+  .pb { display: grid; grid-template-columns: 112px 88px minmax(0, 1fr); align-items: center; column-gap: var(--sp-3); margin-top: var(--sp-2); }
+  .pb__names, .pb__vals { display: grid; grid-auto-rows: 32px; align-items: center; }
+  .pb__names span { white-space: nowrap; }
+  .pb__vals span { text-align: right; color: var(--ink-2); font-size: var(--fs-caption); white-space: nowrap; }
+  .pb__vals .pnum { color: var(--ink); font-size: var(--fs-body); }
+  .trend { display: flex; align-items: center; gap: var(--sp-3); margin-top: var(--sp-2); }
+  .trend__latest { font-family: var(--font-num); font-variant-numeric: tabular-nums; }
+  .trend__latest .unit { margin-left: 4px; }
+  .crows { margin-top: var(--sp-3); }
+  .crow { display: grid; grid-template-columns: minmax(0, 1fr) 64px 72px; align-items: center; min-height: 40px; border-bottom: var(--hair) solid var(--rule); }
+  .crow--head { min-height: 28px; color: var(--ink-3); font-size: var(--fs-caption); line-height: var(--lh-caption); border-bottom: var(--hair) solid var(--rule); }
+  .crow .r { text-align: right; font-family: var(--font-num); font-variant-numeric: tabular-nums; }
+  .ck-meds { display: flex; gap: var(--sp-8); margin-top: var(--sp-2); margin-bottom: var(--sp-3); }
+  .ck-meds .pnum { font-size: var(--fs-figure); line-height: var(--lh-figure); font-weight: var(--w-light); color: var(--ink); }
+  .ck-meds .lab { color: var(--ink-3); font-size: var(--fs-caption); line-height: var(--lh-caption); }
+  .srow { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; column-gap: var(--sp-4); min-height: 60px; padding: var(--sp-2) 0; border-bottom: var(--hair) solid var(--rule); color: inherit; text-decoration: none; }
+  .srow__when { display: block; color: var(--ink-3); font-size: var(--fs-caption); line-height: var(--lh-caption); }
+  .srow__name { display: block; font-weight: var(--w-semibold); }
+  .srow__end { text-align: right; }
+  .srow__dur { display: block; color: var(--ink-2); font-size: var(--fs-caption); line-height: var(--lh-caption); }
+  .srow__dur .pnum { font-size: var(--fs-body); color: var(--ink); }
+  .srow__data { display: block; color: var(--ink-2); font-size: var(--fs-caption); line-height: var(--lh-caption); }
+  .more { margin-top: var(--sp-2); }
+  .export { display: grid; gap: var(--sp-3); margin-top: var(--sp-4); }
+</style>
+<body>
+{{ sprite() }}
+{{ device() }}
+{{ statusbar('21:24') }}
+<main class="page">
+  <header class="pagehead">
+    <h1 class="t-display" tabindex="-1">{{ K.COPY.RECORDS.title }}</h1>
+    <p class="folio"><span>10月1日–22日 · <b>{{ D.month().sessions }}</b> 次练习</span><span>{{ NEW['RECORDS.folioEnd'] }}</span></p>
+  </header>
+
+  <section class="overview" aria-label="概览">
+    <div class="overview__cell">
+      <p class="overview__label">{{ K.COPY.RECORDS.week.title }}</p>
+      <p class="overview__value"><span class="pnum">{{ D.week().practisedDays }}</span> 天</p>
+      <p class="overview__note">共 {{ D.week().minutes }} 分钟</p>
+      {{ weekDots(D.week().days) }}
+    </div>
+    <div class="overview__cell">
+      <p class="overview__label">10月</p>
+      <p class="overview__value"><span class="pnum">{{ D.month().days }}</span> 天</p>
+      <p class="overview__note">{{ D.month().sessions }} 次练习<br>共 {{ D.month().minutes }} 分钟</p>
+    </div>
+  </section>
+  <div class="why"><button class="disclose" type="button" aria-expanded="false" aria-controls="why-body">{{ NEW['RECORDS.streakNote.title'] }}{{ icon('chevron-down') }}</button></div>
+
+  <section class="section" aria-labelledby="cal-h">
+    <div class="section-head"><h2 id="cal-h">10月</h2><span class="month-nav"><button class="icon-btn" type="button" aria-label="{{ NEW['RECORDS.prevMonth'] }}">{{ icon('back') }}</button><button class="icon-btn" type="button" aria-label="{{ NEW['RECORDS.nextMonth'] }}" disabled>{{ icon('chevron-right') }}</button></span></div>
+    {{ monthCalendar({ byDay: D.month().byDay, cellW: 50, cellH: 44 }) }}
+    <p class="cap">{{ K.keep(K.COPY.RECORDS.calendar) }}</p>
+  </section>
+
+  <section class="section" aria-labelledby="pb-h">
+    <div class="section-head"><h2 id="pb-h">{{ K.COPY.RECORDS.byPractice.title }}</h2><span class="aside">10月 · 分钟</span></div>
+    <div class="pb">
+      <div class="pb__names">{{ D.byPractice().map(r => `<span>${r.name}</span>`).join('') }}</div>
+      {{ practiceBars(D.byPractice(), { width: 88, rowH: 32, th: 6 }) }}
+      <div class="pb__vals">{{ D.byPractice().map(r => `<span><span class="pnum">${r.minutes}</span> 分钟 · ${r.sessions} 次</span>`).join('') }}</div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="fc-h">
+    <div class="section-head"><h2 id="fc-h">{{ K.COPY.RECORDS.focus.title }}</h2><span class="aside">专注呼吸 · {{ K.COPY.RECORDS.focus.unit }}</span></div>
+    {{ focusDotPlot(D.focusRates(), { width: 350, height: 160 }) }}
+    <p class="cap">{{ K.keep(K.COPY.RECORDS.focus.note) }}</p>
+  </section>
+
+  <section class="section" aria-labelledby="cn-h">
+    <div class="section-head"><h2 id="cn-h">{{ K.COPY.RECORDS.count.title }}</h2><span class="aside">共 {{ D.countStats().length }} 次</span></div>
+    <div class="trend">{{ sparkline(D.countStats()) }}<span class="trend__latest">{{ Math.round(D.countStats().at(-1).accuracy * 100) }}%<span class="unit">最近一次</span></span></div>
+    <div class="crows">
+      <div class="crow crow--head"><span>日期</span><span class="r">{{ K.COPY.RECORDS.count.accuracy }}</span><span class="r">{{ K.COPY.RECORDS.count.resets }}</span></div>
+      {{ D.countStats().map(r => `<div class="crow"><span>${D.fmtDay(r.date)}</span><span class="r">${Math.round(r.accuracy * 100)}%</span><span class="r">${r.resets} 次</span></div>`).join('') }}
+    </div>
+    <button class="disclose" type="button" aria-expanded="false">{{ NEW['RECORDS.howCounted'] }}{{ icon('chevron-down') }}</button>
+  </section>
+
+  <section class="section" aria-labelledby="ck-h">
+    <div class="section-head"><h2 id="ck-h">{{ K.COPY.RECORDS.checkin.title }}</h2><span class="tag">{{ K.COPY.RECORDS.checkin.tag }}</span></div>
+    <div class="ck-meds">
+      <p><span class="lab">{{ K.COPY.RECORDS.checkin.before }} · {{ K.COPY.RECORDS.checkin.median }}</span><br><span class="pnum">{{ D.checkins().medBefore }}</span></p>
+      <p><span class="lab">{{ K.COPY.RECORDS.checkin.after }} · {{ K.COPY.RECORDS.checkin.median }}</span><br><span class="pnum">{{ D.checkins().medAfter }}</span></p>
+    </div>
+    {{ checkinStrips(D.checkins(), { width: 350, rowH: 52, dot: 6, gap: 1.5 }) }}
+    <p class="cap">{{ K.keep(`「此刻有多紧张？」0–10，共 ${D.checkins().n} 次，竖线是中位数。${K.COPY.RECORDS.checkin.noise}`) }}</p>
+    <p class="cap">{{ K.keep(K.COPY.RECORDS.checkin.caveat) }}</p>
+  </section>
+
+  <section class="section" aria-labelledby="ls-h">
+    <div class="section-head"><h2 id="ls-h">{{ K.COPY.RECORDS.list.title }}</h2><span class="aside">共 {{ D.month().sessions }} 次</span></div>
+    {{ [...D.SESSIONS].reverse().slice(0, 6).map(s => `<a class="srow" href="#session"><span><span class="srow__when">${D.fmtDay(s.date)} 周${D.weekday(s.date)} · <span class="tnum">${s.start}</span></span><span class="srow__name">${D.NAMES[s.practice]}</span></span><span class="srow__end"><span class="srow__dur"><span class="pnum">${s.minutes}</span> 分钟</span><span class="srow__data">${[D.sessionData(s), s.feeling ? D.FEELING[s.feeling] : ''].filter(Boolean).join(' · ')}</span></span></a>`).join('') }}
+    <button class="btn btn--quiet more" type="button">显示更早的 {{ D.month().sessions - 6 }} 次</button>
+  </section>
+
+  <section class="section" aria-labelledby="ex-h">
+    <div class="section-head"><h2 id="ex-h">{{ K.COPY.RECORDS.export }}</h2></div>
+    <div class="export">
+      <button class="btn btn--secondary btn--block" type="button">{{ icon('download') }}导出 CSV</button>
+      <button class="btn btn--secondary btn--block" type="button">{{ icon('download') }}导出 JSON</button>
+    </div>
+  </section>
+</main>
+{{ tabbar('records') }}
+{{ homebar() }}
+</div>
+</body>
+</html>
