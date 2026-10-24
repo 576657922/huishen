@@ -16,7 +16,7 @@
 
 - 安装：`npm ci`。
 - 构建：`npm run build`，输出目录 `dist`。
-- Node.js：`26.7.0`，与通过完整质量检查的本机版本一致，也满足 React Router、jsdom 等依赖的版本要求。
+- Node.js：`24.18.0`，已在平台控制台核实支持，满足 React Router、jsdom 等依赖的版本要求。
 - 正式分支：`main`。
 - 数据库、服务器端函数、环境变量：不需要。
 

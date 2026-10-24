@@ -2,7 +2,7 @@
   "installCommand": "npm ci",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
-  "nodeVersion": "26.7.0",
+  "nodeVersion": "24.18.0",
   "rewrites": [{ "source": "/*", "destination": "/index.html" }],
   "headers": [
     {
