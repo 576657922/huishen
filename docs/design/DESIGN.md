@@ -991,6 +991,8 @@ Every route in PRODUCT.md §1. A recipe lists the regions top to bottom, the com
 
 ### 13.2 今日 `/` — mock-up today.png
 
+**2026-10-24 首页图片版更新（产品负责人要求）。** 用户指定以新的[首页原型](https://chatgpt.com/s/m_6adc1f4d2c70819189560a9da88b50ad)加入高清自然配图，覆盖本页原来的无摄影限制，其他页面仍沿用原规格。主推荐使用山湖照片、暗色遮罩与浅色文字；三个短练习入口使用配图，位于主推荐下方，桌面右栏保留本周和求助内容。手机配图入口只显示名称和时长，做法仍通过可读说明提供；桌面显示结构短句。播放器不变。素材、提示词和验收记录见 [homepage-photos.md](homepage-photos.md)。
+
 Phone, top to bottom:
 1. **Masthead** — lockup, 设置 icon button.
 2. **Dateline** — 「10月22日 星期四」 · solar-term phrase.

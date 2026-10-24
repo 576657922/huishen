@@ -6,7 +6,35 @@
   min-width: 0;
 }
 .recommendation {
-  padding-top: var(--sp-4);
+  --ink-2: var(--ink);
+  --ink-3: var(--ink);
+  --fill-primary: var(--ink);
+  position: relative;
+  isolation: isolate;
+  margin-top: var(--sp-4);
+  padding: var(--sp-5);
+  border-radius: var(--r-2);
+  background: var(--paper);
+  color: var(--ink);
+}
+.heroImage,
+.recommendation::before {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  pointer-events: none;
+}
+.heroImage {
+  z-index: -2;
+  object-fit: cover;
+  object-position: center;
+}
+.recommendation::before {
+  z-index: -1;
+  content: "";
+  background: color-mix(in srgb, var(--paper) 60%, transparent);
 }
 .title {
   display: flex;
@@ -21,6 +49,7 @@
 }
 .description {
   margin-top: var(--sp-2);
+  max-width: var(--measure);
   color: var(--ink-2);
 }
 .figure {
@@ -48,7 +77,61 @@
   stroke-width: 1;
 }
 .quick {
-  margin-top: var(--sp-8);
+  margin-top: var(--sp-6);
+}
+.photoPicks {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--sp-3);
+  padding: 0;
+  margin: var(--sp-2) 0 var(--sp-4);
+  list-style: none;
+}
+.photoPick {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  height: 100%;
+  text-align: left;
+  border-radius: var(--r-2);
+}
+.pickImage {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: var(--r-2);
+}
+.pickName {
+  margin-top: var(--sp-3);
+  font-family: var(--font-display);
+  font-weight: var(--w-display);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+}
+.pickStructure,
+.pickDuration {
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+  color: var(--ink-2);
+}
+.pickStructure {
+  display: none;
+  margin-top: var(--sp-1);
+}
+.pickDuration {
+  margin-top: auto;
+  padding-top: var(--sp-2);
+}
+.photoPick:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: var(--sp-1);
+}
+.photoPick:active .pickName {
+  text-decoration: underline;
+  text-underline-offset: var(--sp-1);
 }
 .week {
   display: flex;
@@ -78,6 +161,9 @@
   .grid {
     max-width: var(--reading-max);
   }
+  .pickStructure {
+    display: block;
+  }
 }
 @media (min-width: 1024px) {
   .grid {
@@ -92,7 +178,21 @@
     grid-column: 9 / 13;
   }
   .quick {
+    margin-top: var(--sp-6);
+  }
+  .recommendation {
+    padding: var(--sp-8);
+  }
+  .pickImage {
+    aspect-ratio: 4 / 3;
+  }
+  .pickName {
+    font-size: var(--fs-name);
+  }
+  .week {
     margin-top: 0;
+    border-top: 1px solid var(--ink);
+    min-height: var(--sp-20);
   }
   .hardRow {
     display: none;
@@ -101,15 +201,28 @@
     display: block;
   }
   .start {
-    max-width: calc(var(--sp-20) * 5);
+    max-width: calc(var(--sp-20) * 4);
   }
-}
-.quick li:not(:last-child) > button {
-  border-bottom: var(--hair) solid var(--rule);
 }
 .weekActions {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   gap: var(--sp-1);
+}
+@media (hover: hover) and (pointer: fine) {
+  .photoPick:hover .pickName {
+    text-decoration: underline;
+    text-underline-offset: var(--sp-1);
+  }
+}
+@media (forced-colors: active) {
+  .heroImage,
+  .recommendation::before,
+  .pickImage {
+    display: none;
+  }
+  .recommendation {
+    border: 1px solid CanvasText;
+  }
 }

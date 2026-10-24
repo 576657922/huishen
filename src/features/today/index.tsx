@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useId, useMemo, useState } from 'react'
 import { type StartSource, startPractice } from '@/app/flows'
 import { Dateline, Masthead, PageFrame } from '@/app/layout'
 import { PROGRAM, RECORDS, TODAY } from '@/content/copy'
@@ -24,6 +24,10 @@ import {
 } from '@/ui'
 import { HelpNumbers } from '@/widgets/HelpNumbers'
 import { StartButton } from '@/widgets/StartButton'
+import lake from './images/lake-960.webp'
+import lakeLarge from './images/lake-1536.webp'
+import leaves from './images/leaves-540.webp'
+import water from './images/water-540.webp'
 import { RecommendationFigure } from './RecommendationFigure'
 import styles from './Today.module.css'
 import { useRecommendationTime } from './useRecommendationTime'
@@ -36,6 +40,27 @@ function start(item: Shortcut, from: StartSource): void {
     from,
     ...(item.params ? { overrides: { params: item.params } } : {}),
   })
+}
+
+function PhotoPick({ item }: { item: ReturnType<typeof quickPicks>[number] }) {
+  const hintId = useId()
+  const image = item.practiceId === 'pause' ? water : item.practiceId === 'breathing-space' ? leaves : lake
+  return (
+    <button
+      type="button"
+      className={styles.photoPick}
+      aria-describedby={hintId}
+      onClick={() => start(item, 'today')}
+    >
+      <img className={styles.pickImage} src={image} width="540" height="540" alt="" decoding="async" />
+      <span className={styles.pickName}>{item.label}</span>
+      <span className={styles.pickStructure}>{item.structure}</span>
+      <span className={styles.pickDuration}>{TODAY.minutes(item.minutes)}</span>
+      <span id={hintId} hidden>
+        {item.hint}
+      </span>
+    </button>
+  )
 }
 
 export function TodayPage() {
@@ -148,7 +173,19 @@ export function TodayPage() {
               className={styles.recommendation}
               aria-labelledby="recommendation-title"
               aria-busy={loading}
+              data-theme="dark"
             >
+              <img
+                className={styles.heroImage}
+                src={lakeLarge}
+                srcSet={`${lake} 960w, ${lakeLarge} 1536w`}
+                sizes="(min-width: 1024px) 640px, (min-width: 768px) 640px, calc(100vw - 40px)"
+                width="1536"
+                height="1024"
+                alt=""
+                fetchPriority="high"
+                decoding="async"
+              />
               <Kicker
                 start={day?.doneToday && index === 0 ? TODAY.program.doneToday : pick.reason}
                 end={<GradeMark grade={practice.grade} prefix />}
@@ -199,21 +236,15 @@ export function TodayPage() {
               )}
             </section>
           )}
-        </div>
-        <div className={styles.aside}>
           <Section title={TODAY.quick.title} className={styles.quick}>
-            <PracticeList>
+            <ul className={styles.photoPicks}>
               {picks.map(p => (
-                <PracticeRow
-                  key={p.practiceId}
-                  practice={isCatalogPracticeId(p.practiceId) ? PRACTICE_BY_ID[p.practiceId] : undefined}
-                  name={p.label}
-                  description={p.structure}
-                  hint={p.hint}
-                  minutes={p.minutes}
-                  onClick={() => start(p, 'today')}
-                />
+                <li key={p.practiceId}>
+                  <PhotoPick item={p} />
+                </li>
               ))}
+            </ul>
+            <PracticeList>
               <PracticeRow
                 variant="nav"
                 glyph="grounding"
@@ -226,6 +257,8 @@ export function TodayPage() {
               />
             </PracticeList>
           </Section>
+        </div>
+        <div className={styles.aside}>
           <section className={styles.week} aria-labelledby="week-title">
             <div>
               <h2 id="week-title">{TODAY.week.title}</h2>
