@@ -1,6 +1,11 @@
 # 回神 · 部署
 
-目标地址：`https://huishen.chinnhouhou.com`。该地址尚未绑定或发布。
+正式地址：`https://huishen.chinnhouhou.com`，正在配置 DNS 与 HTTPS。
+
+腾讯云中国站项目：`makers-1v3cgnr1pqq0`，项目名 `huishen`。
+加速区域：全球可用区（不含中国大陆）。
+首个生产部署 `dp945ym2t3xz` 已成功，对应提交 `5ef5b89`。
+平台地址：`https://huishen-cpyy7psl.edgeone.dev`，正式分享使用自定义域名。
 
 源码仓库：<https://github.com/576657922/huishen>。
 面向国内访客使用腾讯云 EdgeOne Pages，GitHub 只负责保存源码。
@@ -11,7 +16,7 @@
 
 - 安装：`npm ci`。
 - 构建：`npm run build`，输出目录 `dist`。
-- Node.js：`22.17.1`，满足 Vite 的最低版本要求。
+- Node.js：`26.7.0`，与通过完整质量检查的本机版本一致，也满足 React Router、jsdom 等依赖的版本要求。
 - 正式分支：`main`。
 - 数据库、服务器端函数、环境变量：不需要。
 
@@ -46,4 +51,4 @@
 - [导入 Git 仓库](https://pages.edgeone.ai/document/importing-a-git-repository)
 - [edgeone.json 与 SPA 路由](https://pages.edgeone.ai/document/edgeone-json)
 - [域名与加速区域](https://pages.edgeone.ai/document/domain-overview)
-- [Node.js 22.17.1 支持](https://edgeone.cloud.tencent.com/pages/document/162936998387830784)
+- [构建配置与 Node.js 版本](https://pages.edgeone.ai/document/edgeone-json)
