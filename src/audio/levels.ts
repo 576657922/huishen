@@ -10,6 +10,7 @@ import { dbToGain, gainToDb } from './dsp/util'
 import {
   BELL,
   DEFAULT_VOLUMES,
+  GLIDE,
   LAYER_TRIMS,
   type LayerKey,
   LEVELS,
@@ -73,7 +74,10 @@ export function bellSpan(kind: BellKind): number {
 }
 
 /**
- * 滑音振荡器的振幅：单声道的正弦上混到两个声道，响度 ≈ 20·log10(A) − 0.69 LUFS
- * （220–330 Hz 处 K 计权几乎是 0 dB，泛音只多出不到 0.1 dB）
+ * 柔音峰顶的振幅。固定 D4 的正弦上混到双声道，响度 ≈ 20·log10(A) − 0.69 LUFS。
+ * 余弦吸呼中 y 的均值为 1/2、平方均值为 3/8；补偿包络的平均功率，综合响度仍落在目标。
  */
-export const glideAmp = (): number => dbToGain(LOUDNESS.target.relax + LEVELS.glide - cueChainDb() + 0.691)
+export const glideAmp = (): number => {
+  const meanPower = 3 / 8 + GLIDE.floor / 4 + (3 * GLIDE.floor ** 2) / 8
+  return dbToGain(LOUDNESS.target.relax + LEVELS.glide - cueChainDb() + 0.691 - 10 * Math.log10(meanPower))
+}

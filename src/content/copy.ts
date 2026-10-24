@@ -781,13 +781,13 @@ const GUIDANCE_LEVELS = {
 } as const satisfies Record<GuidanceLevel, { name: string; help: string }>
 
 /**
- * 跟随节拍时怎样提示吸呼，与 engine/types.ts 的 CueStyle 一一对应（测试核对）；data/prefs.ts 默认滑音。
+ * 跟随节拍时怎样提示吸呼，与 engine/types.ts 的 CueStyle 一一对应（测试核对）；默认柔音，保留 glide 偏好键。
  * 做法见 engine/session.ts 的 playSegment 和 audio/params.ts 的 CUES
  */
 const CUE_STYLES = {
   glide: {
-    name: '滑音',
-    help: '一个轻柔的长音，吸气时往上滑，呼气时往下滑，背景声也跟着起伏。默认用这一种。',
+    name: '柔音',
+    help: '音高保持不变，吸气时声音渐强，呼气时渐弱，停顿时安静。背景声也跟着起伏。默认用这一种。',
   },
   ping: {
     name: '钟点',

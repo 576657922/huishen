@@ -557,7 +557,7 @@ describe('规格点名的句子', () => {
   it('设置里的选项与各层的类型一一对应', () => {
     const cueStyles: Record<CueStyle, { name: string }> = SETTINGS.sound.cueStyle.options
     expect(Object.keys(cueStyles)).toEqual(['glide', 'ping', 'bed', 'off'])
-    expect(Object.values(cueStyles).map(o => o.name)).toEqual(['滑音', '钟点', '仅背景', '静音'])
+    expect(Object.values(cueStyles).map(o => o.name)).toEqual(['柔音', '钟点', '仅背景', '静音'])
     const levels: Record<GuidanceLevel, { name: string }> = SETTINGS.guidance.level.options
     expect(Object.values(levels).map(o => o.name)).toEqual(['详细', '标准', '安静'])
     const themes: Record<ThemePref, string> = SETTINGS.appearance.theme

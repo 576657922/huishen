@@ -1037,7 +1037,7 @@ Phone, all kinds:
 Settings rows print a value only for sliders (节律 「5.5 次/分」); segmented rows show it in the selected cell; a segmented row of bare figures says its unit in the label, 「时长（分钟）」.
 
 Per kind — figure · 设置 rows:
-- **paced · 慢呼吸** (as the mock-up): BreathSpecimen · 节律 slider 4.5–6.5 step 0.5, labels 4.5 · 5.0 · 5.5 · 6.0 · 6.5, with the 舒适节律探索 link in its hint *(new)*; 吸与呼 segmented (吸 4.5 · 呼 6.5 / 等长); 开头 90 秒逐步放慢 toggle *(new label and hint)*; 时长（分钟） segmented 3 · 5 · 10 · 15 · 20; 声音 navigation row (「雨 + 长音 ›」); 节拍提示 segmented 滑音 · 钟点 · 仅背景 · 静音 with the selected option's help (SETTINGS.sound.cueStyle).
+- **paced · 慢呼吸** (as the mock-up): BreathSpecimen · 节律 slider 4.5–6.5 step 0.5, labels 4.5 · 5.0 · 5.5 · 6.0 · 6.5, with the 舒适节律探索 link in its hint *(new)*; 吸与呼 segmented (吸 4.5 · 呼 6.5 / 等长); 开头 90 秒逐步放慢 toggle *(new label and hint)*; 时长（分钟） segmented 3 · 5 · 10 · 15 · 20; 声音 navigation row (「雨 + 长音 ›」); 节拍提示 segmented 柔音 · 钟点 · 仅背景 · 静音 with the selected option's help (SETTINGS.sound.cueStyle).
 - **周期性叹息**: BreathSpecimen of the sigh (brackets 吸 2.5 · 再吸 1 · 呼 7) · 时长 1 · 3 · 5; 声音; 节拍提示.
 - **箱式呼吸**: BreathSpecimen of 4-4-4-4 · 每步 stepper 3–6 秒 (default 4); 时长 3 · 5; 声音; 节拍提示.
 - **专注呼吸**: an empty FocusTimeline of the chosen duration · 时长 5 · 10 · 15 · 20 · 30; 引导详细程度 详细 · 标准 · 安静 (SETTINGS.guidance.level); 声音.

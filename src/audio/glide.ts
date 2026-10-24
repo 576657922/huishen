@@ -1,23 +1,24 @@
 /**
- * 节拍提示「滑音」：一个轻柔的长音，音高随肺容量的示意值 y 在纯五度以内滑动——吸气从 A3 滑到 E4，呼气滑回，
- * 时长、快慢都照这一段的缓动走；第二口吸气是一小段短短的上滑；屏息、停的段不出声。
+ * 节拍提示「柔音」：固定音高的温和长音，仅音量随吸呼缓慢起伏；不扫频、不颤音。
+ * 吸气渐强、呼气渐弱，第二口吸气接着渐强；屏息、停的段不出声。
+ * 保留 glide 的内部名称，已保存的偏好与计划会直接使用新声音，无需迁移。
  *
  * 前一段刚结束、下一段紧接着开始时，两段连成一个音，转折处不断开；中间隔着屏息时，各自起音、收音。
- * 撤销（cancelScheduled）时，还没开始的不再响，正在响的停在当时的音高、慢慢淡出；
- * 如果紧接着又从同一时刻排了一段（会话「有点急」重排节拍时就是这样），就把这个音接回来继续滑，
+ * 撤销（cancelScheduled）时，还没开始的不再响，正在响的从当时的音量慢慢淡出；
+ * 如果紧接着又从同一时刻排了一段（会话「有点急」重排节拍时就是这样），就把这个音接回来继续起伏，
  * 不另起一个音：两个同音高、相位无关的音交叠时会互相抵消，听起来像一下凹陷。
  * 振荡器用自定义的周期波形（基音加一点二、三次谐波），比纯正弦更容易在背景声里听清，又不尖。
  */
 import type { Segment } from '@/engine/types'
-import { breathY, createTrack, type Track } from './automation'
+import { breathY, createTrack, followBreath, type Track } from './automation'
 import { quietly } from './graph'
 import { GLIDE, TIMING } from './params'
 import type { Scheduled } from './types'
 
 export interface Glides {
-  /** 排一段滑音；返回的 cancel 撤销这一段 */
+  /** 排一段柔音；返回的 cancel 撤销这一段 */
   play(seg: Segment, at: number): Scheduled
-  /** 撤销全部：没开始的不响，正在响的停在当前音高并淡出 */
+  /** 撤销全部：没开始的不响，正在响的从当前音量淡出 */
   cancelAll(): void
   /** 最后一个音响完的时刻 */
   busyUntil(): number
@@ -27,7 +28,6 @@ export interface Glides {
 interface Tone {
   osc: OscillatorNode
   gain: GainNode
-  freq: Track
   amp: Track
   start: number
   /** 当前最后一段结束（开始收音）的时刻 */
@@ -41,12 +41,12 @@ interface Tone {
 
 const NOOP: Scheduled = { cancel() {} }
 
-const freqOf = (y: number): number => GLIDE.f0 * GLIDE.ratio ** Math.max(0, Math.min(1, y))
+const envelope = (y: number): number => GLIDE.floor + (1 - GLIDE.floor) * Math.max(0, Math.min(1, y))
 
 const silentSeg = (seg: Segment): boolean =>
   !GLIDE.holdTone && (seg.key === 'hold' || seg.key === 'rest' || seg.y0 === seg.y1 || seg.ease === 'flat')
 
-/** level 为振荡器的振幅（基音），由 levels.ts 按「比背景声低 6 LU」算好 */
+/** level 为峰顶振幅（基音），由 levels.ts 按柔音的综合响度目标和包络补偿算好 */
 export function createGlides(ctx: BaseAudioContext, dest: AudioNode, level: () => number): Glides {
   const tones = new Set<Tone>()
   let wave: PeriodicWave | null = null
@@ -73,13 +73,10 @@ export function createGlides(ctx: BaseAudioContext, dest: AudioNode, level: () =
     quietly(() => t.gain.disconnect())
   }
 
-  /** 这一段的音高曲线：每隔 glideStep 秒取一个点 */
-  function bend(t: Tone, seg: Segment, at: number): void {
-    const n = Math.max(2, Math.ceil(seg.dur / TIMING.glideStep))
-    for (let k = 1; k <= n; k++) {
-      const tt = at + (seg.dur * k) / n
-      t.freq.rampTo(freqOf(breathY(seg, at, tt)), tt)
-    }
+  /** 与画面同一条缓动，仅排音量；频率从创建到结束始终固定 */
+  function swell(t: Tone, seg: Segment, at: number, from = at): void {
+    const peak = level()
+    followBreath(seg, at, from, TIMING.breathStep, [[t.amp, y => peak * envelope(y)]])
   }
 
   /** 在 end 开始收音，收完停下振荡器（再次调用 stop 会取代上一次的停止时刻） */
@@ -93,6 +90,7 @@ export function createGlides(ctx: BaseAudioContext, dest: AudioNode, level: () =
   function startTone(seg: Segment, at: number): Tone {
     const osc = ctx.createOscillator()
     osc.setPeriodicWave(periodicWave())
+    osc.frequency.value = GLIDE.frequency
     const gain = ctx.createGain()
     gain.gain.value = 0
     osc.connect(gain).connect(dest)
@@ -100,7 +98,6 @@ export function createGlides(ctx: BaseAudioContext, dest: AudioNode, level: () =
     const t: Tone = {
       osc,
       gain,
-      freq: createTrack(osc.frequency, freqOf(seg.y0), t0),
       amp: createTrack(gain.gain, 0, t0),
       start: at,
       end: at + seg.dur,
@@ -108,9 +105,9 @@ export function createGlides(ctx: BaseAudioContext, dest: AudioNode, level: () =
       cut: null,
       done: false,
     }
-    t.freq.set(freqOf(seg.y0), at)
-    t.amp.glide(level(), at, at + Math.min(GLIDE.attack, seg.dur / 2), undefined, 10)
-    bend(t, seg, at)
+    const attackEnd = at + Math.min(GLIDE.attack, seg.dur / 2)
+    t.amp.glide(level() * envelope(breathY(seg, at, attackEnd)), at, attackEnd, undefined, 16)
+    swell(t, seg, at, attackEnd)
     scheduleRelease(t, at + seg.dur)
     osc.onended = () => release(t)
     osc.start(at)
@@ -118,22 +115,23 @@ export function createGlides(ctx: BaseAudioContext, dest: AudioNode, level: () =
     return t
   }
 
-  /** 接在前一个音后面：撤掉它的收音，音高接着滑 */
+  /** 接在前一个音后面：撤掉收音，继续同一个振荡器的音量起伏 */
   function extend(t: Tone, seg: Segment, at: number): void {
     t.amp.cancelFrom(t.end)
-    bend(t, seg, at)
+    swell(t, seg, at)
     scheduleRelease(t, at + seg.dur)
   }
 
-  /** 刚被撤销、还在淡出的音：撤掉淡出，回到原来的电平，再接着滑 */
+  /** 重排时从当前电平接回这段包络，避免突变和叠音 */
   function revive(t: Tone, seg: Segment, at: number): void {
     t.cut = null
-    t.amp.glide(level(), at, at + GLIDE.cancelFade / 2, undefined, 6)
-    bend(t, seg, at)
+    const fadeEnd = at + Math.min(GLIDE.cancelFade / 2, seg.dur / 2)
+    t.amp.glide(level() * envelope(breathY(seg, at, fadeEnd)), at, fadeEnd, undefined, 6)
+    swell(t, seg, at, fadeEnd)
     scheduleRelease(t, at + seg.dur)
   }
 
-  /** 从 at 起停在当时的音高，淡出后停下；at 之前还没开始的音直接不响 */
+  /** 从 at 时的电平淡出后停下；at 之前还没开始的音直接不响 */
   function cutAt(t: Tone, at: number): void {
     if (t.done) return
     if (t.start >= at) {
@@ -141,7 +139,6 @@ export function createGlides(ctx: BaseAudioContext, dest: AudioNode, level: () =
       release(t)
       return
     }
-    t.freq.cancelFrom(at)
     t.amp.glide(0, at, at + GLIDE.cancelFade, undefined, 8)
     t.end = at
     t.cut = at

@@ -208,8 +208,6 @@ export const TIMING = {
   lateBell: 1.5,
   /** 跟随呼吸的自动化每隔多少秒取一个点 */
   breathStep: 0.2,
-  /** 滑音的音高每隔多少秒取一个点：音高比亮度更容易听出折角 */
-  glideStep: 0.05,
   /** 默认试听时长 */
   preview: 7,
 } as const
@@ -235,8 +233,8 @@ export const LEVELS = {
   } satisfies Record<CueKind, number>,
   /** 钟声第一击：与背景声相加后短期响度最多高出 3 LU */
   bell: -1,
-  /** 滑音约比背景声低 6 LU */
-  glide: -6,
+  /** 固定音高的柔音，综合响度约比背景声低 12 LU */
+  glide: -12,
 } as const
 
 /* ---------- 声景 ---------- */
@@ -617,7 +615,7 @@ export type CueSpec =
  * 屏息、停、数息是很轻的短音，不抢注意力。
  * 新的一句的轻提示（caption）是 F♯4 上很短、温暖的一声：35 ms 的软起音（节拍提示音 8 ms、段落小钟 3 ms），
  * 谐波很弱，不到半秒就轻下去，没有钟声的余音，比段落小钟（D5）低一个小六度，一听就分得开；
- * 音高在滑音的音域（A3–E4）之上，带引导词的呼吸练习里不会混进节拍的滑音，手机扬声器也放得出来
+ * 音高在节拍柔音的 D4 之上，带引导词的呼吸练习里不会混进节拍，手机扬声器也放得出来
  */
 export const CUES: Record<CueKind, CueSpec> = {
   in: { type: 'ping', freq: 440, dur: 0.9 },
@@ -660,19 +658,20 @@ export const PING = {
   tail: 0.4,
 } as const
 
-/** 节拍滑音：A3 到 E4（纯五度之内），柔和的正弦加一点泛音，两端平滑起止 */
+/** 节拍柔音：D4 固定音高，无扫频；只用音量起伏跟随吸呼。GLIDE 为兼容原有标识保留 */
 export const GLIDE = {
-  f0: 220,
-  ratio: 1.5,
+  frequency: 293.66,
+  /** 呼气末端保留少量音量，不在每轮边界突然断开 */
+  floor: 0.35,
   /** 周期波形的谐波幅度：基音、二次、三次 */
-  harmonics: [1, 0.12, 0.03] as readonly number[],
-  attack: 0.25,
-  release: 0.4,
-  /** 撤销时正在响的滑音停在当前音高，用这么久淡出 */
+  harmonics: [1, 0.08, 0.015] as readonly number[],
+  attack: 0.6,
+  release: 0.8,
+  /** 撤销时从当前电平淡出 */
   cancelFade: 0.4,
   /** 前一段刚结束、下一段马上开始（间隔不超过这么多秒）时连成一个长音，转折处不断开 */
   join: 0.05,
-  /** 屏息、停的段不出声；改成 true 则在这些段保持音高 */
+  /** 屏息、停的段不出声 */
   holdTone: false,
 } as const
 

@@ -202,10 +202,10 @@ describe('assets', () => {
       rmsDb([c!], Math.round(0.04 * sr), Math.round(0.24 * sr)) - 20,
     )
     expect(chime[0]!.length / sr).toBeGreaterThan(5)
-    // 温暖：F♯4 上（在滑音的音域 A3–E4 之上），谐波很弱，比段落小钟（D5 和它的高分音）暗
+    // 温暖：F♯4 上（在节拍柔音 D4 之上），谐波很弱，比段落小钟（D5 和它的高分音）暗
     const pitch = estimatePitch(c!, sr, 100, 1000, Math.round(0.04 * sr), 2048)
     expect(Math.abs(pitch - 369.99)).toBeLessThan(4)
-    expect(pitch).toBeGreaterThan(GLIDE.f0 * GLIDE.ratio)
+    expect(pitch).toBeGreaterThan(GLIDE.frequency)
     expect(spectralCentroid(caption, sr)).toBeLessThan(500)
     expect(spectralCentroid(caption, sr)).toBeLessThan(spectralCentroid(chime, sr) * 0.75)
     expect(bandEnergyDb(caption, sr, 1500, sr / 2) - bandEnergyDb(caption, sr, 200, 800)).toBeLessThan(-30)

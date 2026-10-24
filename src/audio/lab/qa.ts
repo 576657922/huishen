@@ -13,6 +13,7 @@ import type { BufferStore } from '../buffers'
 import {
   blockLoudness,
   clickScore,
+  estimatePitch,
   integratedLoudness,
   type Metrics,
   measure,
@@ -25,7 +26,7 @@ import { AMBIENCE_IDS, layerAssets, layerKey, MUSIC_IDS } from '../layers'
 import { bellStrikes, cueGain, glideAmp } from '../levels'
 import { type BusName, createMixer, type DynamicsKind, type DynamicsStats } from '../mixer'
 import { createOneShots } from '../oneshots'
-import { DEFAULT_VOLUMES, LAYER_TRIMS, type LayerKey, LOUDNESS, QA } from '../params'
+import { DEFAULT_VOLUMES, LAYER_TRIMS, type LayerKey, LEVELS, LOUDNESS, QA } from '../params'
 import type { AmbienceId, BellKind, Bus, CueKind, MusicId, SoundMix, SoundMode } from '../types'
 import { loadLimiter } from '../worklet/load'
 
@@ -47,7 +48,7 @@ export const SIGH_BREATH: readonly SegSpec[] = [
   { key: 'out', dur: 7, y0: 1, y1: 0, ease: 'inout' },
 ]
 
-/** 箱式呼吸：吸、屏息（吸满）、呼、屏息（呼空）每步 step 秒，屏息段没有滑音 */
+/** 箱式呼吸：吸、屏息（吸满）、呼、屏息（呼空）每步 step 秒，屏息段没有柔音 */
 export function boxBreath(step: number): readonly SegSpec[] {
   return [
     { key: 'in', dur: step, y0: 0, y1: 1, ease: 'inout' },
@@ -81,9 +82,9 @@ export interface Scene {
   /** free：不跟节拍，按自己的慢周期起伏；paced：按 pattern 跟随节拍 */
   motion?: 'free' | 'paced'
   pattern?: readonly SegSpec[]
-  /** 节拍提示「滑音」 */
+  /** 节拍提示「柔音」 */
   glide?: boolean
-  /** 不放背景声，只渲染滑音、钟声或提示音 */
+  /** 不放背景声，只渲染柔音、钟声或提示音 */
   noBed?: boolean
   bells?: readonly { kind: BellKind; at: number }[]
   cues?: readonly { kind: CueKind; at: number }[]
@@ -512,7 +513,7 @@ async function liveSwitchCase(x: Ctx): Promise<QaCase> {
   return done('switch/练习中换声音', 'switch', m, checks, r, x)
 }
 
-/** 跟随节拍的组合加滑音：亮度随吸呼起伏，短期响度变化不超过 3 LU；滑音约比背景声低 6 LU */
+/** 跟随节拍的组合加柔音：亮度随吸呼起伏，短期响度变化不超过 3 LU；柔音约比背景声低 12 LU */
 async function pacedCase(
   x: Ctx,
   label: string,
@@ -526,20 +527,30 @@ async function pacedCase(
   const m = measure(r.audio, x.sr, from)
   const glideOnly = await renderScene({ ...scene, noBed: true }, x.store, x.sr)
   const glideLufs = integratedLoudness(glideOnly.audio, x.sr, from)
+  // 从真实渲染的吸、呼波形取多个位置，防止以后又把固定音高改回警笛式扫频。
+  const pitches = cycleSegments(pattern, total - 1)
+    .filter(({ seg }) => seg.y0 !== seg.y1 && seg.dur > 0.5)
+    .flatMap(({ seg, at }) => [0.25, 0.5, 0.75].map(q => at + seg.dur * q))
+    .filter(t => t >= QA.preroll && t + 0.2 < total)
+    .map(t => estimatePitch(glideOnly.audio[0]!, x.sr, 180, 500, Math.round(t * x.sr), 2048))
+  const pitchSpan = Math.max(...pitches) - Math.min(...pitches)
+  const pitchMean = pitches.reduce((sum, p) => sum + p, 0) / pitches.length
   const checks = [
     atMost('20 秒内升幅（LU）', m.maxRise, LOUDNESS.maxRise),
     atMost('30 秒内变化（LU）', m.maxSwing, LOUDNESS.maxSwing),
     atMost('响度范围（LU）', m.lra, LOUDNESS.lra.relax),
     within('综合响度（LUFS）', m.lufs, LOUDNESS.target.relax, LOUDNESS.tolerance + 0.5),
-    within('滑音 − 目标（LU）', glideLufs - LOUDNESS.target.relax, -6, 1.5),
+    within('柔音 − 目标（LU）', glideLufs - LOUDNESS.target.relax, LEVELS.glide, 1.5),
+    between('Tone pitch (Hz)', pitchMean, 180, 440),
+    atMost('Tone pitch span (Hz)', pitchSpan, 1),
     ...basics(m),
-    atMost('滑音咔哒声', clickScore(glideOnly.audio, x.sr, from), QA.maxClick),
+    atMost('柔音咔哒声', clickScore(glideOnly.audio, x.sr, from), QA.maxClick),
   ]
   return done(`paced/${label}`, 'paced', m, checks, r, x)
 }
 
 /**
- * 最坏的跟随节拍：箱式呼吸屏息在吸满、呼空两头，起伏走得最满；只有一层，没有别的层来冲淡；再加滑音
+ * 最坏的跟随节拍：箱式呼吸屏息在吸满、呼空两头，起伏走得最满；只有一层，没有别的层来冲淡；再加柔音
  * （它在屏息时不响，一开一停也是起伏）。屏息越长短期响度在两头停得越久，起伏又随随机种子变：
  * 每个种子都要平稳，报告里列最坏的那个种子
  */
@@ -594,7 +605,7 @@ async function pacedSoloCase(x: Ctx, key: LayerKey, step: number, seeds: number)
       QA.maxClick,
     ),
   ]
-  const label = `paced/箱式 ${step} 秒 + 滑音（只有 ${key}${seeds > 1 ? `，${seeds} 个种子` : ''}）`
+  const label = `paced/箱式 ${step} 秒 + 柔音（只有 ${key}${seeds > 1 ? `，${seeds} 个种子` : ''}）`
   return done(label, 'paced', worst!.m, checks, worst!.r, x)
 }
 
