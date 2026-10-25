@@ -233,8 +233,8 @@ export const LEVELS = {
   } satisfies Record<CueKind, number>,
   /** 钟声第一击：与背景声相加后短期响度最多高出 3 LU */
   bell: -1,
-  /** 固定音高的柔音，综合响度约比背景声低 12 LU */
-  glide: -12,
+  /** 木质短音：瞬时响度比背景声低 5 LU，与已确认的试听一致（单声道约 −31 LUFS） */
+  glide: -5,
 } as const
 
 /* ---------- 声景 ---------- */
@@ -615,7 +615,7 @@ export type CueSpec =
  * 屏息、停、数息是很轻的短音，不抢注意力。
  * 新的一句的轻提示（caption）是 F♯4 上很短、温暖的一声：35 ms 的软起音（节拍提示音 8 ms、段落小钟 3 ms），
  * 谐波很弱，不到半秒就轻下去，没有钟声的余音，比段落小钟（D5）低一个小六度，一听就分得开；
- * 音高在节拍柔音的 D4 之上，带引导词的呼吸练习里不会混进节拍，手机扬声器也放得出来
+ * 音色与节拍木音分开，带引导词的呼吸练习里不会混进节拍，手机扬声器也放得出来
  */
 export const CUES: Record<CueKind, CueSpec> = {
   in: { type: 'ping', freq: 440, dur: 0.9 },
@@ -658,21 +658,16 @@ export const PING = {
   tail: 0.4,
 } as const
 
-/** 节拍柔音：D4 固定音高，无扫频；只用音量起伏跟随吸呼。GLIDE 为兼容原有标识保留 */
-export const GLIDE = {
-  frequency: 293.66,
-  /** 呼气末端保留少量音量，不在每轮边界突然断开 */
-  floor: 0.35,
-  /** 周期波形的谐波幅度：基音、二次、三次 */
-  harmonics: [1, 0.08, 0.015] as readonly number[],
-  attack: 0.6,
-  release: 0.8,
-  /** 撤销时从当前电平淡出 */
-  cancelFade: 0.4,
-  /** 前一段刚结束、下一段马上开始（间隔不超过这么多秒）时连成一个长音，转折处不断开 */
-  join: 0.05,
-  /** 屏息、停的段不出声 */
-  holdTone: false,
+/** 已确认的木质节拍短音：不扫频，不延续到下一段；glide 偏好键保留 */
+export const WOOD_CUE = {
+  frequencies: { in: 392, in2: 392, out: 293.66 },
+  attack: 0.008,
+  decay: 0.06,
+  partials: [
+    [1, 1],
+    [2.76, 0.32],
+    [5.4, 0.035],
+  ] as readonly (readonly [number, number])[],
 } as const
 
 /* ---------- 音乐 ---------- */

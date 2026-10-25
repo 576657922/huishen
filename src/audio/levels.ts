@@ -10,7 +10,6 @@ import { dbToGain, gainToDb } from './dsp/util'
 import {
   BELL,
   DEFAULT_VOLUMES,
-  GLIDE,
   LAYER_TRIMS,
   type LayerKey,
   LEVELS,
@@ -73,11 +72,5 @@ export function bellSpan(kind: BellKind): number {
   return Math.max(...BELL.strikes[kind].map(([t]) => t)) + BELL.seconds
 }
 
-/**
- * 柔音峰顶的振幅。固定 D4 的正弦上混到双声道，响度 ≈ 20·log10(A) − 0.69 LUFS。
- * 余弦吸呼中 y 的均值为 1/2、平方均值为 3/8；补偿包络的平均功率，综合响度仍落在目标。
- */
-export const glideAmp = (): number => {
-  const meanPower = 3 / 8 + GLIDE.floor / 4 + (3 * GLIDE.floor ** 2) / 8
-  return dbToGain(LOUDNESS.target.relax + LEVELS.glide - cueChainDb() + 0.691 - 10 * Math.log10(meanPower))
-}
+/** 木音的素材按瞬时响度归一；默认音量下与已确认的试听音量一致 */
+export const woodGain = (): number => dbToGain(oneShotDb(LEVELS.glide))

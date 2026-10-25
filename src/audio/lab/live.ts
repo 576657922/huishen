@@ -170,11 +170,11 @@ export async function liveCheck(store: BufferStore): Promise<LiveResult> {
     await silent('提示音响完', 300)
 
     const glide = engine.glide(segment('in', 0, 1, 3), engine.now() + 0.05)
-    await sleep(700)
-    await audible('滑音', 300)
+    await sleep(60)
+    await audible('木音', 160)
     engine.cancelScheduled()
     await sleep(700)
-    await silent('撤销后滑音淡出', 300)
+    await silent('撤销后木音安静', 300)
     glide.cancel()
 
     const bell = engine.bell('end', engine.now() + 0.05)

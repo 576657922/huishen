@@ -34,14 +34,7 @@ import {
   paceTarget,
   stepBack,
 } from './pace'
-import {
-  type CycleSpan,
-  completedCycles,
-  cyclesOf,
-  ease,
-  LONG_EXHALE_INHALE_FRACTION,
-  patternAt,
-} from './patterns'
+import { type CycleSpan, completedCycles, cyclesOf, LONG_EXHALE_INHALE_FRACTION, patternAt } from './patterns'
 import { HORIZON_HIDDEN_SEC, HORIZON_VISIBLE_SEC } from './scheduler'
 import {
   AUDIO_START_GRACE_MS,
@@ -60,7 +53,6 @@ import {
   NO_BELL_FADE_SEC,
   NULL_VOICE,
   PACED_TAIL_SEC,
-  PARTIAL_GLIDE_STEPS,
   SHORT_SILENT_END_FADE_SEC,
   SHORT_SILENT_END_SEC,
   SILENT_END_FADE_SEC,
@@ -153,21 +145,26 @@ function expectedSegments(pace: Pace, end: number): PlannedSeg[] {
   return out
 }
 
-/** 按节拍应当排给滑音的各段：和背景声一样，只是超出 end 的部分截掉 */
+/** 按节拍应当排给滑音的各段：只在转换处响一次，结束前留足短音余量 */
 const expectedGlides = (pace: Pace, end: number): PlannedSeg[] =>
-  expectedSegments(pace, end).map(e => ({ ...e, dur: Math.min(e.dur, end - e.t) }))
+  expectedSegments(pace, end)
+    .filter(e => end - e.t >= MIN_PARTIAL_GLIDE_SEC)
+    .map(e => ({ ...e, dur: Math.min(e.dur, end - e.t) }))
 
-/** 排给滑音的各段，半截的一段拆成的直线小段（同一个 key、首尾相接）合回一段 */
-function glideWindows(s: TestSession, origin: number): Array<{ seg: Segment; t: number }> {
-  const out: Array<{ seg: Segment; t: number }> = []
-  for (const c of segCalls(s, 'glide', origin)) {
-    const last = out.at(-1)
-    const joins = last && last.seg.key === c.seg.key && Math.abs(last.t + last.seg.dur - c.t) < 1e-9
-    if (last && joins && c.seg.ease === 'linear')
-      last.seg = { ...last.seg, dur: last.seg.dur + c.seg.dur, y1: c.seg.y1 }
-    else out.push({ ...c })
+/** 旧 glide 端口现在每个相位只排一次木音。 */
+const glideWindows = (s: TestSession, origin: number): Array<{ seg: Segment; t: number }> =>
+  segCalls(s, 'glide', origin)
+
+/** 已实际开始的木音只落在吸呼转换处；重排不能在半口气里增加一声。 */
+function expectWoodOnsets(s: TestSession, origin: number): void {
+  const heard = s.audio.glides().filter(g => !g.cancelled)
+  const starts = heard.map(g => g.at.toFixed(8))
+  expect(new Set(starts).size).toBe(starts.length)
+  for (const g of heard) {
+    const phase = s.ctrl.breathAt(g.at - origin + 1e-7)
+    expect(phase?.seg?.key).toBe(g.kind)
+    expect((phase?.seg?.dur ?? 0) - (phase?.rem ?? 0)).toBeCloseTo(0, 5)
   }
-  return out
 }
 
 /**
@@ -192,11 +189,6 @@ function maxDrift(
   return worst
 }
 
-/** 半截的滑音拆成直线小段后，弦与弧之差的上限（起伏幅度为 1）：每小段不长于整段的 1/PARTIAL_GLIDE_STEPS，
- * 只有从一段开头起的第一小段可以放长到 MIN_PARTIAL_GLIDE_SEC；inout 缓动的弦高不超过 (π²/16)·(小段/整段)² */
-const chordTolerance = (shortestSeg: number): number =>
-  (Math.PI ** 2 / 16) * Math.max(1 / PARTIAL_GLIDE_STEPS, MIN_PARTIAL_GLIDE_SEC / shortestSeg) ** 2
-
 /** 实际排出的各段与应当排出的逐段一致 */
 function expectSegments(actual: Array<{ seg: Segment; t: number }>, expected: readonly PlannedSeg[]): void {
   expect(actual.map(a => a.seg.key)).toEqual(expected.map(e => e.key))
@@ -205,10 +197,6 @@ function expectSegments(actual: Array<{ seg: Segment; t: number }>, expected: re
     expect(a.seg.dur).toBeCloseTo(expected[i]?.dur ?? Number.NaN, 6)
   }
 }
-
-/** 一段里 x 秒（段内）处的位置 */
-const yIn = (seg: Segment, x: number): number =>
-  seg.y0 + (seg.y1 - seg.y0) * ease(seg.ease, seg.dur > 0 ? x / seg.dur : 1)
 
 /**
  * 背景声实际跟随的曲线（去掉撤销的、截到停下的时刻）：从练习第 0 秒起首尾相接、不重叠，交界处的位置连续；
@@ -597,6 +585,25 @@ describe('paced session', () => {
     expect(s.results[0]?.finalRate).toBeCloseTo(60 / 10.5, 12)
   })
 
+  it('does not repeat a wooden cue when resuming in the middle of a breath', async () => {
+    const s = createTestSession()
+    await s.ctrl.start(pacedPlan(SLOW6, { plannedSec: 60 }))
+    await s.advanceTo(2)
+    s.ctrl.pause()
+    await s.advance(3000)
+    const before = s.audio.callsTo('glide').length
+    s.ctrl.resume()
+    await s.advance(100)
+    // Lookahead may re-schedule the upcoming exhale, but must not signal another inhale.
+    const added = s.audio.callsTo('glide').slice(before)
+    expect(added.every(c => (c.args[0] as Segment).key === 'out')).toBe(true)
+    expect(s.ctrl.breathAt(s.ctrl.time())?.seg?.key).toBe('in')
+    await s.advance(4000)
+    const played = s.audio.glides().filter(g => !g.cancelled && g.at <= s.audio.now())
+    expect(played.filter(g => g.kind === 'in')).toHaveLength(1)
+    expect(played.some(g => g.kind === 'out')).toBe(true)
+  })
+
   it.each<[CueStyle, { breath: boolean; glide: boolean; ping: boolean }]>([
     ['glide', { breath: true, glide: true, ping: false }],
     ['ping', { breath: true, glide: false, ping: true }],
@@ -625,7 +632,7 @@ describe('paced session', () => {
     expect(s.results[0]).toMatchObject({ completed: true, breaths: 6 })
   })
 
-  it('cuts the last glide at the end along the drawn curve so nothing rings on past the end bell', async () => {
+  it('schedules one short cue at the last onset and keeps the bed on the original curve', async () => {
     const s = createTestSession()
     // 一轮 10 秒；第 60 秒开始的吸气只剩 3 秒
     const plan = pacedPlan(SLOW6, { plannedSec: 63 })
@@ -634,28 +641,11 @@ describe('paced session', () => {
     await s.advance(70_000)
     const seg = patternOf(plan).segs[0]
     if (!seg) throw new Error('节拍里没有吸气')
-    // 最后一个滑音截到第 63 秒，拆成首尾相接的直线小段：交界处都在吸气的曲线上，而不是把缓动重新套在 3 秒上
     const parts = segCalls(s, 'glide', origin).filter(c => c.t > 60 - 1e-9)
-    const [head, ...rest] = parts
-    if (!head) throw new Error('没有排上最后的滑音')
-    expect(head.t).toBeCloseTo(60, 9)
-    expect(head.seg).toMatchObject({ key: 'in', y0: 0, t0: 0, ease: 'linear' })
-    // 从一段开头起可能新起一个音，声音端口按第一小段的长短起音：它不短于 MIN_PARTIAL_GLIDE_SEC
-    expect(head.seg.dur).toBeGreaterThanOrEqual(MIN_PARTIAL_GLIDE_SEC - 1e-9)
-    let prev = head
-    for (const p of rest) {
-      expect(p.t).toBeCloseTo(prev.t + prev.seg.dur, 9)
-      expect(p.seg.dur).toBeLessThanOrEqual(seg.dur / PARTIAL_GLIDE_STEPS + 1e-9)
-      expect(p.seg).toMatchObject({ key: 'in', ease: 'linear' })
-      prev = p
-    }
-    for (const p of parts) {
-      expect(p.seg.y0).toBeCloseTo(yIn(seg, p.t - 60), 12)
-      expect(p.seg.y1).toBeCloseTo(yIn(seg, p.t - 60 + p.seg.dur), 12)
-    }
-    expect(prev.t + prev.seg.dur).toBeCloseTo(63, 9)
-    expect(prev.seg.y1).toBeCloseTo(yIn(seg, 3), 12)
-    expect(maxDrift(s.audio.glideCover(), s.ctrl, origin)).toBeLessThan(chordTolerance(seg.dur))
+    expect(parts).toHaveLength(1)
+    expect(parts[0]?.t).toBeCloseTo(60, 9)
+    expect(parts[0]?.seg).toMatchObject({ key: 'in', y0: 0, dur: 3, ease: seg.ease })
+    expectWoodOnsets(s, origin)
     for (const g of s.audio.glides()) expect(g.at + (g.seg?.dur ?? 0)).toBeLessThanOrEqual(origin + 63 + 1e-9)
     // 背景声那时正在淡出，最后一段照整段排，一直跟着画面上的曲线
     const bed = segCalls(s, 'breath', origin).at(-1)
@@ -809,22 +799,11 @@ describe('step back (有点急)', () => {
     s.ctrl.stepBack()
     expect(s.audio.callsTo('cancelScheduled')).toHaveLength(1)
 
-    // 正在响的吸气滑音停在此刻，从当前音高沿吸气的曲线补上这一段剩下的 2 秒（拆成首尾相接的直线小段）
+    // 已经在第 30 秒敲过一次，重排不能在吸气中间补敲。
     const inhale = patternOf(plan).segs[0]
     if (!inhale) throw new Error('节拍里没有吸气')
-    const cut = s.audio.glides().filter(g => g.stoppedAt !== null)
-    expect(cut.map(g => g.at - origin)).toEqual([expect.closeTo(30, 9)])
-    expect(cut[0]?.stoppedAt).toBeCloseTo(origin + t, 9)
     const rest = glideWindows(s, origin).filter(w => w.t > t - 1e-9 && w.t < 35 - 1e-6)
-    expect(rest).toHaveLength(1)
-    expect(rest[0]?.t).toBeCloseTo(t, 9)
-    expect(rest[0]?.seg.key).toBe('in')
-    expect(rest[0]?.seg.dur).toBeCloseTo(35 - t, 9)
-    expect(rest[0]?.seg.y0).toBeCloseTo(paceAt(paceOf(patternOf(plan)), t).y, 9)
-    expect(rest[0]?.seg.y1).toBe(1)
-    const parts = segCalls(s, 'glide', origin).filter(c => c.t > t - 1e-9 && c.t < 35 - 1e-6)
-    expect(parts.length).toBeGreaterThan(1)
-    for (const p of parts) expect(p.seg.dur).toBeLessThanOrEqual(inhale.dur / PARTIAL_GLIDE_STEPS + 1e-9)
+    expect(rest).toEqual([])
     // 背景声照整段吸气、从第 30 秒起再排一次：声音端口从停住的值沿原来的曲线接着走
     const again = s.audio.callsTo('breath').filter(c => Math.abs(c.time - origin - t) < 1e-9)
     expect(again[0]?.args[0]).toBe(inhale)
@@ -870,7 +849,7 @@ describe('step back (有点急)', () => {
     expect((bed[0]?.args[1] as number) - origin).toBeCloseTo(0, 9)
     expect(5 - t).toBeLessThan(MIN_PARTIAL_GLIDE_SEC)
     expect(segCalls(s, 'glide', origin).filter(at)).toEqual([])
-    // 下一段照常有滑音
+    // 下一段照常敲木音
     const next = segCalls(s, 'glide', origin).filter(c => c.t > t)
     expect(next[0]?.seg.key).toBe('out')
     expect(next[0]?.t).toBeCloseTo(5, 9)
@@ -1001,11 +980,8 @@ describe('step back property', () => {
       }
       // 背景声跟的每一段都是节拍上那一刻的那一段：没有按旧节拍排的残留
       for (const span of cover) expect(paceAt(pace, span.from - origin + 1e-7).seg?.key).toBe(span.seg.key)
-      // 补排的半段也在画面上的曲线上：背景声读数一致，滑音只差弦与弧之间的一点
       expect(maxDrift(cover, s.ctrl, origin, 0.02)).toBeLessThan(1e-9)
-      const last = pace.at(-1)?.pattern.segs ?? []
-      const tolerance = chordTolerance(Math.min(...last.map(seg => seg.dur)))
-      expect(maxDrift(s.audio.glideCover(), s.ctrl, origin, 0.02)).toBeLessThan(tolerance)
+      expectWoodOnsets(s, origin)
       const live = s.audio.bells('end').filter(b => !b.cancelled)
       expect(live.map(b => b.at - origin)).toEqual([expect.closeTo(end, 9)])
       expect(s.results[0]).toMatchObject({
@@ -1031,7 +1007,7 @@ describe('sound on the drawn breathing curve', () => {
     throw new Error(`没有走到「${key}」的 ${lo}–${hi} 处`)
   }
 
-  it('keeps the bed and the glide on the curve after 有点急 in the middle of an inhale', async () => {
+  it('keeps the bed on the curve and wood cues on phase onsets after 有点急', async () => {
     const s = createTestSession()
     const plan = slowPlan(5.5, { plannedSec: 300 })
     const origin = practiceOrigin(plan)
@@ -1047,11 +1023,7 @@ describe('sound on the drawn breathing curve', () => {
     expect(s.results[0]).toMatchObject({ completed: true, rateSteps: 1 })
     // 背景声：撤销前、接着走的半段、之后的各段，读数都与画面一致（把缓动重新套在半段上时差到 0.1 以上）
     expect(maxDrift(s.audio.breathCover(), s.ctrl, origin)).toBeLessThan(1e-9)
-    // 滑音：接着滑的半段拆成直线小段，只差弦与弧之间的一点
-    const segs = want.pace.at(-1)?.pattern.segs ?? []
-    expect(maxDrift(s.audio.glideCover(), s.ctrl, origin)).toBeLessThan(
-      chordTolerance(Math.min(...segs.map(x => x.dur))),
-    )
+    expectWoodOnsets(s, origin)
   })
 
   it('does not jump when one inhale is re-planned twice', async () => {
@@ -1084,10 +1056,7 @@ describe('sound on the drawn breathing curve', () => {
     // 交界处的位置连续（从停住的值接着走，不从节拍上的读数重新起步），整条都在画面上的曲线上
     expectContinuousCover(s.audio, origin, stop)
     expect(maxDrift(s.audio.breathCover(), s.ctrl, origin)).toBeLessThan(1e-9)
-    const shortest = Math.min(
-      ...[...patternOf(plan).segs, ...(want.pace.at(-1)?.pattern.segs ?? [])].map(x => x.dur),
-    )
-    expect(maxDrift(s.audio.glideCover(), s.ctrl, origin)).toBeLessThan(chordTolerance(shortest))
+    expectWoodOnsets(s, origin)
   })
 })
 

@@ -105,7 +105,7 @@ Helpers the UI may use: `leadFor(plan, audioOn)` — the countdown actually used
 | `haptics` | Vibrate on phase changes (where supported). |
 | `silentEnd` | Bed fades early and the end bell rings after silence (≥ 3 min: last 60 s, 30-s fade; 1–3 min: last 25 s, 15-s fade). |
 | `params` | Recorded parameters (`rate`, `ratio`, `cycle`, `level`, `interval`, `mode`, …). |
-| `cueStyle?` | `'glide'` (default; fixed-pitch 柔音, legacy preference key retained) / `'ping'` / `'bed'` / `'off'`. |
+| `cueStyle?` | `'glide'` (default; short wooden onset cues, legacy preference key retained) / `'ping'` / `'bed'` / `'off'`. |
 | `endBell?` | Default `true`. `false` (bedtime): the bed fades over the last 120 s instead. |
 | `bells?` | **New.** Default `true`. `false` (设置 › 钟声 off): no start bell and no end bell; the ending is otherwise unchanged (silent ending still fades and leaves the quiet; `leadFor` no longer stretches the countdown). Interval bells follow `intervalSec`. |
 | `fadeInSec?` | Bed fade-in: 8 (default), 20 at bedtime. |
@@ -123,7 +123,7 @@ Helpers the UI may use: `leadFor(plan, audioOn)` — the countdown actually used
 | `patternAt(p, t): PatternPoint` | Position at second `t` (y, segment, index, remaining, progress, cycle). The controller's `breathAt` adds 有点急 on top. |
 | `cyclesOf(p)` · `cycleAt(p, t)` · `completedCycles(p, t)` | Cycle spans (start, length, rate). `hrv` uses `cyclesOf` for cycle boundaries. |
 | `describePattern(params): string` | One-line description, e.g. 「吸 4.5 秒，呼 6.5 秒 · 每分钟 5.5 次」. |
-| `ease(kind, q)` | The easing all consumers share — canvas, haptics, and the audio bed and glide (`src/audio/automation.ts` imports it). |
+| `ease(kind, q)` | The easing all consumers share — canvas, haptics, and the audio bed (`src/audio/automation.ts` imports it). |
 | `paceOf`, `paceAt`, `paceCycleAt`, `paceCycles`, `paceBreaths`, `paceTarget`, `paceSteps`, `stepBack`, `paceEndAt` | The actual tempo of a run as consecutive pieces (warm-up, 有点急). Used by the controller; exported for tests and summaries. `STEP_BACK_RATE` 0.5, `STEP_BACK_MAX_RATE` 7 (= `SLOW_RATE_MAX`), `STEP_BACK_LEAD_SEC` 0.3. `paceEndAt(pace, closingT, end)` — where the pacer stops: the end of the phase in progress at `closingT` (or `closingT` itself on a phase boundary), never after `end`; `end` when `closingT ≥ end`. |
 
 ### 1.4 Guided timelines
@@ -164,7 +164,7 @@ Real-time synthesis with Web Audio: soundscapes and generative music (assets gen
 | `now()` · `state()` · `onStateChange(fn)` | Audio clock; `'running' \| 'suspended' \| 'closed' \| 'interrupted' \| 'unavailable'`. |
 | `setVolume(bus, 0–100)` | `master`, `ambience`, `music`, `cues`; perceptual curve. A bed's `SoundMix.ambienceVolume` / `musicVolume` set the same two buses when it starts or changes. |
 | `startBed(mix, at, fadeIn, plannedSec?)` · `changeBed(mix)` · `fadeBedOut(at, dur)` · `stopBed(fade)` | The background bed (called by the engine). |
-| `breath(seg, at)` · `glide(seg, at)` · `freeRun(until)` | Breath-following bed brightness, the fixed-pitch 柔音 tone, free slow movement (called by the engine). |
+| `breath(seg, at)` · `glide(seg, at)` · `freeRun(until)` | Breath-following bed brightness, short wooden onset cues, free slow movement (called by the engine). |
 | `cue(kind, at?)` · `bell(kind, at)` · `cancelScheduled()` | One-shots and bells; cancel everything not yet sounding (called by the engine). |
 | `suspend()` · `resume()` | Pause with a fade; resume fades back in. |
 | `setDuck(on)` | Lower ambience and music by 8 dB while a voice plays (0.3 s down, 1.5 s up). Unused in v1; kept for future human recordings. |
@@ -182,9 +182,9 @@ The `speechSynthesis` voice guide (`createVoiceGuide`, `VoiceGuide`, `DEFAULT_RA
 
 `AMBIENCE_IDS`, `MUSIC_IDS`, `volumeGain(v, bus)`; types `AmbienceId` (`none rain stream ocean forest birds wind pink brown`), `MusicId` (`none drone pentatonic phasing`), `SoundMode` (`relax | sleep`), `SoundMix`, `Bus`, `CueKind`, `BellKind`, `Scheduled`, `PreviewState`, `AudioEngine`. Which sounds a mode allows (no birds at bedtime) is decided by `fitMix` in `@/content/sounds`.
 
-`CueKind` = `in in2 hold out rest mark tap ninth section` + **`caption`**: the new-line cue of text guidance — a very soft, short, warm tone on F♯4 (369.99 Hz; 35 ms raised-cosine attack, weak partials ×2/×3, each decaying with τ = 0.22 s ÷ partial, ≈ 0.5 s audible, no ring), clearly unlike the bright, long-ringing section chime (D5, 3 ms attack, T60 11 s) and the 8 ms-attack breath pings; above the breath tone's fixed D4 (293.66 Hz), so it never blends into the pacer, and high enough for phone speakers. Level `LEVELS.cues.caption` = −8 LU against the bed target (section −3, mark −5); the offline QA checks it like every cue (`cue/caption`).
+`CueKind` = `in in2 hold out rest mark tap ninth section` + **`caption`**: the new-line cue of text guidance — a very soft, short, warm tone on F♯4 (369.99 Hz; 35 ms raised-cosine attack, weak partials ×2/×3, each decaying with τ = 0.22 s ÷ partial, ≈ 0.5 s audible, no ring), clearly unlike the bright, long-ringing section chime (D5, 3 ms attack, T60 11 s) and the 8 ms-attack breath pings; distinct in timbre from the short wooden breath cues and audible on phone speakers. Level `LEVELS.cues.caption` = −8 LU against the bed target (section −3, mark −5); the offline QA checks it like every cue (`cue/caption`).
 
-**2026-10-24 breathing cue update:** the former A3–E4 pitch sweep is replaced by a fixed D4 tone (293.66 Hz), with weak harmonics, 600 ms attack and 800 ms release. Only amplitude follows the breath curve: rising on inhale, falling on exhale, quiet during holds. The integrated cue target is now 12 LU below the bed target (previously 6 LU). The `glide` preference value and AudioPort method stay compatible, so existing users receive the new sound without resetting preferences. Offline paced QA additionally checks the rendered pitch span stays within 1 Hz.
+**2026-10-25 breathing cue update:** the user selected the wooden audition to replace the continuous tone. Inhale/supplement cues use 392 Hz and exhale uses 293.66 Hz; all have an 8 ms raised-cosine attack, a 60 ms fundamental decay, and rapidly decaying non-harmonic partials (×2.76, ×5.4). Each buffer ends at 428 ms, with silence between cues and during holds. The momentary target is 5 LU below the bed target (about −31 LUFS per mono channel at default volume), matching the selected audition. The `glide` preference value and AudioPort method stay compatible. Resume and pace changes never repeat the current phase onset. Audio regression compares real rendered samples with PCM extracted from the approved audition and checks gaps, holds, cancellation, pitch and loudness.
 
 Dev tools: `audio-lab.html` (offline QA, live smoke, calibration; every cue incl. `caption` has a try button, plus a manual 「人声压低」 toggle) and `session-lab.html` (§6); `npm run test:audio` runs both in Chrome. The offline QA's default relax preset is `SOUND_PRESETS.relax` (stream, no music) and must land at −23 LUFS ±1 (`preset/默认放松`).
 
@@ -322,7 +322,7 @@ Each of the five steps is a 60-s session started from the page (APP.md §8.4): `
 
 ## 6. Verified in a real browser
 
-`session-lab.html` + `src/dev/session-lab.ts` (dev server only; not part of the production build) build the controller exactly as above — real `createAudioEngine()`, `NULL_VOICE`, `createBrowserPlatform()` — and run four short sessions: slow breathing 40 s with fixed-pitch breath cues and 有点急 at 15 s (in the 7.5/min warm-up cycle, so the pace slows to 7 and holds there: rates 8 → 7.5 → 7, `finalRate` 7); a 30-s guided script with a skippable section and `skipSection()`; focus 20 s with three marks; unlimited sound ended by hand after 15 s. Each result is also converted with `resultToRecord`. `e2e-audio/session.spec.ts` (Chrome, `--autoplay-policy=no-user-gesture-required`) checks that each session completes, `onFinish` fires once with sensible numbers, the audio clock keeps pace with the wall clock, the bed is audible, the limiter worklet loads and is switched in, and the console stays clean.
+`session-lab.html` + `src/dev/session-lab.ts` (dev server only; not part of the production build) build the controller exactly as above — real `createAudioEngine()`, `NULL_VOICE`, `createBrowserPlatform()` — and run four short sessions: slow breathing 40 s with wooden onset cues and 有点急 at 15 s (in the 7.5/min warm-up cycle, so the pace slows to 7 and holds there: rates 8 → 7.5 → 7, `finalRate` 7); a 30-s guided script with a skippable section and `skipSection()`; focus 20 s with three marks; unlimited sound ended by hand after 15 s. Each result is also converted with `resultToRecord`. `e2e-audio/session.spec.ts` (Chrome, `--autoplay-policy=no-user-gesture-required`) checks that each session completes, `onFinish` fires once with sensible numbers, the audio clock keeps pace with the wall clock, the bed is audible, the limiter worklet loads and is switched in, and the console stays clean.
 
 ```bash
 npx playwright test -c playwright.audio.config.ts --project=dev e2e-audio/session.spec.ts   # about 2 minutes

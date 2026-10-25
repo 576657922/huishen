@@ -14,7 +14,7 @@ import { type AssetName, CUE_ASSETS } from './dsp/assets'
 import { createGlides, type Glides } from './glide'
 import { quietly } from './graph'
 import { layerAssets, layerKey } from './layers'
-import { bellStrikes, cueGain, glideAmp } from './levels'
+import { bellStrikes, cueGain, woodGain } from './levels'
 import { createMixer, type Mixer } from './mixer'
 import { createOneShots, type OneShots } from './oneshots'
 import { DEFAULT_VOLUMES, FADES, TIMING } from './params'
@@ -216,7 +216,7 @@ export function createAudioEngine(options: AudioEngineOptions = {}): AudioEngine
     mixer = createMixer(c, { volumes, smooth: FADES.volume })
     if (ducked) mixer.setDuck(true)
     shots = createOneShots(c, mixer.buses.cues, armIdle)
-    glides = createGlides(c, mixer.buses.cues, glideAmp)
+    glides = createGlides(c, mixer.buses.cues, woodGain)
     lastState = c.state
     osStopped = false
     c.addEventListener('statechange', onContextState)

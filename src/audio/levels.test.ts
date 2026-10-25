@@ -4,11 +4,11 @@ import {
   bellSpan,
   bellStrikes,
   cueGain,
-  glideAmp,
   layerTarget,
   oneShotDb,
   presenceDb,
   volumeGain,
+  woodGain,
 } from './levels'
 import { BELL, LEVELS, LOUDNESS } from './params'
 
@@ -74,9 +74,8 @@ describe('one-shot levels', () => {
     expect(bellSpan('end')).toBe(14 + BELL.seconds)
   })
 
-  it('the glide tone is a positive, finite amplitude well below full scale', () => {
-    const a = glideAmp()
-    expect(a).toBeGreaterThan(0)
-    expect(a).toBeLessThan(0.5)
+  it('the wooden cue uses the approved audition loudness at the default bus volumes', () => {
+    expect(gainToDb(woodGain())).toBeCloseTo(oneShotDb(LEVELS.glide), 6)
+    expect(LOUDNESS.target.relax + LEVELS.glide).toBe(-28)
   })
 })

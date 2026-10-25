@@ -19,7 +19,6 @@ import {
   paceTarget,
   stepBack as stepBackPace,
 } from './pace'
-import { ease } from './patterns'
 import { createLookahead, createTicker, horizonFor, type Lookahead } from './scheduler'
 import { settleTone, speakSec } from './timeline'
 import type {
@@ -90,10 +89,8 @@ export const FINE_TIMER_MIN_MS = 10
 export const SKIP_LEAD_SEC = 0.05
 /** 重排节拍时，正在进行的那一段只剩这么短就不再补排起伏 */
 export const MIN_PARTIAL_SEC = 0.05
-/** 重排节拍时，正在进行的那一段剩下不到这么久就不再补一个滑音：滑音两端柔和起止，太短只剩一声杂音 */
+/** 离节拍结束不到这么久就不再敲木音，给短音完整响完的空间 */
 export const MIN_PARTIAL_GLIDE_SEC = 0.5
-/** 不完整的滑音拆成直线小段时，每小段不长于整段的这么多分之一：弦与弧之差不到起伏幅度的 0.3% */
-export const PARTIAL_GLIDE_STEPS = 16
 /** 节拍振动：吸气一下，第二口吸气轻一下，呼气两下，屏息不振 */
 export const HAPTICS: Readonly<Record<PhaseKey, number | readonly number[] | null>> = {
   in: 40,
@@ -306,43 +303,6 @@ const hasStartBell = (plan: SessionPlan): boolean => plan.kind !== 'sound' && pl
 export function leadFor(plan: SessionPlan, audioOn: boolean): number {
   const needsBed = audioOn && hasStartBell(plan) && bedAudible(plan.sound)
   return needsBed ? Math.max(plan.leadSec, BED_BEFORE_BELL_SEC) : plan.leadSec
-}
-
-/**
- * 一段里从 a 秒到 b 秒的那一部分（段内秒数）当作一条直线：两端落在原来的缓动曲线上，中间直着走。
- * 屏息不动的段截一截还是不动
- */
-function chordOf(seg: Segment, a: number, b: number): Segment {
-  const y = (x: number): number => seg.y0 + (seg.y1 - seg.y0) * ease(seg.ease, seg.dur > 0 ? x / seg.dur : 1)
-  return {
-    ...seg,
-    t0: seg.t0 + a,
-    dur: b - a,
-    y0: y(a),
-    y1: y(b),
-    ease: seg.ease === 'flat' ? 'flat' : 'linear',
-  }
-}
-
-/**
- * 滑音只跟一段里从 a 秒到 b 秒的那一部分时（重排节拍时补排、练习结束时截尾），在段内哪几处切开。
- * 声音端口按收到的那一段自己的时长取缓动：把整段的缓动套在半截上，音高会在半截的开头从零坡度重新起步，
- * 中途离开画面上的曲线可达起伏幅度的七分之一。所以拆成首尾相接的直线小段，交界处都落在原来的曲线上，
- * 声音端口把首尾相接的滑音连成一个音。每小段不长于整段的 1/PARTIAL_GLIDE_STEPS；
- * 只有从一段的开头起（练习结束截掉的最后一段）才可能新起一个音，声音端口按第一小段的长短起音，
- * 那里的第一小段不短于 MIN_PARTIAL_GLIDE_SEC，起音和整段时一样柔和。本来就是直线的段不必拆
- */
-function glideCuts(seg: Segment, a: number, b: number): number[] {
-  if (seg.ease === 'linear' || seg.ease === 'flat' || !(seg.dur > 0)) return [a, b]
-  const step = seg.dur / PARTIAL_GLIDE_STEPS
-  const cuts = [a]
-  let x = a > 0 ? a : Math.min(b, Math.max(step, MIN_PARTIAL_GLIDE_SEC))
-  // 剩下的零头并进前一小段，不留一小截
-  if (b - x < 1e-6) x = b
-  if (x > a) cuts.push(x)
-  const n = Math.ceil((b - x) / step - 1e-6)
-  for (let k = 1; k <= n; k++) cuts.push(k === n ? b : x + ((b - x) * k) / n)
-  return cuts
 }
 
 /** 晚于 after、早于 stopAt 开始的每一段，按轮展开；与 paceAt 的读数严格一致 */
@@ -604,33 +564,17 @@ export function createSessionController(
     if (!r.pace || r.style === 'off') audio.freeRun(r.origin + Math.min(t + horizon, r.end + 1))
   }
 
-  /**
-   * 从练习第 t 秒开始的一段节拍：背景声随它起伏，再按提示方式加滑音或提示音。
-   * 滑音截到节拍停下（练习结束）的时刻，最后一个滑音不会盖过结束钟声、拖到小结页上；背景声那时正在淡出，照整段排，
-   * 截成半截反而会让声音端口按半截的长短重套缓动（海浪、风的起伏都按整口气排）。
-   * 结尾的话开始后节拍停在一段的转折处（paceEndAt），那里的滑音本来就是整段
-   */
+  /** 背景声随整段起伏；木音只在相位开始时响一次，不给重排后的半段补敲。 */
   function playSegment(r: Run, seg: Segment, t: number): void {
     audio.breath(seg, r.origin + t)
     if (r.style === 'glide') glideOver(r, seg, t, 0, Math.min(seg.dur, r.paceEnd - t))
     if (r.style === 'ping') audio.cue(seg.key, r.origin + t)
   }
 
-  /**
-   * 滑音跟练习第 start 秒开始的这一段里从 a 到 b 秒的部分：整段照原样，不完整的按 glideCuts 拆成直线小段。
-   * 不完整的一段太短时不加滑音：两端柔和起止，太短只剩一声杂音
-   */
+  /** 保留旧端口名；只排转换处的一声木音，结束前留出完整短音的余量。 */
   function glideOver(r: Run, seg: Segment, start: number, a: number, b: number): void {
-    if (a <= 0 && b >= seg.dur) {
-      audio.glide(seg, r.origin + start)
-      return
-    }
-    if (b - a < MIN_PARTIAL_GLIDE_SEC) return
-    let prev = a
-    for (const x of glideCuts(seg, a, b).slice(1)) {
-      audio.glide(chordOf(seg, prev, x), r.origin + start + prev)
-      prev = x
-    }
+    if (a > 1e-9 || b - a < MIN_PARTIAL_GLIDE_SEC) return
+    audio.glide(b >= seg.dur ? seg : { ...seg, dur: b }, r.origin + start)
   }
 
   /** 晚于 after 的声音事件，各自一条前瞻轨道 */
@@ -703,11 +647,7 @@ export function createSessionController(
     else audio.fadeBedOut(nowA, Math.max(STOP_BED_FADE_SEC, at + f.dur - nowA))
   }
 
-  /**
-   * 撤销会让正在进行的这一段停在当前值、正在响的滑音淡出：补排这一段剩下的部分，节拍提示不断档。
-   * 背景声照整段、按这一段本来开始的时刻再排一次：声音端口不再排已经过去的部分，从停住的值沿原来的曲线接着走，
-   * 停住的值本来就在这条曲线上，同一段里接连重排几次也不会跳。滑音从此刻接着滑到这一段结束（不超过节拍停下、练习结束的时刻）
-   */
+  /** 重排后背景声沿原曲线接着走；已经过了转换处的相位不再补敲木音。 */
   function continuePhase(r: Run, tc: number): void {
     if (!r.pace || r.style === 'off' || !(tc >= 0) || tc >= r.paceEnd - PACED_TAIL_SEC) return
     const p = paceAt(r.pace, tc)
