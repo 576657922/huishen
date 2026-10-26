@@ -86,6 +86,7 @@ export type StorageMode = 'indexeddb' | 'local' | 'memory'
 export const PREFS_VERSION = 2
 
 export type ThemePref = 'system' | 'light' | 'dark'
+export type LanguagePref = 'zh-CN' | 'ja'
 
 /** 静坐计时的间隔钟声（分钟），0 为不响 */
 export type IntervalBell = 0 | 5 | 10
@@ -187,6 +188,7 @@ export interface ProgramProgress {
 export interface Prefs {
   v: typeof PREFS_VERSION
   theme: ThemePref
+  language: LanguagePref
   /** 0–100 */
   volume: { master: number; ambience: number; music: number; cues: number }
   /** 引导详细程度，默认标准 */

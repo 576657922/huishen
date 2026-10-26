@@ -1,3 +1,4 @@
+import { auxiliary } from '@/content/auxiliary'
 /**
  * 共振频率测定（Lehrer、Vaschillo 与 Vaschillo，2000；Shaffer 与 Meehan，2020）。
  * 依次以几个频率各呼吸约两分钟，比较每个频率下心率随呼吸起伏的幅度（每轮峰谷差），起伏最大的就是共振频率；
@@ -124,15 +125,18 @@ export interface AssessmentPlan {
 }
 
 function validate(c: AssessmentConfig): void {
-  if (!c.rates.length) throw new RangeError('至少要有一个测试频率')
+  if (!c.rates.length) throw new RangeError(auxiliary('requiredRate'))
   for (const r of c.rates) {
     if (!(Number.isFinite(r) && r >= RATE_MIN && r <= RATE_MAX)) {
-      throw new RangeError(`测试频率应在 ${RATE_MIN}–${RATE_MAX} 次/分之间：${r}`)
+      throw new RangeError(auxiliary('rateRange', RATE_MIN, RATE_MAX, r))
     }
   }
-  if (!(Number.isFinite(c.trialSec) && c.trialSec > 0)) throw new RangeError(`每段时长不合理：${c.trialSec}`)
-  if (!(c.settleSec >= 0 && c.settleSec < c.trialSec)) throw new RangeError(`适应时长不合理：${c.settleSec}`)
-  if (!(c.restSec >= 0 && Number.isFinite(c.restSec))) throw new RangeError(`休息时长不合理：${c.restSec}`)
+  if (!(Number.isFinite(c.trialSec) && c.trialSec > 0))
+    throw new RangeError(auxiliary('sectionDuration', c.trialSec))
+  if (!(c.settleSec >= 0 && c.settleSec < c.trialSec))
+    throw new RangeError(auxiliary('adaptationDuration', c.settleSec))
+  if (!(c.restSec >= 0 && Number.isFinite(c.restSec)))
+    throw new RangeError(auxiliary('restDuration', c.restSec))
 }
 
 /**

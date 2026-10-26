@@ -1,14 +1,17 @@
+import { auxiliary } from '@/content/auxiliary'
+import { CALENDAR_COPY } from '@/content/calendar-copy'
 /**
  * 练习提醒的日历文件（RFC 5545）。导入系统日历后由日历负责提醒，网页不需要在后台运行。
  * 设置页用 buildPlanICS：按执行意图式的计划，工作日、周末各生成一个事件，放在同一个文件里。
  */
 import { addDays } from '@/lib/date'
+import { getLanguage } from '@/lib/locale'
 import { clamp } from '@/lib/math'
 import { pad2 } from '@/lib/time'
 import { isClockTime } from './guards'
 import type { Reminders } from './types'
 
-export const REMINDER_FILE_NAME = '回神练习提醒.ics'
+export const REMINDER_FILE_NAME = auxiliary('reminderFile')
 
 /** RFC 5545 的星期代码 */
 export type Weekday = 'MO' | 'TU' | 'WE' | 'TH' | 'FR' | 'SA' | 'SU'
@@ -51,18 +54,23 @@ export interface ReminderEvent {
 /* ---------- 执行意图式的计划 ---------- */
 
 /** 计划句子里固定的那种情况：「如果【太累】，就只做【1 分钟】」（PRODUCT.md §8） */
-export const PLAN_OBSTACLE = '太累'
+export const PLAN_OBSTACLE = auxiliary('obstacle')
 
 /**
  * 计划的句子，日历提醒的说明用它，界面也可以直接显示：
  * 「在刷牙后，我会做 3 分钟呼吸；如果太累，就只做 1 分钟。」情境或保底留空时略去那半句
  */
 export function planSentence(plan: Pick<Reminders, 'cue' | 'action' | 'fallback'>): string {
+  if (getLanguage() === 'ja') return CALENDAR_COPY.sentence(plan.cue, plan.action, plan.fallback)
   const cue = filledIn(plan.cue, CUE_WORDS)
   const action = planAction(plan)
   const fallback = filledIn(plan.fallback, FALLBACK_WORDS)
-  const main = cue ? `${spaced('在', cue)}，${spaced('我会做', action)}` : spaced('我会做', action)
-  return fallback ? `${main}；如果${PLAN_OBSTACLE}，${spaced('就只做', fallback)}。` : `${main}。`
+  const main = cue
+    ? `${spaced(auxiliary('cuePrefix'), cue)}，${spaced(auxiliary('actionPrefix'), action)}`
+    : spaced(auxiliary('actionPrefix'), action)
+  return fallback
+    ? auxiliary('fallbackSentence', main, PLAN_OBSTACLE, spaced(auxiliary('fallbackPrefix'), fallback))
+    : `${main}。`
 }
 
 // 句子里已有的词。空格前面印着这些字，用户还是常常再写一遍（「在刷牙后」），去掉开头重复的那个；
@@ -82,7 +90,7 @@ function filledIn(text: string, words: readonly string[]): string {
 
 /** 「我会做」后面的那一段，没填时为「练习」 */
 function planAction(plan: Pick<Reminders, 'action'>): string {
-  return filledIn(plan.action, ACTION_WORDS) || '练习'
+  return filledIn(plan.action, ACTION_WORDS) || auxiliary('exportPractice')
 }
 
 const HAN = /\p{Script=Han}/u
@@ -113,7 +121,7 @@ export interface PlanICSOptions {
  */
 export function buildPlanICS(reminders: Reminders, options: PlanICSOptions): string {
   const common = {
-    title: `回神 · ${planAction(reminders)}`,
+    title: auxiliary('reminderTitle', planAction(reminders)),
     description: planSentence(reminders),
     url: options.url,
     startDate: options.startDate,
@@ -124,13 +132,13 @@ export function buildPlanICS(reminders: Reminders, options: PlanICSOptions): str
   const events: ReminderEvent[] = []
   if (reminders.weekday !== null) events.push({ ...common, time: reminders.weekday, days: WORKDAYS })
   if (reminders.weekend !== null) events.push({ ...common, time: reminders.weekend, days: WEEKEND })
-  if (events.length === 0) throw new RangeError('工作日和周末都没有设提醒时间')
+  if (events.length === 0) throw new RangeError(auxiliary('noReminderTimes'))
   return buildRemindersICS(events)
 }
 
 /** 「3 分钟呼吸」里的 3 */
 function minutesIn(action: string): number | undefined {
-  const m = /(\d+(?:\.\d+)?)\s*分钟/.exec(action)
+  const m = /(\d+(?:\.\d+)?)\s*分(?:钟)?/.exec(action)
   const n = m ? Number(m[1]) : Number.NaN
   return n > 0 ? n : undefined
 }
@@ -143,10 +151,10 @@ export function buildReminderICS(event: ReminderEvent): string {
 
 /** 多个提醒放进同一个文件，一次导入，如工作日 07:30、周末 09:00 */
 export function buildRemindersICS(events: readonly ReminderEvent[]): string {
-  if (events.length === 0) throw new RangeError('至少要有一个提醒')
+  if (events.length === 0) throw new RangeError(auxiliary('noReminders'))
   const vevents = events.map(vevent)
   const uids = new Set(vevents.map(e => e.uid))
-  if (uids.size !== vevents.length) throw new RangeError('同一个文件里的提醒不能共用一个 UID')
+  if (uids.size !== vevents.length) throw new RangeError(auxiliary('duplicateUID'))
   const lines = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
@@ -160,10 +168,10 @@ export function buildRemindersICS(events: readonly ReminderEvent[]): string {
 }
 
 function vevent(event: ReminderEvent): { uid: string; lines: string[] } {
-  if (!isClockTime(event.time)) throw new RangeError(`提醒时间应为 HH:MM：${event.time}`)
-  if (Number.isNaN(event.startDate.getTime())) throw new RangeError('提醒的开始日期无效')
+  if (!isClockTime(event.time)) throw new RangeError(auxiliary('invalidReminderTime', event.time))
+  if (Number.isNaN(event.startDate.getTime())) throw new RangeError(auxiliary('invalidReminderDate'))
   const now = event.now ?? new Date()
-  if (Number.isNaN(now.getTime())) throw new RangeError('生成时间无效')
+  if (Number.isNaN(now.getTime())) throw new RangeError(auxiliary('invalidTimestamp'))
   const days = normalizeDays(event.days)
   const uid = event.uid ?? defaultUid(days)
   const url = httpURL(event.url)
@@ -199,7 +207,7 @@ function normalizeDays(days: readonly Weekday[] | undefined): Weekday[] {
   const wanted = new Set<string>(days)
   const out = EVERY_DAY.filter(d => wanted.has(d))
   if (out.length === 0 || out.length !== wanted.size)
-    throw new RangeError(`提醒的日子无效：${days.join(',')}`)
+    throw new RangeError(auxiliary('invalidWeekday', days.join(',')))
   return out
 }
 

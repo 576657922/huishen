@@ -1,3 +1,4 @@
+import { auxiliary } from '@/content/auxiliary'
 /**
  * 练习记录仓库。正常存在 IndexedDB；打不开时（被禁用、部分隐私模式、打开卡住）退到 localStorage，
  * 连 localStorage 也写不进时只留在内存里。写入后经 BroadcastChannel 通知其他标签页。
@@ -160,7 +161,7 @@ export function createSessionRepo(options: SessionRepoOptions = {}): LocalSessio
 
     async add(record) {
       const clean = sanitizeRecord(record)
-      if (!clean) throw new TypeError('练习记录格式无效，未保存')
+      if (!clean) throw new TypeError(auxiliary('invalidRecordSave'))
       await run(backend => backend.put(clean))
       changed()
     },
@@ -174,7 +175,7 @@ export function createSessionRepo(options: SessionRepoOptions = {}): LocalSessio
           // 只改了开始时间时，本地日期要跟着重算，不能沿用旧的
           if (patch.startedAt !== undefined && patch.date === undefined) delete merged.date
           const next = sanitizeRecord(merged)
-          if (!next) throw new TypeError('修改后的练习记录无效，未保存')
+          if (!next) throw new TypeError(auxiliary('invalidEditSave'))
           return next
         }),
       )
@@ -307,7 +308,7 @@ function withTimeout(promise: Promise<HuishenDB>, ms: number): Promise<HuishenDB
     let late = false
     const timer = setTimeout(() => {
       late = true
-      reject(new Error('打开数据库超时'))
+      reject(new Error(auxiliary('databaseTimeout')))
     }, ms)
     promise.then(
       db => {
@@ -327,7 +328,7 @@ function withTimeout(promise: Promise<HuishenDB>, ms: number): Promise<HuishenDB
 }
 
 function closedError(): Error {
-  return new Error('记录仓库已关闭')
+  return new Error(auxiliary('repositoryClosed'))
 }
 
 // Safari 在后台久了会断开连接，之后的操作报 InvalidStateError 或 UnknownError；重新打开即可恢复

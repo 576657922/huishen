@@ -1,3 +1,8 @@
+import japanese from './locales/ja/sounds.json'
+import { createTranslator } from './translate'
+
+const tr = createTranslator(japanese)
+
 /**
  * 声音目录：「练习」里的声音页、每个播放器里的声音选择、设置里「听声音」的默认背景声，都从这里读。
  * 只有数据和几个纯函数；名字、描述、依据说明和提示文案都放在这里，组件里不写死。
@@ -148,16 +153,17 @@ function deepFreeze<T>(value: T): T {
 /** 白天、睡前都可以用 */
 const ANYTIME: SoundFlags = { sleepOk: true, dayOnly: false, noHealthClaim: false, weakEvidence: false }
 
-const MASKING_TAG = '遮蔽环境噪音 · 证据很弱'
+const MASKING_TAG = tr('遮蔽环境噪音 · 证据很弱')
 
 /** 自然声，按证据排序（PRODUCT.md §2）：水声在前，风在最后 */
 export const AMBIENCES: readonly AmbienceOption[] = deepFreeze<AmbienceOption[]>([
   {
     id: 'rain',
-    name: '雨',
-    description: '细密的雨声连成一片，偶尔落下大颗雨滴',
-    evidenceNote:
+    name: tr('雨'),
+    description: tr('细密的雨声连成一片，偶尔落下大颗雨滴'),
+    evidenceNote: tr(
       '一项汇总分析发现，各类自然声里，水声对健康和积极情绪指标的效应较大（证据：有限）。不过这个估计很不精确；研究多在实验室或医院里做，很多是拿自然声和噪声比，和安静相比有没有差别，还不清楚。',
+    ),
     evidence: ['sound-buxton-2021'],
     flags: ANYTIME,
     tag: null,
@@ -165,11 +171,12 @@ export const AMBIENCES: readonly AmbienceOption[] = deepFreeze<AmbienceOption[]>
   },
   {
     id: 'stream',
-    name: '溪流',
-    description: '溪水不紧不慢地流，夹着细碎的叮咚声',
+    name: tr('溪流'),
+    description: tr('溪水不紧不慢地流，夹着细碎的叮咚声'),
     // 这项试验用的正是潺潺流水声；只写自评结果，不写皮质醇（sound.notes §4：不做激素方面的说法）
-    evidenceNote:
+    evidenceNote: tr(
       '溪流属于水声。一项有 60 名健康女性参加的试验里，压力测试前听 10 分钟流水声的人，和安静休息的人相比，自评的紧张、焦虑没有差别（证据：有限）。',
+    ),
     evidence: ['sound-thoma-2013'],
     flags: ANYTIME,
     tag: null,
@@ -177,10 +184,11 @@ export const AMBIENCES: readonly AmbienceOption[] = deepFreeze<AmbienceOption[]>
   },
   {
     id: 'ocean',
-    name: '海浪',
-    description: '远处的浪涌上来，浪花轻轻碎开，又退下去',
-    evidenceNote:
+    name: tr('海浪'),
+    description: tr('远处的浪涌上来，浪花轻轻碎开，又退下去'),
+    evidenceNote: tr(
       '海浪属于水声。一项汇总分析发现，各类自然声里，水声对健康和积极情绪指标的效应较大（证据：有限）；但很多研究是拿自然声和噪声比，和安静相比有没有差别，还不清楚。',
+    ),
     evidence: ['sound-buxton-2021'],
     flags: ANYTIME,
     tag: null,
@@ -188,12 +196,13 @@ export const AMBIENCES: readonly AmbienceOption[] = deepFreeze<AmbienceOption[]>
   },
   {
     id: 'forest',
-    name: '林间',
-    description: '溪水流着，偶尔几声鸟鸣，风吹过树叶',
+    name: tr('林间'),
+    description: tr('溪水流着，偶尔几声鸟鸣，风吹过树叶'),
     // 声音层在睡前模式里不出鸟声（audio/layers/birds.ts），描述跟着换
-    sleepDescription: '溪水流着，风吹过树叶',
-    evidenceNote:
+    sleepDescription: tr('溪水流着，风吹过树叶'),
+    evidenceNote: tr(
       '在一项有 63 人参加的实验里，听流水、鸟鸣、风声等自然声的人，注意力测验的成绩比听城市声音的人提高更多（证据：有限）；两组的情绪变化没有差别。',
+    ),
     evidence: ['sound-vanhedger-2019'],
     flags: ANYTIME,
     tag: null,
@@ -201,10 +210,11 @@ export const AMBIENCES: readonly AmbienceOption[] = deepFreeze<AmbienceOption[]>
   },
   {
     id: 'birds',
-    name: '鸟鸣',
-    description: '树叶轻响，几只小鸟隔一阵唱一句',
-    evidenceNote:
+    name: tr('鸟鸣'),
+    description: tr('树叶轻响，几只小鸟隔一阵唱一句'),
+    evidenceNote: tr(
       '一项汇总分析发现，鸟鸣可能减轻压力和烦躁（证据：有限），但这个结果只来自 2 项研究；汇总的研究里，很多是拿自然声和噪声比，不是和安静比。另一项研究里，人们觉得轻柔、清亮的鸣唱更让人放松，响而刺耳的叫声更让人紧张，所以这里只用前一种。',
+    ),
     evidence: ['sound-buxton-2021', 'sound-ratcliffe-2020'],
     // 不加标注：睡前的选择器里本来就没有它，SOUND_COPY.dayOnly 在那里说明
     flags: { ...ANYTIME, sleepOk: false, dayOnly: true },
@@ -213,12 +223,12 @@ export const AMBIENCES: readonly AmbienceOption[] = deepFreeze<AmbienceOption[]>
   },
   {
     id: 'wind',
-    name: '风',
-    description: '风一阵阵吹过树林，树叶沙沙作响',
-    evidenceNote: '几乎没有专门研究风声的试验。放在这里，只是因为有人喜欢它的声音。',
+    name: tr('风'),
+    description: tr('风一阵阵吹过树林，树叶沙沙作响'),
+    evidenceNote: tr('几乎没有专门研究风声的试验。放在这里，只是因为有人喜欢它的声音。'),
     evidence: [],
     flags: { ...ANYTIME, noHealthClaim: true },
-    tag: '无健康声明',
+    tag: tr('无健康声明'),
     icon: 'wind',
   },
 ])
@@ -227,12 +237,13 @@ export const AMBIENCES: readonly AmbienceOption[] = deepFreeze<AmbienceOption[]>
 export const NOISES: readonly AmbienceOption[] = deepFreeze<AmbienceOption[]>([
   {
     id: 'pink',
-    name: '粉噪声',
-    description: '均匀的沙沙声，比白噪声柔和',
+    name: tr('粉噪声'),
+    description: tr('均匀的沙沙声，比白噪声柔和'),
     // 市面上「粉噪声加深睡眠」的说法多出自实验室里的短促脉冲，和连续播放不同（sound-capezuti-2022）。
     // 先给综述的结论，再说正面结果从哪来，免得读成「多数研究有效」
-    evidenceNote:
+    evidenceNote: tr(
       '一篇综述认为，没有强证据支持用声音帮助睡眠（证据：不足）。粉噪声的 11 项研究里，设计严谨的只有 2 项；正面的结果多来自睡眠实验室，有几项只有 4–16 人，只在某个睡眠阶段短促地播放，和整晚连续播放不是一回事。',
+    ),
     evidence: ['sound-capezuti-2022'],
     flags: { ...ANYTIME, weakEvidence: true },
     tag: MASKING_TAG,
@@ -240,11 +251,12 @@ export const NOISES: readonly AmbienceOption[] = deepFreeze<AmbienceOption[]>([
   },
   {
     id: 'brown',
-    name: '棕噪声',
-    description: '低沉的呼呼声，像远处的瀑布',
+    name: tr('棕噪声'),
+    description: tr('低沉的呼呼声，像远处的瀑布'),
     // 等级只评「能改善睡眠」；对睡眠和听力的提醒不带等级，免得读成「有害的证据很弱」
-    evidenceNote:
+    evidenceNote: tr(
       '一篇纳入 38 项研究的综述里，有的研究发现持续噪声让人睡得更好，有的发现睡得更差；持续噪声能改善睡眠的证据质量极低（证据：不足）。作者也提醒，要留意持续噪声对睡眠和听力的影响。',
+    ),
     evidence: ['sound-riedy-2021'],
     flags: { ...ANYTIME, weakEvidence: true },
     tag: MASKING_TAG,
@@ -256,10 +268,11 @@ export const NOISES: readonly AmbienceOption[] = deepFreeze<AmbienceOption[]>([
 export const MUSIC: readonly MusicOption[] = deepFreeze<MusicOption[]>([
   {
     id: 'drone',
-    name: '长音',
-    description: '柔和的和弦缓缓流动，没有旋律',
-    evidenceNote:
+    name: tr('长音'),
+    description: tr('柔和的和弦缓缓流动，没有旋律'),
+    evidenceNote: tr(
       '长音这种实时合成的音乐，本身没有专门研究过。它照研究里常用的放松音乐来做：慢，没有歌词，强弱平稳；不过研究没有发现速度快慢、有没有歌词会明显改变效果。',
+    ),
     evidence: ['sound-jespersen-2022', 'sound-adiasto-2022', 'sound-dewitte-2020-moderators'],
     flags: ANYTIME,
     tag: null,
@@ -267,22 +280,24 @@ export const MUSIC: readonly MusicOption[] = deepFreeze<MusicOption[]>([
   },
   {
     id: 'pentatonic',
-    name: '五声',
-    description: '像古筝的拨弦，五声音阶，隔几秒响一声',
+    name: tr('五声'),
+    description: tr('像古筝的拨弦，五声音阶，隔几秒响一声'),
     // 五行音乐的试验多与其他方法合用、又只和常规照护比，看不出「五音对五脏」本身的作用（sound-li-2025）
-    evidenceNote:
+    evidenceNote: tr(
       '只是一种音乐风格。回神不把五音和五行、脏腑对应起来，因为相关的试验多把音乐和其他方法合在一起用，又只和常规照护比较，看不出五音本身有什么作用。',
+    ),
     evidence: ['sound-li-2025'],
     flags: { ...ANYTIME, noHealthClaim: true },
-    tag: '风格 · 无健康声明',
+    tag: tr('风格 · 无健康声明'),
     icon: 'music',
   },
   {
     id: 'phasing',
-    name: '回响',
-    description: '几个琴音各自循环，组合一直在变',
-    evidenceNote:
+    name: tr('回响'),
+    description: tr('几个琴音各自循环，组合一直在变'),
+    evidenceNote: tr(
       '回响这种写法没有专门的研究。它和长音一样慢，没有歌词，强弱平稳；几个音按不同的间隔各自重复，彼此交错。',
+    ),
     evidence: ['sound-jespersen-2022', 'sound-adiasto-2022', 'sound-dewitte-2020-moderators'],
     flags: ANYTIME,
     tag: null,
@@ -292,16 +307,16 @@ export const MUSIC: readonly MusicOption[] = deepFreeze<MusicOption[]>([
 
 export const SOUND_GROUPS: Readonly<Record<SoundGroupId, SoundGroup>> = deepFreeze({
   nature: {
-    name: '自然声',
+    name: tr('自然声'),
     slot: 'ambience',
     note: {
-      relax: '许多人觉得自然声让人放松。',
-      sleep: '自然声能不能帮助睡眠，证据很弱。各项说明里的研究看的是放松，不是睡眠。',
+      relax: tr('许多人觉得自然声让人放松。'),
+      sleep: tr('自然声能不能帮助睡眠，证据很弱。各项说明里的研究看的是放松，不是睡眠。'),
     },
     evidence: { relax: ['sound-buxton-2021', 'sound-vanhedger-2019'], sleep: ['sound-capezuti-2022'] },
   },
   noise: {
-    name: '噪声',
+    name: tr('噪声'),
     slot: 'ambience',
     // 对睡眠和听力的提醒放在组上：选粉噪声的人也要看到（sound-riedy-2021）。文字归 safety.ts，两种模式相同
     note: { relax: SLEEP_SOUND_RULES.noise, sleep: SLEEP_SOUND_RULES.noise },
@@ -311,14 +326,16 @@ export const SOUND_GROUPS: Readonly<Record<SoundGroupId, SoundGroup>> = deepFree
     },
   },
   music: {
-    name: '音乐',
+    name: tr('音乐'),
     slot: 'music',
     // 医疗场景的效应和健康成人的结果分开评级：后者小、不一致（sound-panteleeva-2018 小幅，sound-adiasto-2022 无差别）
     note: {
-      relax:
+      relax: tr(
         '在你的设备上实时合成，没有节拍，没有人声。在手术前后这类紧张的场景里，听舒缓的音乐可能让人感觉放松一些，效应小到中等（证据：中等）。健康成人身上效果更小。压力过后听音乐，并不比安静休息恢复得更快（证据：有限）。',
-      sleep:
+      ),
+      sleep: tr(
         '在你的设备上实时合成，没有节拍，没有人声。有失眠困扰的成人每晚听音乐、坚持几周，和不听音乐相比，自评的睡眠质量可能好一些（证据：中等）；但用仪器测量睡眠的 3 项研究没有看到改善。',
+      ),
     },
     evidence: {
       relax: ['sound-dewitte-2020', 'sound-adiasto-2022', 'sound-panteleeva-2018'],
@@ -329,10 +346,12 @@ export const SOUND_GROUPS: Readonly<Record<SoundGroupId, SoundGroup>> = deepFree
 
 /** 不放声景或音乐 */
 export const NONE: NoneOption = deepFreeze<NoneOption>({
-  name: '无',
-  summary: { ambience: '不放声景', music: '不加音乐' },
+  name: tr('无'),
+  summary: { ambience: tr('不放声景'), music: tr('不加音乐') },
   // sound-adiasto-2022 的建议：把安静作为同样正当的选择列出来
-  note: '不放声音也可以。在健康成人的研究里，听音乐或流水声的人，并不比安静休息的人更放松（证据：有限）。',
+  note: tr(
+    '不放声音也可以。在健康成人的研究里，听音乐或流水声的人，并不比安静休息的人更放松（证据：有限）。',
+  ),
   evidence: ['sound-adiasto-2022', 'sound-thoma-2013'],
 })
 
@@ -359,19 +378,24 @@ export const UNLIMITED = 0
 export const LISTEN: Readonly<Record<SoundMode, ListenSetup>> = deepFreeze({
   relax: {
     practiceId: 'listen',
-    name: '放松',
+    name: tr('放松'),
     minutes: PRACTICE_BY_ID.listen.durations,
     defaultMinutes: PRACTICE_BY_ID.listen.defaultMinutes,
-    note: '研究里多是一次听 20 分钟左右，所以默认 20 分钟。也有试验比较过 15 分钟和 30 分钟，效果没有差别，选你方便的时长就好。',
+    note: tr(
+      '研究里多是一次听 20 分钟左右，所以默认 20 分钟。也有试验比较过 15 分钟和 30 分钟，效果没有差别，选你方便的时长就好。',
+    ),
     evidence: ['sound-yang-2025', 'sound-panteleeva-2018'],
   },
   sleep: {
     practiceId: 'sleep',
-    name: '睡前',
+    name: tr('睡前'),
     minutes: PRACTICE_BY_ID.sleep.durations,
     defaultMinutes: PRACTICE_BY_ID.sleep.defaultMinutes,
     // 25–60 分钟出自音乐的试验，默认的雨声、噪声没有对应的研究，照实说。淡出的说法取自 safety.ts
-    note: `研究里，有失眠困扰的成人每晚听音乐 25–60 分钟不等，平均 36 分钟；雨声和噪声听多久合适，没有研究可以参考。${SLEEP_SOUND_RULES.timer}`,
+    note: tr(
+      '研究里，有失眠困扰的成人每晚听音乐 25–60 分钟不等，平均 36 分钟；雨声和噪声听多久合适，没有研究可以参考。{0}',
+      SLEEP_SOUND_RULES.timer,
+    ),
     evidence: ['sound-jespersen-2022'],
   },
 })
@@ -381,20 +405,22 @@ export const UNLIMITED_CONFIRM: ConfirmCopy = SLEEP_SOUND_RULES.allNight
 
 /** 时长选项的文字 */
 export function listenLabel(minutes: number): string {
-  return minutes === UNLIMITED ? '不限' : `${minutes} 分钟`
+  return minutes === UNLIMITED ? tr('不限') : tr('{0} 分钟', minutes)
 }
 
 /* ---------- 说明文字 ---------- */
 
 export const SOUND_COPY: Readonly<Record<SoundCopyId, CopyBlock>> = deepFreeze({
   volume: {
-    title: '音量与耳机',
+    title: tr('音量与耳机'),
     // 音量、耳机、整夜播放和婴儿这几句取自 safety.ts，与练习详情页、不限时的确认一字不差
     lines: [
-      `${SLEEP_SOUND_RULES.volume}一项有 144 名大学生参加的研究里，多数人觉得轻的音量更适合放松。`,
+      tr('{0}一项有 144 名大学生参加的研究里，多数人觉得轻的音量更适合放松。', SLEEP_SOUND_RULES.volume),
       // 世卫组织给大众的建议（safety-itu-2018 的局限一栏）
       SLEEP_SOUND_RULES.headphones,
-      '按世卫组织和国际电联的安全聆听标准，成人每周听 80 分贝的声音，累计不超过 40 小时；音量每高 3 分贝，能听的时间减半。',
+      tr(
+        '按世卫组织和国际电联的安全聆听标准，成人每周听 80 分贝的声音，累计不超过 40 小时；音量每高 3 分贝，能听的时间减半。',
+      ),
       // 没有证据说戴耳机睡觉有害，所以只给做法，不说风险（safety.notes §9）
       SLEEP_SOUND_RULES.placement,
       SLEEP_SOUND_RULES.infants,
@@ -402,38 +428,51 @@ export const SOUND_COPY: Readonly<Record<SoundCopyId, CopyBlock>> = deepFreeze({
     evidence: ['sound-staum-2000', 'safety-itu-2018', 'sound-who-2018', 'safety-hugh-2014'],
   },
   iosLock: {
-    title: '在 iPhone 和 iPad 上锁屏，回神的声音会停',
+    title: tr('在 iPhone 和 iPad 上锁屏，回神的声音会停'),
     lines: [
-      '回神在浏览器里运行。在 iPhone 和 iPad 上，锁屏或切到别的应用后，回神的声音就会停下。',
-      '练习和听声音时，请让屏幕亮着。回神会尽量让屏幕保持常亮，但不是每台设备都能做到。',
-      '如果屏幕还是会自动熄灭，可以打开「设置」，在「显示与亮度」里把「自动锁定」暂时改成「永不」。这样计时结束后，屏幕也不会自己熄灭，用完记得改回来。',
-      '打开了低电量模式时，「自动锁定」限制为 30 秒，要先关掉低电量模式才能改。',
+      tr('回神在浏览器里运行。在 iPhone 和 iPad 上，锁屏或切到别的应用后，回神的声音就会停下。'),
+      tr('练习和听声音时，请让屏幕亮着。回神会尽量让屏幕保持常亮，但不是每台设备都能做到。'),
+      tr(
+        '如果屏幕还是会自动熄灭，可以打开「设置」，在「显示与亮度」里把「自动锁定」暂时改成「永不」。这样计时结束后，屏幕也不会自己熄灭，用完记得改回来。',
+      ),
+      tr('打开了低电量模式时，「自动锁定」限制为 30 秒，要先关掉低电量模式才能改。'),
       // 屏幕整夜亮着、又在充电：说清手机放哪儿，免得压在枕头下充电
-      '整夜播放时，屏幕会一直亮着。把亮度调低，屏幕朝下，放在离枕边远一些的地方，再接上充电器；充电时不要把手机压在身下，也不要放在枕头下或被子里。',
+      tr(
+        '整夜播放时，屏幕会一直亮着。把亮度调低，屏幕朝下，放在离枕边远一些的地方，再接上充电器；充电时不要把手机压在身下，也不要放在枕头下或被子里。',
+      ),
     ],
     evidence: [],
   },
   noHealthClaim: {
-    title: '无健康声明',
+    title: tr('无健康声明'),
     lines: [
-      '「无健康声明」的意思是：我们不说这种声音比同类的声音多出什么作用。',
-      '比如五声，和长音、回响一样是舒缓的音乐。有些说法把五音和五行、脏腑对应起来，这没有可靠的研究支持，我们不这样做。',
-      '选不选，看你喜不喜欢它的声音。',
+      tr('「无健康声明」的意思是：我们不说这种声音比同类的声音多出什么作用。'),
+      tr(
+        '比如五声，和长音、回响一样是舒缓的音乐。有些说法把五音和五行、脏腑对应起来，这没有可靠的研究支持，我们不这样做。',
+      ),
+      tr('选不选，看你喜不喜欢它的声音。'),
     ],
     evidence: ['sound-li-2025'],
   },
   dayOnly: {
-    title: '为什么睡前没有鸟鸣',
-    lines: ['鸟鸣是白天的声音，叫声来得突然，睡前模式里不提供。', '林间在睡前模式里只有溪水和风，不出鸟叫。'],
+    title: tr('为什么睡前没有鸟鸣'),
+    lines: [
+      tr('鸟鸣是白天的声音，叫声来得突然，睡前模式里不提供。'),
+      tr('林间在睡前模式里只有溪水和风，不出鸟叫。'),
+    ],
     evidence: [],
   },
   sleep: {
-    title: '声音与睡眠',
+    title: tr('声音与睡眠'),
     // 先说默认的雨声、噪声这一类，免得把音乐的结果套到它们身上
     lines: [
-      '自然声和噪声能不能帮助睡眠，证据很弱；也有综述提醒，要留意持续的噪声对睡眠和听力的影响。',
-      '有失眠困扰的成人每晚听音乐、坚持几周，和不听音乐相比，自评的睡眠质量可能好一些（证据：中等）；但用仪器测量睡眠的 3 项研究没有看到改善。',
-      '没有睡眠障碍的成人听音乐，和不听相比，睡眠质量整体上没有明显差别；只在坚持 3 周以上的 3 项研究里看到改善（证据：有限）。',
+      tr('自然声和噪声能不能帮助睡眠，证据很弱；也有综述提醒，要留意持续的噪声对睡眠和听力的影响。'),
+      tr(
+        '有失眠困扰的成人每晚听音乐、坚持几周，和不听音乐相比，自评的睡眠质量可能好一些（证据：中等）；但用仪器测量睡眠的 3 项研究没有看到改善。',
+      ),
+      tr(
+        '没有睡眠障碍的成人听音乐，和不听相比，睡眠质量整体上没有明显差别；只在坚持 3 周以上的 3 项研究里看到改善（证据：有限）。',
+      ),
       SLEEP_SOUND_RULES.clinic,
     ],
     evidence: ['sound-jespersen-2022', 'sound-riedy-2021', 'sound-capezuti-2022', 'sound-tang-2022'],

@@ -35,6 +35,7 @@ import {
   realIn,
   within,
 } from './guards'
+import { PREFS_KEY } from './language'
 import { parseProgramDay, programDayIndex, programDayKey } from './program'
 import { getLocalStorage, readJSON, readText, writeText } from './storage'
 import {
@@ -52,7 +53,7 @@ import {
 } from './types'
 
 /** 键名里的 v1 是历史原因：格式版本记在值里的 v，换键名反而要多迁移一次 */
-export const PREFS_KEY = 'huishen.prefs.v1'
+export { PREFS_KEY } from './language'
 
 /**
  * 个人呼吸速度的范围（次/分）：慢呼吸的 4.5–7.0（engine 的 SLOW_RATE_MIN、SLOW_RATE_MAX，PRODUCT §2）。
@@ -73,6 +74,7 @@ const MAX_MINUTES = 240
 export const DEFAULT_PREFS: Prefs = deepFreeze({
   v: PREFS_VERSION,
   theme: 'system',
+  language: 'zh-CN',
   volume: { master: 80, ambience: 55, music: 45, cues: 70 },
   guidance: 'standard',
   // 安静了 20 秒以上再出现新的一句时轻响一声（PRODUCT §5、§8）
@@ -203,6 +205,7 @@ function parsePrefs(o: Record<string, unknown>, base: Prefs): Prefs {
   return {
     v: PREFS_VERSION,
     theme: isTheme(o.theme) ? o.theme : base.theme,
+    language: o.language === 'ja' || o.language === 'zh-CN' ? o.language : base.language,
     volume: parseVolume(o.volume, base.volume),
     // 旧版本存的 voice（语音朗读、语音、语速）不再读：v1 没有语音引导
     guidance: isGuidanceLevel(o.guidance) ? o.guidance : base.guidance,
@@ -437,6 +440,7 @@ export function pickPrefs(state: Prefs): Prefs {
   return {
     v: PREFS_VERSION,
     theme: state.theme,
+    language: state.language,
     volume: state.volume,
     guidance: state.guidance,
     captionCue: state.captionCue,

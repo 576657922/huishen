@@ -1,3 +1,4 @@
+import { auxiliary } from '@/content/auxiliary'
 /**
  * 呼吸节拍：把练习参数换算成一轮里的各段，并能查询任一时刻在节拍里的位置。
  * 画面、提示音、背景声起伏和振动都从同一份节拍读数，保证彼此对齐。
@@ -82,11 +83,11 @@ export function ease(kind: Easing, q: number): number {
 }
 
 function checkRange(name: string, x: number, lo: number, hi: number): void {
-  if (!Number.isFinite(x) || x < lo || x > hi) throw new RangeError(`${name} 应在 ${lo}–${hi} 之间：${x}`)
+  if (!Number.isFinite(x) || x < lo || x > hi) throw new RangeError(auxiliary('range', name, lo, hi, x))
 }
 
 function checkPositive(name: string, x: number, hi: number): void {
-  if (!Number.isFinite(x) || x <= 0 || x > hi) throw new RangeError(`${name} 应大于 0 且不超过 ${hi}：${x}`)
+  if (!Number.isFinite(x) || x <= 0 || x > hi) throw new RangeError(auxiliary('positive', name, hi, x))
 }
 
 function withStarts(specs: readonly SegmentSpec[]): Segment[] {
@@ -109,8 +110,8 @@ function sighSegments(cycle: number): SegmentSpec[] {
       y0: 0,
       y1: SIGH_IN_LEVEL,
       ease: 'inout',
-      label: '吸',
-      hint: '用鼻子慢慢吸气，吸到舒服的满',
+      label: auxiliary('inhale'),
+      hint: auxiliary('inhaleHint'),
     },
     {
       key: 'in2',
@@ -118,8 +119,8 @@ function sighSegments(cycle: number): SegmentSpec[] {
       y0: SIGH_IN_LEVEL,
       y1: 1,
       ease: 'out',
-      label: '再吸',
-      hint: '不呼气，鼻子再补一小口',
+      label: auxiliary('inhaleAgain'),
+      hint: auxiliary('inhaleAgainHint'),
     },
     // 最后一段取余数，各段之和严格等于一轮
     {
@@ -128,8 +129,8 @@ function sighSegments(cycle: number): SegmentSpec[] {
       y0: 1,
       y1: 0,
       ease: 'inout',
-      label: '呼',
-      hint: '用嘴慢慢呼，呼得长一些',
+      label: auxiliary('exhale'),
+      hint: auxiliary('exhaleHint'),
     },
   ]
 }
@@ -138,20 +139,52 @@ function resonanceSegments(T: number, ratio: 'equal' | 'long'): SegmentSpec[] {
   const inDur = T * (ratio === 'long' ? LONG_EXHALE_INHALE_FRACTION : EQUAL_INHALE_FRACTION)
   return [
     // 「轻轻」：慢呼吸容易吸得过深，提示里不说「深吸」
-    { key: 'in', dur: inDur, y0: 0, y1: 1, ease: 'inout', label: '吸', hint: '用鼻子轻轻吸气，腹部自然鼓起' },
-    { key: 'out', dur: T - inDur, y0: 1, y1: 0, ease: 'inout', label: '呼', hint: '慢慢呼出，不用力' },
+    {
+      key: 'in',
+      dur: inDur,
+      y0: 0,
+      y1: 1,
+      ease: 'inout',
+      label: auxiliary('inhale'),
+      hint: auxiliary('gentleInhale'),
+    },
+    {
+      key: 'out',
+      dur: T - inDur,
+      y0: 1,
+      y1: 0,
+      ease: 'inout',
+      label: auxiliary('exhale'),
+      hint: auxiliary('gentleExhale'),
+    },
   ]
 }
 
 /** 屏息时最要紧的一句：憋着劲停住会让人紧张，觉得吃力就该缩短每一步 */
-export const HOLD_HINT = '停顿时喉咙放松，不要憋劲'
+export const HOLD_HINT = auxiliary('holdHint')
 
 function phaseSegments(p: Extract<PacedParams, { type: 'phases' }>): SegmentSpec[] {
   const all: SegmentSpec[] = [
-    { key: 'in', dur: p.inhale, y0: 0, y1: 1, ease: 'inout', label: '吸', hint: '用鼻子吸气' },
-    { key: 'hold', dur: p.holdIn, y0: 1, y1: 1, ease: 'flat', label: '停', hint: HOLD_HINT },
-    { key: 'out', dur: p.exhale, y0: 1, y1: 0, ease: 'inout', label: '呼', hint: '慢慢呼出' },
-    { key: 'rest', dur: p.holdOut, y0: 0, y1: 0, ease: 'flat', label: '停', hint: HOLD_HINT },
+    {
+      key: 'in',
+      dur: p.inhale,
+      y0: 0,
+      y1: 1,
+      ease: 'inout',
+      label: auxiliary('inhale'),
+      hint: auxiliary('noseInhale'),
+    },
+    { key: 'hold', dur: p.holdIn, y0: 1, y1: 1, ease: 'flat', label: auxiliary('hold'), hint: HOLD_HINT },
+    {
+      key: 'out',
+      dur: p.exhale,
+      y0: 1,
+      y1: 0,
+      ease: 'inout',
+      label: auxiliary('exhale'),
+      hint: auxiliary('exhaleSlow'),
+    },
+    { key: 'rest', dur: p.holdOut, y0: 0, y1: 0, ease: 'flat', label: auxiliary('hold'), hint: HOLD_HINT },
   ]
   return all.filter(s => s.dur > 0)
 }
@@ -160,20 +193,20 @@ function phaseSegments(p: Extract<PacedParams, { type: 'phases' }>): SegmentSpec
 export function buildPattern(params: PacedParams): BreathPattern {
   switch (params.type) {
     case 'sigh': {
-      checkRange('一轮秒数', params.cycle, SIGH_CYCLE_MIN, SIGH_CYCLE_MAX)
+      checkRange(auxiliary('cycleSeconds'), params.cycle, SIGH_CYCLE_MIN, SIGH_CYCLE_MAX)
       const segs = withStarts(sighSegments(params.cycle))
       return { T: params.cycle, rate: 60 / params.cycle, segs, type: 'sigh' }
     }
     case 'resonance': {
-      checkRange('每分钟次数', params.rate, RATE_MIN, RATE_MAX)
+      checkRange(auxiliary('perMinute'), params.rate, RATE_MIN, RATE_MAX)
       const T = 60 / params.rate
       return { T, rate: params.rate, segs: withStarts(resonanceSegments(T, params.ratio)), type: 'resonance' }
     }
     case 'phases': {
-      checkPositive('吸气秒数', params.inhale, PHASE_SEC_MAX)
-      checkRange('吸满后停的秒数', params.holdIn, 0, PHASE_SEC_MAX)
-      checkPositive('呼气秒数', params.exhale, PHASE_SEC_MAX)
-      checkRange('呼空后停的秒数', params.holdOut, 0, PHASE_SEC_MAX)
+      checkPositive(auxiliary('inhaleSeconds'), params.inhale, PHASE_SEC_MAX)
+      checkRange(auxiliary('holdInSeconds'), params.holdIn, 0, PHASE_SEC_MAX)
+      checkPositive(auxiliary('exhaleSeconds'), params.exhale, PHASE_SEC_MAX)
+      checkRange(auxiliary('holdOutSeconds'), params.holdOut, 0, PHASE_SEC_MAX)
       const segs = withStarts(phaseSegments(params))
       const T = params.inhale + params.holdIn + params.exhale + params.holdOut
       return { T, rate: 60 / T, segs, type: 'phases' }
@@ -196,7 +229,7 @@ function scaledCycle(p: BreathPattern, rate: number): BreathCycle {
 
 /** 同样比例、每分钟 rate 次、没有开头放慢的节拍；练习中「有点急」换速度时用 */
 export function atRate(p: BreathPattern, rate: number): BreathPattern {
-  checkRange('每分钟次数', rate, RATE_MIN, RATE_MAX)
+  checkRange(auxiliary('perMinute'), rate, RATE_MIN, RATE_MAX)
   return steady({ ...scaledCycle(p, rate), type: p.type })
 }
 
@@ -206,7 +239,7 @@ export function atRate(p: BreathPattern, rate: number): BreathPattern {
  * 只有慢呼吸（resonance）放慢：叹息和箱式呼吸的节拍本来就是按轮设计的，原样返回（去掉旧的放慢）
  */
 export function withWarmup(p: BreathPattern, startRate: number = WARMUP_START_RATE): BreathPattern {
-  checkRange('起始速度', startRate, RATE_MIN, RATE_MAX)
+  checkRange(auxiliary('initialRate'), startRate, RATE_MIN, RATE_MAX)
   const base = steady(p)
   if (p.type !== undefined && p.type !== 'resonance') return base
   const warmup: BreathCycle[] = []
@@ -332,10 +365,10 @@ export function describePattern(params: PacedParams): string {
   const durs = p.segs.map(s => num(s.dur))
   switch (params.type) {
     case 'sigh':
-      return `鼻吸 ${durs[0]} 秒 → 再吸 ${durs[1]} 秒 → 嘴呼 ${durs[2]} 秒 · 每分钟 ${num(p.rate)} 轮`
+      return auxiliary('sighPattern', durs[0], durs[1], durs[2], num(p.rate))
     case 'resonance': {
       const [inhale, exhale] = p.segs.map(s => half(s.dur))
-      return `吸 ${inhale} 秒，呼 ${exhale} 秒 · 每分钟 ${num(p.rate)} 次`
+      return auxiliary('slowPattern', inhale, exhale, num(p.rate))
     }
     case 'phases':
       return p.segs.map(s => `${s.label} ${num(s.dur)}`).join(' · ')

@@ -6,6 +6,7 @@
  * v1 没有语音引导（PRODUCT.md §0）：没有语音服务，会话控制器拿到不出声的语音端口（engine 的 NULL_VOICE）
  */
 import { type AudioEngine, type Bus, createAudioEngine } from '@/audio'
+import { auxiliary } from '@/content/auxiliary'
 import { getSessionRepo, type LocalSessionRepo, prefsStore } from '@/data'
 import {
   type AudioPort,
@@ -109,8 +110,8 @@ export const peekController = (): SessionController | null => controller
  * 必须在第一次 getController() 之前调用；生产构建里没有调用它的代码
  */
 export function setTimeScale(scale: number): void {
-  if (controller) throw new Error('会话控制器已经建好，不能再改时间流速')
-  if (!(Number.isFinite(scale) && scale > 0)) throw new RangeError(`时间流速应大于 0：${scale}`)
+  if (controller) throw new Error(auxiliary('controllerCreated'))
+  if (!(Number.isFinite(scale) && scale > 0)) throw new RangeError(auxiliary('invalidSpeed', scale))
   timeScale = scale
 }
 

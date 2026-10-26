@@ -122,6 +122,7 @@ describe('defaults', () => {
     expect(DEFAULT_PREFS).toEqual({
       v: 2,
       theme: 'system',
+      language: 'zh-CN',
       volume: { master: 80, ambience: 55, music: 45, cues: 70 },
       guidance: 'standard',
       captionCue: true,
@@ -995,5 +996,18 @@ describe('shared prefs', () => {
     expect(PREFS_KEY).toBe('huishen.prefs.v1')
     expect(getPrefs()).toBe(prefsStore.getState())
     expect(getPrefs().v).toBe(2)
+  })
+})
+
+describe('language preference', () => {
+  it('defaults old and invalid preferences to Chinese', () => {
+    expect(sanitizePrefs(v2({})).language).toBe('zh-CN')
+    expect(sanitizePrefs(v2({ language: 'unknown' })).language).toBe('zh-CN')
+  })
+  it('persists Japanese and restores it when the store is reopened', () => {
+    const first = store()
+    first.getState().set({ language: 'ja' })
+    expect(saved()).toMatchObject({ language: 'ja' })
+    expect(store().getState().language).toBe('ja')
   })
 })

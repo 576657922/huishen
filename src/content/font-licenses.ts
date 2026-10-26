@@ -1,5 +1,6 @@
 /** SIL OFL 1.1. Source: google/fonts/ofl/inter/OFL.txt. Available offline. */
 export const FONT_COPYRIGHTS = [
+  'Noto Serif JP — (c) 2017–2024 Adobe (http://www.adobe.com/).',
   'Noto Serif SC — (c) 2017–2024 Adobe (http://www.adobe.com/).',
   'Inter — Copyright 2016 The Inter Project Authors (https://github.com/rsms/inter).',
 ] as const

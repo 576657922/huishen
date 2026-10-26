@@ -10,6 +10,7 @@ import {
   useState,
 } from 'react'
 import { createPortal } from 'react-dom'
+import { auxiliary } from '@/content/auxiliary'
 import { usePresence } from '../../layer'
 import { typeset } from '../../text'
 import styles from './Toast.module.css'
@@ -45,7 +46,7 @@ const ToastContext = createContext<ToastApi | null>(null)
 
 export function useToast(): ToastApi {
   const api = useContext(ToastContext)
-  if (!api) throw new Error('useToast 要在 <ToastHost> 里面使用')
+  if (!api) throw new Error(auxiliary('toastHost'))
   return api
 }
 

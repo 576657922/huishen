@@ -640,7 +640,7 @@ describe('依据页的页面模型', () => {
   it('evidence.ts 不把卡片层和证据库静态打进主包', () => {
     expect(ACCESS_SOURCE).toBeDefined()
     expect(ACCESS_SOURCE).not.toMatch(/^import[^\n]*from '\.\/evidence-cards'/m)
-    expect(ACCESS_SOURCE).not.toMatch(/^import[^\n]*evidence\.json/m)
+    expect(ACCESS_SOURCE).not.toMatch(/^import[^\n]*docs\/research\/evidence\.json/m)
     expect(ACCESS_SOURCE).toContain("import('./evidence-cards')")
   })
 })

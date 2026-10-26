@@ -1,3 +1,4 @@
+import { auxiliary } from '@/content/auxiliary'
 /**
  * 模拟心率带：没有硬件时用于演示和测试，接口与真实设备相同。界面上须注明是模拟数据。
  *
@@ -64,7 +65,7 @@ export interface SimulatedHeartRate extends HeartRateDevice {
  * 与引擎吸呼等长的节拍（两段半余弦）在同一时刻读数相同。rate 不是正数时抛出 RangeError
  */
 export function steadyBreathing(rate: number): VolumeFn {
-  if (!(Number.isFinite(rate) && rate > 0)) throw new RangeError(`呼吸频率不合理：${rate}`)
+  if (!(Number.isFinite(rate) && rate > 0)) throw new RangeError(auxiliary('invalidBreathRate', rate))
   const hz = rate / 60
   return t => (1 - Math.cos(2 * Math.PI * hz * t)) / 2
 }
@@ -230,7 +231,8 @@ function checkOptions(o: NumericOptions): void {
     ['intervalMs', o.intervalMs > 0],
   ]
   for (const [name, ok] of rules) {
-    if (!(ok && Number.isFinite(o[name]))) throw new RangeError(`模拟心率带的参数 ${name} 不合理：${o[name]}`)
+    if (!(ok && Number.isFinite(o[name])))
+      throw new RangeError(auxiliary('simulatorParameter', name, o[name]))
   }
 }
 
@@ -243,7 +245,7 @@ export function createSimulatedHeartRate(options: SimulatorOptions = {}): Simula
     sharpness = 3,
     artifacts = 0.005,
     rrIntervals = true,
-    name = '模拟心率带',
+    name = auxiliary('simulatedStrap'),
     intervalMs = 1000,
   } = options
   checkOptions({ resonance, baseHr, rsa, sharpness, artifacts, intervalMs })

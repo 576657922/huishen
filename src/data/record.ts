@@ -1,3 +1,4 @@
+import { auxiliary } from '@/content/auxiliary'
 /**
  * 练习记录：把引擎的结果变成记录，以及校验任何来路的记录（数据库、导入文件、备用存储）。
  * 校验的原则：身份和练习时长（id、练习、类型、开始时间、实际秒数）不对就整条丢弃；
@@ -93,7 +94,7 @@ export function resultToRecord(result: SessionResult, extras: RecordExtras = {})
     note: extras.note,
   })
   if (!record) {
-    throw new RangeError(`练习结果无法记录：开始时间 ${result.startedAt}，时长 ${result.practicedSec} 秒`)
+    throw new RangeError(auxiliary('invalidRecord', result.startedAt, result.practicedSec))
   }
   return record
 }

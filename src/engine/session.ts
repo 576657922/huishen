@@ -5,6 +5,7 @@
  * v1 是文字引导（PRODUCT §0、§5）：引导词按时刻成为字幕；安静了 20 秒以上才出现的一句，先轻响一声（captionCue）
  */
 import type { SoundMix } from '@/audio/types'
+import { auxiliary } from '@/content/auxiliary'
 import { clamp, round1 } from '@/lib/math'
 import { createAudioClock, createPerfClock, type SessionClock } from './clock'
 import {
@@ -275,17 +276,17 @@ function quietly(fn: () => Promise<void>): void {
 
 function checkPlan(plan: SessionPlan): void {
   if (!(Number.isFinite(plan.plannedSec) && plan.plannedSec >= 0))
-    throw new RangeError(`计划时长无效：${plan.plannedSec}`)
+    throw new RangeError(auxiliary('invalidPlanDuration', plan.plannedSec))
   if (!(Number.isFinite(plan.leadSec) && plan.leadSec >= 0))
-    throw new RangeError(`倒数秒数无效：${plan.leadSec}`)
+    throw new RangeError(auxiliary('invalidLeadIn', plan.leadSec))
   if (plan.fadeInSec !== undefined && !(Number.isFinite(plan.fadeInSec) && plan.fadeInSec >= 0))
-    throw new RangeError(`淡入秒数无效：${plan.fadeInSec}`)
+    throw new RangeError(auxiliary('invalidFadeIn', plan.fadeInSec))
   const p = plan.pattern
   if (p && !(Number.isFinite(p.T) && p.T > 0 && p.segs.length > 0))
-    throw new RangeError(`节拍无效：一轮 ${p.T} 秒、${p.segs.length} 段`)
+    throw new RangeError(auxiliary('invalidPattern', p.T, p.segs.length))
   for (const c of p?.warmup ?? [])
     if (!(Number.isFinite(c.T) && c.T > 0 && c.segs.length > 0))
-      throw new RangeError(`开头放慢的节拍无效：一轮 ${c.T} 秒、${c.segs.length} 段`)
+      throw new RangeError(auxiliary('invalidWarmup', c.T, c.segs.length))
 }
 
 /** 背景声是否真有声音：选了声景或音乐，且音量不为 0 */
@@ -406,7 +407,8 @@ export function createSessionController(
   const { audio, platform } = ports
   const voice = ports.voice ?? NULL_VOICE
   const timeScale = options.timeScale ?? 1
-  if (!(timeScale > 0 && Number.isFinite(timeScale))) throw new RangeError(`时间流速应大于 0：${timeScale}`)
+  if (!(timeScale > 0 && Number.isFinite(timeScale)))
+    throw new RangeError(auxiliary('invalidSpeed', timeScale))
   const perfNow = options.perfNow ?? (() => performance.now())
   // 不带 this 调用：浏览器自带的定时器函数挂在别的对象上调用会报错
   const { setInterval: si, clearInterval: ci, setTimeout: st, clearTimeout: ct } = options

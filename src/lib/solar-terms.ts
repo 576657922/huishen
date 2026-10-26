@@ -3,6 +3,7 @@
  * 只用于在「今日」页标注日期，精度为天。
  */
 import { addDays, dayKey, startOfDay } from './date'
+import { getLanguage } from './locale'
 
 // biome-ignore format: 每行一季，便于对照
 export const TERM_NAMES = [
@@ -70,7 +71,35 @@ export function termNear(d: Date): { today: TermInfo | null; tomorrow: TermInfo 
 /** 「霜降」「霜降前一日」或 null */
 export function termLabel(d: Date): string | null {
   const { today, tomorrow } = termNear(d)
-  if (today) return today.name
-  if (tomorrow) return `${tomorrow.name}前一日`
+  const names = [
+    '小寒',
+    '大寒',
+    '立春',
+    '雨水',
+    '啓蟄',
+    '春分',
+    '清明',
+    '穀雨',
+    '立夏',
+    '小満',
+    '芒種',
+    '夏至',
+    '小暑',
+    '大暑',
+    '立秋',
+    '処暑',
+    '白露',
+    '秋分',
+    '寒露',
+    '霜降',
+    '立冬',
+    '小雪',
+    '大雪',
+    '冬至',
+  ]
+  const name = (term: TermInfo): string =>
+    getLanguage() === 'ja' ? (names[TERM_NAMES.indexOf(term.name)] ?? term.name) : term.name
+  if (today) return name(today)
+  if (tomorrow) return getLanguage() === 'ja' ? `${name(tomorrow)}の前日` : `${tomorrow.name}前一日`
   return null
 }

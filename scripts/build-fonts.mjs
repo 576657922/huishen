@@ -27,7 +27,11 @@ function collectText(patterns) {
   for (const pattern of patterns) {
     for (const file of fs.globSync(pattern, { cwd: ROOT })) {
       const raw = fs.readFileSync(path.join(ROOT, file), 'utf8')
-      text += /\.(ts|tsx|js|mjs|css)$/.test(file) ? stripComments(raw) : raw
+      text += file.endsWith('.json')
+        ? Object.values(JSON.parse(raw)).join('')
+        : /\.(ts|tsx|js|mjs|css)$/.test(file)
+          ? stripComments(raw)
+          : raw
     }
   }
   return text

@@ -1,3 +1,8 @@
+import japanese from './locales/ja/evidence.json'
+import { createTranslator } from './translate'
+
+const tr = createTranslator(japanese)
+
 /**
  * 证据的访问层：依据页的页面模型、练习详情页的出处、效应量和出处的写法（DESIGN.md §8.10、§13.4、§13.8）。
  *
@@ -60,23 +65,23 @@ export const EVIDENCE_CATEGORY_INFO: Readonly<
 > = Object.freeze({
   meditation: {
     label: EVIDENCE.filters.meditation,
-    description: '正念课程、手机应用和各项冥想练习，与不练习或其他方法相比的结果。',
+    description: tr('正念课程、手机应用和各项冥想练习，与不练习或其他方法相比的结果。'),
   },
   breathing: {
     label: EVIDENCE.filters.breathing,
-    description: '慢呼吸、周期性叹息和箱式呼吸对压力、情绪和心率变异性的影响，以及节律怎么选。',
+    description: tr('慢呼吸、周期性叹息和箱式呼吸对压力、情绪和心率变异性的影响，以及节律怎么选。'),
   },
   sound: {
     label: EVIDENCE.filters.sound,
-    description: '音乐、自然声和噪声对压力和睡眠的影响；多数研究不在日常生活里做。',
+    description: tr('音乐、自然声和噪声对压力和睡眠的影响；多数研究不在日常生活里做。'),
   },
   safety: {
     label: EVIDENCE.filters.safety,
-    description: '练习中的不适有多常见、会持续多久，以及哪些练法有风险。',
+    description: tr('练习中的不适有多常见、会持续多久，以及哪些练法有风险。'),
   },
   design: {
-    label: '设计',
-    description: '回神的用法为什么这样定：练多久、引导说多少、怎样记录和自评。',
+    label: tr('设计'),
+    description: tr('回神的用法为什么这样定：练多久、引导说多少、怎样记录和自评。'),
   },
 })
 
@@ -134,21 +139,21 @@ export function formatEffect(
   const digits = Math.max(2, decimals(o.g), decimals(o.lo), decimals(o.hi))
   const lo = fixed(o.lo, digits)
   const hi = fixed(o.hi, digits)
-  const range = o.lo < 0 || o.hi < 0 ? `${lo} 至 ${hi}` : `${lo}–${hi}`
+  const range = o.lo < 0 || o.hi < 0 ? tr('{0} 至 {1}', lo, hi) : `${lo}–${hi}`
   return `${metric} = ${fixed(o.g, digits)}（${style === 'note' ? `95% CI ${range}` : range}）`
 }
 
 const UNIT_LABEL: Readonly<Record<StudyUnit, string>> = Object.freeze({
-  trials: '项试验',
-  studies: '项研究',
-  comparisons: '项比较',
+  trials: tr('项试验'),
+  studies: tr('项研究'),
+  comparisons: tr('项比较'),
 })
 
 /** 效应量行左边的规模：「12 项试验 · 785 人」；都没有时为空字符串 */
 export function formatSize(o: Pick<EffectOutcome, 'k' | 'n'>, unit: StudyUnit = 'trials'): string {
   const parts: string[] = []
   if (o.k !== undefined) parts.push(`${o.k} ${UNIT_LABEL[unit]}`)
-  if (o.n !== undefined) parts.push(`${o.n} 人`)
+  if (o.n !== undefined) parts.push(tr('{0} 人', o.n))
   return parts.join(' · ')
 }
 
@@ -157,12 +162,12 @@ export const metaLine = (card: Pick<EvidenceCard, 'kind' | 'size'>): string =>
   card.size ? `${card.kind} · ${card.size}` : card.kind
 
 const DIRECTION_NOTE: Readonly<Record<EffectDirection, string>> = Object.freeze({
-  lower: '小于 0 表示比对照减轻。',
-  higher: '大于 0 表示比对照增加。',
-  better: '大于 0 表示比对照改善。',
+  lower: tr('小于 0 表示比对照减轻。'),
+  higher: tr('大于 0 表示比对照增加。'),
+  better: tr('大于 0 表示比对照改善。'),
 })
 
-const SIZE_NOTE = '效应量约 0.2 算小，约 0.5 算中等，0.8 以上算大。'
+const SIZE_NOTE = tr('效应量约 0.2 算小，约 0.5 算中等，0.8 以上算大。')
 
 /** 效应量轴下面的说明（DESIGN.md §8.10）；没有效应量行的卡片没有轴，也没有这句 */
 export function effectNote(card: Pick<EvidenceCard, 'outcomes' | 'direction'>): string | undefined {
@@ -452,8 +457,8 @@ const GRADES: readonly Grade[] = ['A', 'B', 'C', 'D']
 
 /** 回神自己加的两处说法，DESIGN.md 没有规定，写在这里 */
 const LABELS = Object.freeze({
-  inApp: '在应用中',
-  noContrary: '我们没有找到相反的结果。',
+  inApp: tr('在应用中'),
+  noContrary: tr('我们没有找到相反的结果。'),
 })
 
 function inAppOf(card: EvidenceCard): EvidenceInApp {

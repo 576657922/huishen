@@ -221,3 +221,11 @@
   font-weight: var(--w-light);
   line-height: var(--lh-readout);
 }
+
+/* Japanese labels need a full line while preserving the four existing controls. */
+:global(html:lang(ja)) .controls > button {
+  flex-direction: column;
+  gap: var(--sp-1);
+  font-size: var(--fs-caption);
+  white-space: nowrap;
+}

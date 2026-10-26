@@ -7,6 +7,7 @@
 import { useEffect, useId, useRef } from 'react'
 import { getAudio, peekAudio } from '@/app/services'
 import type { AmbienceId, MusicId, SoundMix, SoundMode } from '@/audio/types'
+import { auxiliary } from '@/content/auxiliary'
 import { SETTINGS } from '@/content/copy'
 import { type AnySound, NONE, SOUND_GROUPS, soundsFor } from '@/content/sounds'
 import { GroupTitle, Icon, Segmented, Slider, StackRow, useRadioGroup } from '@/ui'
@@ -30,7 +31,7 @@ export interface SoundPickerProps {
 }
 
 /** 声景这一层的读屏名称 TODO(content) */
-const AMBIENCE_LABEL = '声景'
+const AMBIENCE_LABEL = auxiliary('soundscape')
 
 const MODES: readonly SoundMode[] = ['relax', 'sleep']
 

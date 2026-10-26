@@ -1,3 +1,4 @@
+import { getLanguage } from './locale'
 import { pad2 } from './time'
 
 /** 一天的毫秒数（按 UTC 计；本地日期的差用 daysBetween，夏令时那天不是 24 小时） */
@@ -35,11 +36,15 @@ export function daysBetween(a: Date, b: Date): number {
   return Math.round((startOfDay(b).getTime() - startOfDay(a).getTime()) / DAY_MS)
 }
 
-export const WEEKDAYS = ['日', '一', '二', '三', '四', '五', '六'] as const
+export const WEEKDAYS =
+  getLanguage() === 'ja'
+    ? (['日', '月', '火', '水', '木', '金', '土'] as const)
+    : (['日', '一', '二', '三', '四', '五', '六'] as const)
 
 /** 「10月22日 星期四」 */
 export function fmtDate(d: Date): string {
-  return `${d.getMonth() + 1}月${d.getDate()}日 星期${WEEKDAYS[d.getDay()]}`
+  const weekday = new Intl.DateTimeFormat(getLanguage(), { weekday: 'long' }).format(d)
+  return `${d.getMonth() + 1}月${d.getDate()}日 ${weekday}`
 }
 
 /** 记录列表里的时间：今天 21:05 / 昨天 07:30 / 10/18 21:05 */
@@ -47,8 +52,10 @@ export function fmtWhen(iso: string, now: Date = new Date()): string {
   const d = new Date(iso)
   const t = `${pad2(d.getHours())}:${pad2(d.getMinutes())}`
   const k = dayKey(d)
-  if (k === dayKey(now)) return `今天 ${t}`
-  if (k === dayKey(addDays(now, -1))) return `昨天 ${t}`
+  if (k === dayKey(now))
+    return `${new Intl.RelativeTimeFormat(getLanguage(), { numeric: 'auto' }).format(0, 'day')} ${t}`
+  if (k === dayKey(addDays(now, -1)))
+    return `${new Intl.RelativeTimeFormat(getLanguage(), { numeric: 'auto' }).format(-1, 'day')} ${t}`
   if (d.getFullYear() !== now.getFullYear())
     return `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()} ${t}`
   return `${d.getMonth() + 1}/${d.getDate()} ${t}`

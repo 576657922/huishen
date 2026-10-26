@@ -1,0 +1,19 @@
+{
+  "id": "/",
+  "name": "回神",
+  "short_name": "回神",
+  "description": "研究をもとに設計した瞑想・呼吸・音の練習",
+  "lang": "ja",
+  "dir": "ltr",
+  "start_url": "/?lang=ja",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#F4F1EA",
+  "theme_color": "#F4F1EA",
+  "categories": ["health", "lifestyle"],
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

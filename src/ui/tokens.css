@@ -365,3 +365,25 @@
     --dur-scene: 0ms;
   }
 }
+
+@font-face {
+  font-family: "HS Display JP";
+  src: url("/fonts/display-ja.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "HS Display JP";
+  src: url("/fonts/display-ja-light.woff2") format("woff2");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+html:lang(ja) {
+  --fs-phase: 80px;
+  --font-display: "HS Display JP", "Hiragino Mincho ProN", "Yu Mincho", serif;
+  --font-ui:
+    "HS Num", -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo",
+    sans-serif;
+}

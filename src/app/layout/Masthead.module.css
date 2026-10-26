@@ -8,6 +8,20 @@
 }
 @media (min-width: 768px) {
   .masthead {
+    justify-content: flex-end;
+    height: auto;
+    min-height: var(--hit);
+    margin-bottom: var(--sp-2);
+  }
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+@media (min-width: 768px) {
+  .masthead > :first-child {
     display: none;
   }
 }
@@ -26,4 +40,10 @@
 }
 .dateline time {
   color: var(--ink);
+}
+
+@media (min-width: 768px) {
+  .actions > :last-child {
+    display: none;
+  }
 }

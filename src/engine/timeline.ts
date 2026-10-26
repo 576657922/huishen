@@ -1,3 +1,4 @@
+import { auxiliary } from '@/content/auxiliary'
 /**
  * 引导时间线：把引导词排成带时间的提示。v1 是文字引导（PRODUCT §0、§5）：每一句按时刻出现在屏幕上，
  * 时间按冥想引导的语速估算（以后有真人录音时同样适用）。
@@ -175,18 +176,19 @@ interface Layout extends Frame, Parts {
 
 function checkInputs(script: GuidedScript, minutes: number, opts: TimelineOptions): void {
   const { charsPerSecond: cps, endBufferSec: endBuffer, level } = opts
-  if (!Number.isFinite(minutes)) throw new RangeError(`时长不是有效数字：${minutes}`)
+  if (!Number.isFinite(minutes)) throw new RangeError(auxiliary('invalidMinutes', minutes))
   if (
     !(script.minMinutes > 0 && script.maxMinutes >= script.minMinutes && Number.isFinite(script.maxMinutes))
   )
-    throw new RangeError(`引导词「${script.id}」的时长范围无效：${script.minMinutes}–${script.maxMinutes}`)
-  if (cps !== undefined && !(cps > 0 && Number.isFinite(cps))) throw new RangeError(`语速应大于 0：${cps}`)
+    throw new RangeError(auxiliary('invalidScriptRange', script.id, script.minMinutes, script.maxMinutes))
+  if (cps !== undefined && !(cps > 0 && Number.isFinite(cps)))
+    throw new RangeError(auxiliary('invalidGuidanceSpeed', cps))
   if (endBuffer !== undefined && !(endBuffer >= 0 && Number.isFinite(endBuffer)))
-    throw new RangeError(`结尾留白不能为负：${endBuffer}`)
+    throw new RangeError(auxiliary('invalidEndBuffer', endBuffer))
   if (level !== undefined && !Object.hasOwn(LEVEL_RANK, level))
-    throw new RangeError(`未知的引导详细程度：${level}`)
+    throw new RangeError(auxiliary('unknownGuidance', level))
   if (opts.prosody !== undefined && opts.prosody !== 'steady' && opts.prosody !== 'settle')
-    throw new RangeError(`未知的语气：${opts.prosody}`)
+    throw new RangeError(auxiliary('unknownTone', opts.prosody))
 }
 
 function select(script: GuidedScript, minutes: number, level: GuidanceLevel): Parts {

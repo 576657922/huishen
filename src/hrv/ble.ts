@@ -1,3 +1,4 @@
+import { auxiliary } from '@/content/auxiliary'
 /**
  * 通过 Web Bluetooth 连接标准心率带（GATT 心率服务 0x180D）。
  * 只有桌面和安卓上的 Chrome、Edge 支持；其他浏览器（包括 iOS 上的所有浏览器）没有 navigator.bluetooth。
@@ -15,12 +16,12 @@ const CONNECT_TIMEOUT_MS = 15000
 export type HeartRateErrorCode = 'unsupported' | 'unavailable' | 'denied' | 'no-service' | 'failed'
 
 const MESSAGES: Record<HeartRateErrorCode, string> = {
-  unsupported: '这个浏览器不支持蓝牙。请在电脑或安卓手机上用 Chrome 或 Edge 打开。',
-  unavailable: '蓝牙没有打开，或这台设备没有蓝牙。',
-  denied: '浏览器不允许这个页面使用蓝牙。可以在浏览器的网站设置里打开。',
-  'no-service': '这台设备不提供标准心率数据。请换一条支持蓝牙心率的心率带。',
+  unsupported: auxiliary('bluetoothUnsupported'),
+  unavailable: auxiliary('bluetoothOff'),
+  denied: auxiliary('bluetoothPermission'),
+  'no-service': auxiliary('bluetoothService'),
   // 胸带多半要贴着皮肤才开始广播
-  failed: '没有连上。请确认心率带已经戴好、就在附近，再试一次。',
+  failed: auxiliary('bluetoothConnection'),
 }
 
 /** 连接失败；code 供界面区分处理，message 可以直接显示 */
@@ -165,7 +166,7 @@ function wrap(device: BluetoothDevice): HeartRateDevice {
   }
 
   return {
-    name: device.name?.trim() || '心率带',
+    name: device.name?.trim() || auxiliary('heartStrap'),
     get connected() {
       return live && device.gatt?.connected === true
     },

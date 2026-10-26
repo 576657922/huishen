@@ -1,3 +1,4 @@
+import { auxiliary } from '@/content/auxiliary'
 /**
  * 素材仓库：按名字取 AudioBuffer。
  *
@@ -302,7 +303,7 @@ export function createBufferStore(options: BufferStoreOptions = {}): BufferStore
     }
     return name => {
       const b = map.get(name)
-      if (!b) throw new Error(`素材未就绪：${name}`)
+      if (!b) throw new Error(auxiliary('missingAsset', name))
       return b
     }
   }
@@ -331,7 +332,7 @@ export function createBufferStore(options: BufferStoreOptions = {}): BufferStore
         const map = new Map(names.map((n, i) => [n, buffers[i]!]))
         return name => {
           const b = map.get(name)
-          if (!b) throw new Error(`素材未就绪：${name}`)
+          if (!b) throw new Error(auxiliary('missingAsset', name))
           return b
         }
       } finally {

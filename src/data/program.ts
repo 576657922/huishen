@@ -1,3 +1,4 @@
+import { auxiliary } from '@/content/auxiliary'
 /**
  * 计划进度的键与推进。进度按「完成了哪几天」记，键如 'w3d2'（第 3 周第 2 天）：
  * 漏了的日子不重排、不算落后，下次打开接着做还没做的那一天（PRODUCT.md §3）。
@@ -23,7 +24,7 @@ const isDay = (day: number): boolean => Number.isInteger(day) && day >= 1 && day
 
 /** 第 3 周第 2 天 → 'w3d2'；超出范围时抛 RangeError */
 export function programDayKey(week: number, day: number): string {
-  if (!isWeek(week) || !isDay(day)) throw new RangeError(`计划里没有第 ${week} 周第 ${day} 天`)
+  if (!isWeek(week) || !isDay(day)) throw new RangeError(auxiliary('missingProgramDay', week, day))
   return `w${week}d${day}`
 }
 

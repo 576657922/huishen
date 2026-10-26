@@ -7,13 +7,16 @@ import styles from './Masthead.module.css'
 
 /**
  * 今日的报头（DESIGN.md §8.0）：左边是标志（回到今日的链接），右边是设置。44 高。
- * 平板和桌面上不显示：导航栏顶上已经有标志，设置也在导航栏里
+ * 平板和桌面只显示页面传入的操作：标志、设置已在侧栏里
  */
-export function Masthead() {
+export function Masthead({ actions }: { actions?: import('react').ReactNode }) {
   return (
     <header className={styles.masthead}>
       <Lockup />
-      <IconLink icon="settings" label={NAV.settings} to="/settings" />
+      <div className={styles.actions}>
+        {actions}
+        <IconLink icon="settings" label={NAV.settings} to="/settings" />
+      </div>
     </header>
   )
 }

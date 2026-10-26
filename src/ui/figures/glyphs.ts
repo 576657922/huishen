@@ -1,3 +1,4 @@
+import { auxiliary } from '@/content/auxiliary'
 /**
  * 练习的呼吸字形（48 × 24，DESIGN.md §8.6）：每个练习画它自己的结构。
  * 跟节拍的三种从引擎的真实节拍取样（buildPattern + patternAt），身体扫描的台阶宽度来自 buildTimeline，
@@ -68,7 +69,7 @@ function wave(params: PacedParams, span: number, offset = 0): string {
 
 function pacedOf(id: 'slow' | 'cyclic-sigh' | 'box'): PacedParams {
   const paced = PRACTICE_BY_ID[id].paced
-  if (!paced) throw new Error(`${id} 没有节拍参数`)
+  if (!paced) throw new Error(auxiliary('missingPattern', id))
   return paced
 }
 

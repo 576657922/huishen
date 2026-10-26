@@ -1,3 +1,4 @@
+import { auxiliary } from '@/content/auxiliary'
 /**
  * 应用外壳的短标签。内容（src/content）里已有的直接引用；还没有的几条先放在这里，
  * 标了 TODO(content) 的都已在交付报告里向内容负责人申请，内容加上之后把值换成引用即可。
@@ -13,20 +14,20 @@ export const NAV = {
   help: CRISIS_CARD.title,
   settings: SETTINGS.title,
   /** 标签栏和导航栏的读屏名称（DESIGN.md §11） TODO(content) */
-  label: '主导航',
+  label: auxiliary('navigation'),
   /** 播放器控件的读屏名称（DESIGN.md §11） TODO(content) */
-  playerLabel: '练习控制',
+  playerLabel: auxiliary('playerControls'),
   /** 标志是回到今日的链接（DESIGN.md §8.0） TODO(content) */
-  lockup: '回神 · 今日',
+  lockup: auxiliary('homeLockup'),
   /** 标志里的字，与 logo.svg 一致 */
-  wordmark: '回神',
+  wordmark: auxiliary('brand'),
   /** 桌面导航栏底部的一句（DESIGN.md §5.5） TODO(content) */
-  railNote: '离线可用。练习记录只保存在这台设备上。',
+  railNote: auxiliary('offlineNote'),
   /** 跳过导航、直接到正文的链接（DESIGN.md §11） TODO(content) */
-  skip: '跳到正文',
+  skip: auxiliary('skipContent'),
 } as const
 
 export { SYSTEM }
 
 /** 播放器的读屏名称：「慢呼吸练习」（DESIGN.md §11） TODO(content) */
-export const playerName = (practiceName: string): string => `${practiceName}练习`
+export const playerName = (practiceName: string): string => auxiliary('playerName', practiceName)

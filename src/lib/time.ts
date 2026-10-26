@@ -1,3 +1,4 @@
+import { getLanguage } from './locale'
 export const pad2 = (n: number): string => String(n).padStart(2, '0')
 
 /** 倒计时显示：mm:ss，向上取整，避免最后一秒显示 00:00 */
@@ -15,8 +16,16 @@ export function fmtDuration(sec: number): string {
 /** 「12 分钟」「1 小时 5 分钟」 */
 export function fmtMinutes(sec: number): string {
   const m = Math.round(Math.max(0, sec) / 60)
-  if (m < 60) return `${m} 分钟`
+  const unit = (n: number, name: 'hour' | 'minute'): string => {
+    const text = new Intl.NumberFormat(getLanguage(), {
+      style: 'unit',
+      unit: name,
+      unitDisplay: 'long',
+    }).format(n)
+    return getLanguage() === 'ja' ? text : text.replace(/(\d)(?=\p{Script=Han})/u, '$1 ')
+  }
+  if (m < 60) return unit(m, 'minute')
   const h = Math.floor(m / 60)
   const r = m % 60
-  return r ? `${h} 小时 ${r} 分钟` : `${h} 小时`
+  return r ? `${unit(h, 'hour')} ${unit(r, 'minute')}` : unit(h, 'hour')
 }

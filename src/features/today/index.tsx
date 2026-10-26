@@ -28,6 +28,7 @@ import lake from './images/lake-960.webp'
 import lakeLarge from './images/lake-1536.webp'
 import leaves from './images/leaves-540.webp'
 import water from './images/water-540.webp'
+import { LanguageToggle } from './LanguageToggle'
 import { RecommendationFigure } from './RecommendationFigure'
 import styles from './Today.module.css'
 import { useRecommendationTime } from './useRecommendationTime'
@@ -164,7 +165,7 @@ export function TodayPage() {
       <h1 className="vh" tabIndex={-1}>
         {TODAY.title}
       </h1>
-      <Masthead />
+      <Masthead actions={<LanguageToggle />} />
       <div className={styles.grid}>
         <div className={styles.main}>
           <Dateline date={now} />

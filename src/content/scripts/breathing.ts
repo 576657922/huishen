@@ -1,3 +1,8 @@
+import japanese from '../locales/ja/scripts-breathing.json'
+import { createTranslator } from '../translate'
+
+const tr = createTranslator(japanese)
+
 /**
  * 跟随节拍的三种呼吸：慢呼吸、周期性叹息、箱式呼吸。原创中文引导词，只沿用公开的练习结构。
  * 节拍由画面、提示音和振动来带，人声只是很薄的一层：开头不超过二十五秒的说明，中段一次查看
@@ -47,47 +52,47 @@ const NATURAL_TAIL_SEC = 13
  */
 export const slowScript: GuidedScript = {
   id: 'slow',
-  title: '慢呼吸',
+  title: tr('慢呼吸'),
   minMinutes: 3,
   maxMinutes: 20,
   opening: [
-    { text: '这是慢呼吸，坐着、躺着都可以。', pause: 0.5 },
+    { text: tr('这是慢呼吸，坐着、躺着都可以。'), pause: 0.5 },
     // 安全提示（PRODUCT §10）：开头十秒内，任何档位都说
-    { text: '轻柔地呼吸，不必吸得很深。', pause: 0.5 },
+    { text: tr('轻柔地呼吸，不必吸得很深。'), pause: 0.5 },
     // 默认节拍下，这句正好落在开头放慢的第二次吸气里
-    { text: '吸气用鼻子，让腹部自然起伏。', pause: 0.5 },
-    { text: '节拍开头稍快，会一点点慢下来。', detail: 'standard', pause: 0.5 },
+    { text: tr('吸气用鼻子，让腹部自然起伏。'), pause: 0.5 },
+    { text: tr('节拍开头稍快，会一点点慢下来。'), detail: 'standard', pause: 0.5 },
     // 安全提示：呼吸过度的信号，以及随时可以先不跟节拍
-    { text: '如果头晕，手指、嘴唇发麻，或者不舒服，', pause: 0.4 },
-    { text: '随时可以先不跟节拍，自然地呼吸。' },
+    { text: tr('如果头晕，手指、嘴唇发麻，或者不舒服，'), pause: 0.4 },
+    { text: tr('随时可以先不跟节拍，自然地呼吸。') },
 
     { text: '', pause: 8 },
-    { text: '听得到节拍的话，也可以闭上眼睛，', detail: 'detailed' },
-    { text: '隔一会儿，看一眼屏幕上的提示。', detail: 'detailed' },
-    { text: '鼻子不通的话，也可以用嘴，轻轻地呼吸。', detail: 'detailed', minMinutes: 5 },
+    { text: tr('听得到节拍的话，也可以闭上眼睛，'), detail: 'detailed' },
+    { text: tr('隔一会儿，看一眼屏幕上的提示。'), detail: 'detailed' },
+    { text: tr('鼻子不通的话，也可以用嘴，轻轻地呼吸。'), detail: 'detailed', minMinutes: 5 },
     // 默认速度下，节拍约在一分半时放慢到位，气不够的感觉多从这时开始
     { text: '', pause: 50 },
-    { text: '觉得气不够很常见，不用把每一口吸大。', detail: 'detailed' },
-    { text: '一直这样，可以点「有点急」按钮，节拍会快一点。', detail: 'detailed' },
+    { text: tr('觉得气不够很常见，不用把每一口吸大。'), detail: 'detailed' },
+    { text: tr('一直这样，可以点「有点急」按钮，节拍会快一点。'), detail: 'detailed' },
     // 中段查看：练习中再提醒一次放轻（safety-szulczewski-2019），任何档位都说
     { text: '', pause: 10 },
     { text: '', pause: 55, minMinutes: 5 },
     { text: '', pause: 60, minMinutes: 10 },
     { text: '', pause: 95, minMinutes: 15 },
     { text: '', pause: 100, minMinutes: 20 },
-    { text: '留意一下呼吸，如果有点用力，就放轻一些。' },
-    { text: '跟丢了也没关系，从下一次吸气接上就好。', detail: 'detailed', minMinutes: 5 },
+    { text: tr('留意一下呼吸，如果有点用力，就放轻一些。') },
+    { text: tr('跟丢了也没关系，从下一次吸气接上就好。'), detail: 'detailed', minMinutes: 5 },
     // 十分钟起，约三分之二处再说一次：长时间跟节拍，呼吸容易越来越深
     { text: '', pause: 175, detail: 'standard', minMinutes: 10 },
     { text: '', pause: 110, detail: 'standard', minMinutes: 15 },
     { text: '', pause: 100, detail: 'standard', minMinutes: 20 },
-    { text: '吸气还是轻轻的，不用越吸越深。', detail: 'standard', minMinutes: 10, pause: 0.8 },
-    { text: '走神很自然，发现了，再跟上节拍就好。', detail: 'standard', minMinutes: 10 },
+    { text: tr('吸气还是轻轻的，不用越吸越深。'), detail: 'standard', minMinutes: 10, pause: 0.8 },
+    { text: tr('走神很自然，发现了，再跟上节拍就好。'), detail: 'standard', minMinutes: 10 },
   ],
   sections: [],
   closing: [
-    { text: '最后这一会儿，不用再跟着节拍，自然地呼吸就好。' },
-    { text: '留意一下现在的呼吸，不需要改变它。', detail: 'detailed' },
+    { text: tr('最后这一会儿，不用再跟着节拍，自然地呼吸就好。') },
+    { text: tr('留意一下现在的呼吸，不需要改变它。'), detail: 'detailed' },
     { text: '', pause: NATURAL_TAIL_SEC },
   ],
 }
@@ -98,30 +103,30 @@ export const slowScript: GuidedScript = {
  */
 export const cyclicSighScript: GuidedScript = {
   id: 'cyclic-sigh',
-  title: '周期性叹息',
+  title: tr('周期性叹息'),
   minMinutes: 1,
   maxMinutes: 5,
   opening: [
-    { text: '周期性叹息，可以坐着，也可以躺着。', pause: 0.5 },
+    { text: tr('周期性叹息，可以坐着，也可以躺着。'), pause: 0.5 },
     // 安全提示：不提示吸到最满（safety.notes §2）。「每一轮」开头，听起来是在讲做法，不是当下的口令
-    { text: '每一轮先用鼻子，轻轻吸到七八成满，', pause: 0.4 },
-    { text: '再补一小口，然后用嘴慢慢呼完，不用往外挤。', pause: 0.5 },
+    { text: tr('每一轮先用鼻子，轻轻吸到七八成满，'), pause: 0.4 },
+    { text: tr('再补一小口，然后用嘴慢慢呼完，不用往外挤。'), pause: 0.5 },
     // 安全提示：呼吸过度的信号，以及随时可以先不跟节拍
-    { text: '如果头晕，手指、嘴唇发麻，或者不舒服，', pause: 0.4 },
-    { text: '随时可以先不跟节拍，自然地呼吸。' },
+    { text: tr('如果头晕，手指、嘴唇发麻，或者不舒服，'), pause: 0.4 },
+    { text: tr('随时可以先不跟节拍，自然地呼吸。') },
 
     { text: '', pause: 8, detail: 'standard', minMinutes: 3 },
-    { text: '节拍只是参考，也可以多等一会儿再吸。', detail: 'detailed', minMinutes: 3 },
-    { text: '鼻子不通的话，吸气也可以用嘴。', detail: 'detailed', minMinutes: 3 },
+    { text: tr('节拍只是参考，也可以多等一会儿再吸。'), detail: 'detailed', minMinutes: 3 },
+    { text: tr('鼻子不通的话，吸气也可以用嘴。'), detail: 'detailed', minMinutes: 3 },
     // 中段查看
     { text: '', pause: 56, detail: 'standard', minMinutes: 3 },
     { text: '', pause: 60, detail: 'standard', minMinutes: 5 },
-    { text: '吃力的话，两轮之间可以歇一两口气，再接上。', detail: 'standard', minMinutes: 3 },
+    { text: tr('吃力的话，两轮之间可以歇一两口气，再接上。'), detail: 'standard', minMinutes: 3 },
   ],
   sections: [],
   closing: [
-    { text: '最后这一会儿，不用再跟着节拍，自然地呼吸就好。' },
-    { text: '留意一下现在的呼吸，不需要改变它。', detail: 'detailed', minMinutes: 3 },
+    { text: tr('最后这一会儿，不用再跟着节拍，自然地呼吸就好。') },
+    { text: tr('留意一下现在的呼吸，不需要改变它。'), detail: 'detailed', minMinutes: 3 },
     { text: '', pause: NATURAL_TAIL_SEC, minMinutes: 3 },
   ],
 }
@@ -129,36 +134,36 @@ export const cyclicSighScript: GuidedScript = {
 /** 箱式呼吸：3 / 5 分钟。标准档的查看约在 1:31、2:31 */
 export const boxScript: GuidedScript = {
   id: 'box',
-  title: '箱式呼吸',
+  title: tr('箱式呼吸'),
   minMinutes: 3,
   maxMinutes: 5,
   opening: [
-    { text: '箱式呼吸，坐着或者躺着练都可以。', pause: 0.5 },
+    { text: tr('箱式呼吸，坐着或者躺着练都可以。'), pause: 0.5 },
     // 安全提示（PRODUCT §10）：开头十秒内，任何档位都说
-    { text: '轻柔地呼吸，不必吸得很深。', pause: 0.5 },
-    { text: '停顿时，喉咙放松，不用憋劲。', pause: 0.5 },
+    { text: tr('轻柔地呼吸，不必吸得很深。'), pause: 0.5 },
+    { text: tr('停顿时，喉咙放松，不用憋劲。'), pause: 0.5 },
     // 停顿最容易让人发慌：可以缩短，也可以不停
-    { text: '吃力就停得短一些，也可以不停。', pause: 0.5 },
+    { text: tr('吃力就停得短一些，也可以不停。'), pause: 0.5 },
     // 安全提示：说「先不跟节拍」，不说「停下来」，免得和停顿的「停」混淆
-    { text: '如果头晕、心慌、胸口发紧，或者不舒服，', pause: 0.4 },
-    { text: '随时可以先不跟节拍，自然地呼吸。' },
+    { text: tr('如果头晕、心慌、胸口发紧，或者不舒服，'), pause: 0.4 },
+    { text: tr('随时可以先不跟节拍，自然地呼吸。') },
 
     { text: '', pause: 8, detail: 'standard' },
-    { text: '吸气、停、呼气、停，每一步一样长。', detail: 'detailed' },
-    { text: '听得到节拍的话，也可以闭上眼睛，', detail: 'detailed' },
-    { text: '隔一会儿，看一眼屏幕上的提示。', detail: 'detailed' },
-    { text: '鼻子不通的话，也可以用嘴，轻轻地呼吸。', detail: 'detailed', minMinutes: 5 },
+    { text: tr('吸气、停、呼气、停，每一步一样长。'), detail: 'detailed' },
+    { text: tr('听得到节拍的话，也可以闭上眼睛，'), detail: 'detailed' },
+    { text: tr('隔一会儿，看一眼屏幕上的提示。'), detail: 'detailed' },
+    { text: tr('鼻子不通的话，也可以用嘴，轻轻地呼吸。'), detail: 'detailed', minMinutes: 5 },
     // 中段查看
     { text: '', pause: 57, detail: 'standard' },
     { text: '', pause: 60, detail: 'standard', minMinutes: 5 },
-    { text: '停顿的时候，留意喉咙和肩膀是不是放松的。', detail: 'standard' },
-    { text: '如果一直吃力，下次可以把每一步缩短。', detail: 'detailed' },
-    { text: '走神或跟丢了，从下一次吸气接上就好。', detail: 'detailed', minMinutes: 5 },
+    { text: tr('停顿的时候，留意喉咙和肩膀是不是放松的。'), detail: 'standard' },
+    { text: tr('如果一直吃力，下次可以把每一步缩短。'), detail: 'detailed' },
+    { text: tr('走神或跟丢了，从下一次吸气接上就好。'), detail: 'detailed', minMinutes: 5 },
   ],
   sections: [],
   closing: [
-    { text: '最后这一会儿，不用再跟着节拍，自然地呼吸就好。' },
-    { text: '留意一下现在的呼吸，不需要改变它。', detail: 'detailed' },
+    { text: tr('最后这一会儿，不用再跟着节拍，自然地呼吸就好。') },
+    { text: tr('留意一下现在的呼吸，不需要改变它。'), detail: 'detailed' },
     { text: '', pause: NATURAL_TAIL_SEC },
   ],
 }

@@ -3,6 +3,7 @@
  * 练习、声音的中文名由调用方传入（来自 content），数据层不依赖内容层的实现。
  */
 import type { AmbienceId, MusicId } from '@/audio/types'
+import { auxiliary } from '@/content/auxiliary'
 import type { PracticeId } from '@/content/types'
 import { dayKey } from '@/lib/date'
 import { round1 } from '@/lib/math'
@@ -58,23 +59,23 @@ export function toJSON(records: readonly SessionRecord[], meta: ExportMeta = {})
 /* ---------- CSV ---------- */
 
 export const CSV_HEADERS = [
-  '日期',
-  '开始时间',
-  '练习',
-  '计划分钟',
-  '实际分钟',
-  '完成',
-  '回神次数',
-  '数息准确率',
-  '无效轮数',
-  '呼吸轮数',
-  '每分钟次数',
-  '练习前紧张度',
-  '练习后紧张度',
-  '练完感觉',
-  '声景',
-  '音乐',
-  '备注',
+  auxiliary('exportDate'),
+  auxiliary('exportStart'),
+  auxiliary('exportPractice'),
+  auxiliary('exportPlanned'),
+  auxiliary('exportActual'),
+  auxiliary('exportCompleted'),
+  auxiliary('exportMarks'),
+  auxiliary('exportAccuracy'),
+  auxiliary('exportInvalid'),
+  auxiliary('exportBreaths'),
+  auxiliary('perMinute'),
+  auxiliary('exportPre'),
+  auxiliary('exportPost'),
+  auxiliary('feeling'),
+  auxiliary('soundscape'),
+  auxiliary('exportMusic'),
+  auxiliary('exportNote'),
 ] as const
 
 /** id → 中文名：普通对象、Map 或函数都可以，调用方手里是哪种就传哪种 */
@@ -93,10 +94,10 @@ export interface CsvLabels {
 
 // 与练习后点选的四个选项同名（PRODUCT.md §6）
 const FEELING_NAMES: Record<Feeling, string> = {
-  calmer: '更平静',
-  same: '差不多',
-  tenser: '更紧张',
-  unwell: '很不舒服',
+  calmer: auxiliary('calmer'),
+  same: auxiliary('same'),
+  tenser: auxiliary('tenser'),
+  unwell: auxiliary('unwell'),
 }
 
 /**
@@ -148,7 +149,7 @@ function csvRow(r: SessionRecord, labels: CsvLabels): string[] {
     nameOf(labels.practice, r.practiceId) ?? r.practiceId,
     r.plannedSec > 0 ? String(round1(r.plannedSec / 60)) : '',
     String(round1(r.actualSec / 60)),
-    r.completed ? '是' : '否',
+    r.completed ? auxiliary('yes') : auxiliary('no'),
     r.marks ? String(r.marks.length) : '',
     accuracy === null ? '' : `${Math.round(accuracy * 100)}%`,
     // 引擎记下点得太快的轮之前的数息记录按 0 计，与统计一致
@@ -195,16 +196,14 @@ export const MAX_IMPORT_ISSUES = 20
 /** 读入备份文件：接受本应用导出的 JSON，或直接是记录数组。每条记录都重新校验 */
 export function parseImport(text: string): ImportResult {
   const source = text.replace(/^\uFEFF/, '').trim()
-  if (!source) return failure('文件是空的')
-  if (source.length > MAX_IMPORT_CHARS) return failure('文件太大，无法导入')
+  if (!source) return failure(auxiliary('emptyFile'))
+  if (source.length > MAX_IMPORT_CHARS) return failure(auxiliary('largeFile'))
   let data: unknown
   try {
     data = JSON.parse(source)
   } catch {
     return failure(
-      source.startsWith(`${CSV_HEADERS[0]},`)
-        ? 'CSV 文件只用于查看，导入请选择 JSON 备份文件'
-        : '无法读取：文件不是有效的 JSON',
+      source.startsWith(`${CSV_HEADERS[0]},`) ? auxiliary('csvReadOnly') : auxiliary('invalidJSON'),
     )
   }
   const errors: string[] = []
@@ -218,9 +217,9 @@ export function parseImport(text: string): ImportResult {
       continue
     }
     invalid++
-    if (invalid <= MAX_IMPORT_ISSUES) errors.push(`第 ${index + 1} 条记录无法识别，已跳过`)
+    if (invalid <= MAX_IMPORT_ISSUES) errors.push(auxiliary('skippedRecord', index + 1))
   }
-  if (invalid > MAX_IMPORT_ISSUES) errors.push(`另有 ${invalid - MAX_IMPORT_ISSUES} 条记录无法识别，已跳过`)
+  if (invalid > MAX_IMPORT_ISSUES) errors.push(auxiliary('skippedRecords', invalid - MAX_IMPORT_ISSUES))
   return { records, errors, invalid }
 }
 
@@ -230,12 +229,11 @@ function recordsOf(data: unknown, errors: string[]): unknown[] {
     errors.push(message)
     return []
   }
-  if (!isPlainObject(data)) return issue('文件里没有练习记录')
-  if (data.app !== undefined && data.app !== 'huishen') return issue('这不是回神导出的文件')
-  if (data.kind !== undefined && data.kind !== 'records') return issue('这个文件不是练习记录')
-  if (!Array.isArray(data.records)) return issue('文件里没有练习记录')
-  if (typeof data.version === 'number' && data.version > EXPORT_VERSION)
-    errors.push('文件来自更新版本的回神，部分记录可能无法导入')
+  if (!isPlainObject(data)) return issue(auxiliary('noRecords'))
+  if (data.app !== undefined && data.app !== 'huishen') return issue(auxiliary('wrongApp'))
+  if (data.kind !== undefined && data.kind !== 'records') return issue(auxiliary('wrongFile'))
+  if (!Array.isArray(data.records)) return issue(auxiliary('noRecords'))
+  if (typeof data.version === 'number' && data.version > EXPORT_VERSION) errors.push(auxiliary('newerFile'))
   return data.records
 }
 
@@ -245,7 +243,7 @@ const failure = (message: string): ImportResult => ({ records: [], errors: [mess
 
 /** 「回神记录-2026-10-22.json」 */
 export function exportFileName(ext: 'json' | 'csv', now: Date = new Date()): string {
-  return `回神记录-${dayKey(now)}.${ext}`
+  return auxiliary('recordsFile', dayKey(now), ext)
 }
 
 // 立即撤销会让 Safari 和旧版 Firefox 的下载落空，所以留足时间再释放

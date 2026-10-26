@@ -1,3 +1,8 @@
+import japanese from '../locales/ja/scripts-grounding.json'
+import { createTranslator } from '../translate'
+
+const tr = createTranslator(japanese)
+
 /**
  * 落地练习（60 秒）：睁着眼睛，把注意力放到身体外面——双脚、眼前的东西、周围的声音、一口水。
  * 原创中文引导词。这是「不舒服？」和「现在有点难」里的出口，不是一项普通练习。
@@ -29,25 +34,25 @@ import type { GuidedScript } from '@/content/types'
 
 export const groundingScript: GuidedScript = {
   id: 'grounding',
-  title: '落地练习',
+  title: tr('落地练习'),
   minMinutes: 1,
   maxMinutes: 1,
   opening: [
     // 和停止指引的顺序一致：先睁眼，再恢复自然呼吸
-    { text: '这是落地练习，睁着眼睛做。', pause: 0.5 },
+    { text: tr('这是落地练习，睁着眼睛做。'), pause: 0.5 },
     // 安全提示：恢复自然呼吸，不跟任何节拍，不刻意深呼吸
-    { text: '呼吸不用刻意调整，自然就好。', pause: 0.5 },
+    { text: tr('呼吸不用刻意调整，自然就好。'), pause: 0.5 },
     // 头晕、快要晕倒的人留在躺着的姿势
-    { text: '躺着的话，可以慢慢坐起来；头晕就先躺着。', pause: 0.5 },
-    { text: '双脚往下踩一踩，感受身下的支撑。', pause: 0.6 },
-    { text: '慢慢看看四周，', pause: 0.5 },
-    { text: '说出你看到的五样东西，心里说也可以。', pause: 5.4 },
+    { text: tr('躺着的话，可以慢慢坐起来；头晕就先躺着。'), pause: 0.5 },
+    { text: tr('双脚往下踩一踩，感受身下的支撑。'), pause: 0.6 },
+    { text: tr('慢慢看看四周，'), pause: 0.5 },
+    { text: tr('说出你看到的五样东西，心里说也可以。'), pause: 5.4 },
   ],
   sections: [],
   closing: [
-    { text: '听一听周围的声音。', pause: 2 },
-    { text: '手边有水的话，坐着慢慢喝一小口。', pause: 3 },
-    { text: '还是很难受，可以找人聊聊，或者打求助电话。', pause: 0.6 },
-    { text: '最后，再踩一踩，等钟声响起。', pause: 0 },
+    { text: tr('听一听周围的声音。'), pause: 2 },
+    { text: tr('手边有水的话，坐着慢慢喝一小口。'), pause: 3 },
+    { text: tr('还是很难受，可以找人聊聊，或者打求助电话。'), pause: 0.6 },
+    { text: tr('最后，再踩一踩，等钟声响起。'), pause: 0 },
   ],
 }

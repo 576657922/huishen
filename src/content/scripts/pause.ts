@@ -1,3 +1,8 @@
+import japanese from '../locales/ja/scripts-pause.json'
+import { createTranslator } from '../translate'
+
+const tr = createTranslator(japanese)
+
 /**
  * 一分钟停一停：停 · 吸 · 观 · 行。原创中文引导词，只沿用公开的练习结构。
  *
@@ -27,45 +32,45 @@ import type { GuidedScript } from '@/content/types'
 
 export const pauseScript: GuidedScript = {
   id: 'pause',
-  title: '一分钟停一停',
+  title: tr('一分钟停一停'),
   minMinutes: 1,
   maxMinutes: 1,
-  opening: [{ text: '这是一分钟停一停。看着屏幕做就好。', pause: 0.8 }],
+  opening: [{ text: tr('这是一分钟停一停。看着屏幕做就好。'), pause: 0.8 }],
   sections: [
     {
       id: 'stop',
-      title: '停',
+      title: tr('停'),
       weight: 0.5,
-      intro: [{ text: '先停下手头的事。', pause: 0.8 }],
+      intro: [{ text: tr('先停下手头的事。'), pause: 0.8 }],
     },
     {
       id: 'breathe',
-      title: '吸',
+      title: tr('吸'),
       weight: 1,
       intro: [
         // 安全提示：先说不必很深，再请人吸气；呼完回到平常的呼吸
-        { text: '下一口气，比平时稍满一点，不必很深。', pause: 0.5 },
-        { text: '轻轻吸进来。', pause: 1.6 },
-        { text: '再慢慢呼出去，让呼吸恢复平常。', pause: 1.2 },
+        { text: tr('下一口气，比平时稍满一点，不必很深。'), pause: 0.5 },
+        { text: tr('轻轻吸进来。'), pause: 1.6 },
+        { text: tr('再慢慢呼出去，让呼吸恢复平常。'), pause: 1.2 },
       ],
     },
     {
       id: 'observe',
-      title: '观',
+      title: tr('观'),
       weight: 1.5,
       intro: [
-        { text: '留意一下：身体哪里紧，哪里松？', pause: 2.5 },
-        { text: '有什么情绪，什么念头？', pause: 2.5 },
-        { text: '不需要改变什么，知道就好。', pause: 0.6 },
+        { text: tr('留意一下：身体哪里紧，哪里松？'), pause: 2.5 },
+        { text: tr('有什么情绪，什么念头？'), pause: 2.5 },
+        { text: tr('不需要改变什么，知道就好。'), pause: 0.6 },
       ],
     },
     {
       id: 'proceed',
-      title: '行',
+      title: tr('行'),
       weight: 0,
       intro: [
-        { text: '发现走神的那一刻，就是回神。', pause: 1 },
-        { text: '等钟声响起，再回到手头的事。', pause: 0 },
+        { text: tr('发现走神的那一刻，就是回神。'), pause: 1 },
+        { text: tr('等钟声响起，再回到手头的事。'), pause: 0 },
       ],
     },
   ],

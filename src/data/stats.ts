@@ -1,3 +1,4 @@
+import { auxiliary } from '@/content/auxiliary'
 /**
  * 练习统计。全部是纯函数，「现在」由调用方传入：便于测试，也让同一屏上的数字基于同一时刻
  * （monthCalendar 不传时取当前时间，只用来标出今天）。
@@ -272,11 +273,11 @@ export function monthCalendar(
 /** 某月 1 日的本地零点。用 setFullYear 而不是 new Date(year, …)：后者会把 0–99 年当成 1900 年代 */
 function firstOfMonth(year: number, monthIndex: number): Date {
   if (!Number.isInteger(year) || !Number.isInteger(monthIndex)) {
-    throw new RangeError(`年份和月份应为整数：${year}、${monthIndex}`)
+    throw new RangeError(auxiliary('invalidMonth', year, monthIndex))
   }
   const first = new Date(2000, 0, 1)
   first.setFullYear(year, monthIndex, 1)
-  if (Number.isNaN(first.getTime())) throw new RangeError(`超出日期范围：${year} 年 ${monthIndex + 1} 月`)
+  if (Number.isNaN(first.getTime())) throw new RangeError(auxiliary('dateRange', year, monthIndex + 1))
   return first
 }
 
@@ -689,10 +690,10 @@ export function computeStats(records: Records, now: Date): RecordStats {
 
 function toKey(x: Date | string): string {
   if (typeof x === 'string') {
-    if (!isDayKey(x)) throw new RangeError(`日期格式应为 YYYY-MM-DD：${x}`)
+    if (!isDayKey(x)) throw new RangeError(auxiliary('dateFormat', x))
     return x
   }
-  if (Number.isNaN(x.getTime())) throw new RangeError('无效的日期')
+  if (Number.isNaN(x.getTime())) throw new RangeError(auxiliary('invalidDate'))
   return dayKey(x)
 }
 

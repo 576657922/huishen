@@ -222,7 +222,27 @@ describe('字体子集', () => {
     })
   })
 
-  it('三个文件加起来不超过 900 KB', () => {
+  it('Japanese display subsets cover translated Han, kana and player phase labels', () => {
+    const display = charsOf('public/fonts/display-ja.woff2')
+    const messages = import.meta.glob<Record<string, string>>('../content/locales/ja/*.json', {
+      eager: true,
+      import: 'default',
+    })
+    const missing = new Set<string>()
+    for (const dictionary of Object.values(messages)) {
+      for (const text of Object.values(dictionary)) {
+        for (const char of text) {
+          if (/[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}]/u.test(char) && !display.has(char))
+            missing.add(char)
+        }
+      }
+    }
+    expect([...missing]).toEqual([])
+    const light = charsOf('public/fonts/display-ja-light.woff2')
+    for (const char of '吸う足す吐く止める準備') expect(light.has(char), char).toBe(true)
+  })
+
+  it('中日文的五个字体文件加起来不超过 900 KB', () => {
     const sizes = fonts.map(f => bytesOf(f.out))
     for (const size of sizes) expect(size).toBeGreaterThan(1000)
     expect(sizes.reduce((a, b) => a + b, 0)).toBeLessThanOrEqual(900 * 1024)

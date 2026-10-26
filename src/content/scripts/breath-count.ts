@@ -1,3 +1,8 @@
+import japanese from '../locales/ja/scripts-breath-count.json'
+import { createTranslator } from '../translate'
+
+const tr = createTranslator(japanese)
+
 /**
  * 数息（5 / 10 / 15 分钟）。原创中文引导词，只沿用公开的练习结构和任务规则，不翻译、不改写任何现成录音。
  *
@@ -38,100 +43,104 @@ import type { GuidedScript } from '@/content/types'
 
 export const breathCountScript: GuidedScript = {
   id: 'breath-count',
-  title: '数息',
+  title: tr('数息'),
   minMinutes: 5,
   maxMinutes: 15,
   opening: [
     // 到达：命名、坐姿
-    { text: '这是数息练习。', say: '这是数呼吸的练习。' },
-    { text: '找一个舒服、挺直的坐姿。' },
+    { text: tr('这是数息练习。'), say: tr('这是数呼吸的练习。') },
+    { text: tr('找一个舒服、挺直的坐姿。') },
     // 停止指引：先给无条件的许可，再说出现不适时怎么做
-    { text: '任何时候，都可以调整姿势，或者停下来。' },
-    { text: '如果头晕、心慌，或者很不舒服，就停下来，' },
-    { text: '把注意力放到脚底，或者周围的声音上。' },
+    { text: tr('任何时候，都可以调整姿势，或者停下来。') },
+    { text: tr('如果头晕、心慌，或者很不舒服，就停下来，') },
+    { text: tr('把注意力放到脚底，或者周围的声音上。') },
     // 眼睛和手机，再安顿身体。文字引导：目光落在屏幕上，全程不闭眼（meditation-wong-2018：至少半睁）
-    { text: '这个练习睁着眼做，目光落在屏幕上。' },
-    { text: '眼睛半睁就可以，视线放松一些。', detail: 'detailed', minMinutes: 10 },
-    { text: '手机可以放在腿上，左右两边都好点。', detail: 'standard', minMinutes: 10 },
-    { text: '坐椅子的话，可以不靠椅背。', detail: 'detailed', minMinutes: 10 },
-    { text: '肩膀放下来，手臂不用使劲。', detail: 'detailed', minMinutes: 10 },
-    { text: '感受身体的重量落在座位上，', detail: 'standard', minMinutes: 10 },
-    { text: '双脚踩着地面。', detail: 'standard', minMinutes: 10, pause: 3 },
+    { text: tr('这个练习睁着眼做，目光落在屏幕上。') },
+    { text: tr('眼睛半睁就可以，视线放松一些。'), detail: 'detailed', minMinutes: 10 },
+    { text: tr('手机可以放在腿上，左右两边都好点。'), detail: 'standard', minMinutes: 10 },
+    { text: tr('坐椅子的话，可以不靠椅背。'), detail: 'detailed', minMinutes: 10 },
+    { text: tr('肩膀放下来，手臂不用使劲。'), detail: 'detailed', minMinutes: 10 },
+    { text: tr('感受身体的重量落在座位上，'), detail: 'standard', minMinutes: 10 },
+    { text: tr('双脚踩着地面。'), detail: 'standard', minMinutes: 10, pause: 3 },
     // 找到呼吸：留出一两口气的时间去感受
-    { text: '感受鼻孔和上唇之间，气息进来、出去。', pause: 7 },
-    { text: '吸气时也许凉一点，呼气时暖一点。', detail: 'detailed', minMinutes: 10, pause: 4 },
-    { text: '如果感觉很淡，也没关系。', detail: 'standard', minMinutes: 10 },
-    { text: '不需要控制呼吸，快也好，慢也好，都允许。' },
-    { text: '呼吸有长有短，有时会停一下，都很自然。', detail: 'detailed', minMinutes: 10 },
+    { text: tr('感受鼻孔和上唇之间，气息进来、出去。'), pause: 7 },
+    { text: tr('吸气时也许凉一点，呼气时暖一点。'), detail: 'detailed', minMinutes: 10, pause: 4 },
+    { text: tr('如果感觉很淡，也没关系。'), detail: 'standard', minMinutes: 10 },
+    { text: tr('不需要控制呼吸，快也好，慢也好，都允许。') },
+    { text: tr('呼吸有长有短，有时会停一下，都很自然。'), detail: 'detailed', minMinutes: 10 },
     // 怎么数：规则和一轮示范
-    { text: '先看一遍做法，现在还不用点。' },
-    { text: '一吸一呼，算一口气。' },
-    { text: '每次呼气结束，心里念一个数字。' },
-    { text: '不用赶，等呼气自然结束再念。', detail: 'detailed' },
-    { text: '第一到第八口气，点左边；' },
-    { text: '第九口气，点右边，然后回到「一」。', pause: 3 },
-    { text: '就像这样：八，左边；九，右边；一，左边。', detail: 'standard', minMinutes: 10 },
-    { text: '只在心里数，不用掰手指。', say: '只在心里默念，不用掰手指。' },
-    { text: '注意力在呼吸上，数字只是轻轻跟着。', detail: 'standard', minMinutes: 10 },
-    { text: '数字一乱，往往就是走神了。', detail: 'detailed', minMinutes: 10 },
+    { text: tr('先看一遍做法，现在还不用点。') },
+    { text: tr('一吸一呼，算一口气。') },
+    { text: tr('每次呼气结束，心里念一个数字。') },
+    { text: tr('不用赶，等呼气自然结束再念。'), detail: 'detailed' },
+    { text: tr('第一到第八口气，点左边；') },
+    { text: tr('第九口气，点右边，然后回到「一」。'), pause: 3 },
+    { text: tr('就像这样：八，左边；九，右边；一，左边。'), detail: 'standard', minMinutes: 10 },
+    { text: tr('只在心里数，不用掰手指。'), say: tr('只在心里默念，不用掰手指。') },
+    { text: tr('注意力在呼吸上，数字只是轻轻跟着。'), detail: 'standard', minMinutes: 10 },
+    { text: tr('数字一乱，往往就是走神了。'), detail: 'detailed', minMinutes: 10 },
     // 走神与回神
-    { text: '数着数着走神了，这很自然。', detail: 'standard' },
-    { text: '刚开始，常常数不到九就走神。', detail: 'detailed' },
-    { text: '忘了数到几，或者数过了九，' },
+    { text: tr('数着数着走神了，这很自然。'), detail: 'standard' },
+    { text: tr('刚开始，常常数不到九就走神。'), detail: 'detailed' },
+    { text: tr('忘了数到几，或者数过了九，') },
     {
-      text: '就轻轻放下念头，点下方的「数乱了」，回到「一」。',
-      say: '就轻轻放下念头，点下方的按钮，回到一。',
+      text: tr('就轻轻放下念头，点下方的「数乱了」，回到「一」。'),
+      say: tr('就轻轻放下念头，点下方的按钮，回到一。'),
     },
-    { text: '拿不准数到几，也点「数乱了」。', detail: 'detailed', say: '拿不准数到几，也点下方的按钮。' },
-    { text: '发现走神的那一刻，就是回神。', pause: 3 },
+    {
+      text: tr('拿不准数到几，也点「数乱了」。'),
+      detail: 'detailed',
+      say: tr('拿不准数到几，也点下方的按钮。'),
+    },
+    { text: tr('发现走神的那一刻，就是回神。'), pause: 3 },
     // 计数中可能遇到的情况，在这里先说
-    { text: '中途犯困，可以把眼睛睁大一点。', detail: 'standard', minMinutes: 10 },
-    { text: '无聊、烦躁也会来，不用赶它走。', detail: 'standard', minMinutes: 10 },
-    { text: '发现自己在控制呼吸，就放开它。', detail: 'detailed', minMinutes: 10 },
+    { text: tr('中途犯困，可以把眼睛睁大一点。'), detail: 'standard', minMinutes: 10 },
+    { text: tr('无聊、烦躁也会来，不用赶它走。'), detail: 'standard', minMinutes: 10 },
+    { text: tr('发现自己在控制呼吸，就放开它。'), detail: 'detailed', minMinutes: 10 },
     // 开始
-    { text: '接下来大多是安静的。', detail: 'standard', minMinutes: 10 },
-    { text: '听到提示音，就开始数。' },
+    { text: tr('接下来大多是安静的。'), detail: 'standard', minMinutes: 10 },
+    { text: tr('听到提示音，就开始数。') },
   ],
   // 计数中的三段都叫「数息」：播放器上的段落名保持不变，免得看到别的字样，误以为要从头数。
   // 这三段开头的话都是 core 的短句，不问数到几，任何档位听到的都一样
   sections: [
     {
       id: 'count',
-      title: '数息',
+      title: tr('数息'),
       weight: 1,
       minSilence: 40,
-      intro: [{ text: '下一口气，就是「一」。' }],
+      intro: [{ text: tr('下一口气，就是「一」。') }],
     },
     {
       id: 'recount',
-      title: '数息',
+      title: tr('数息'),
       weight: 1,
       minSilence: 40,
-      intro: [{ text: '接着往下数。' }],
+      intro: [{ text: tr('接着往下数。') }],
     },
     {
       id: 'steady',
-      title: '数息',
+      title: tr('数息'),
       weight: 0.85,
       minSilence: 40,
       omitAtOrBelow: 5,
-      intro: [{ text: '感受着气息，接着数下去。' }],
+      intro: [{ text: tr('感受着气息，接着数下去。') }],
     },
     {
       id: 'release',
-      title: '放下数字',
+      title: tr('放下数字'),
       // 权重为 0：停止计数后只留固定的一小段安静，不随时长变长，把时间留给计数
       weight: 0,
       minSilence: 10,
       intro: [
-        { text: '数到这里就好，屏幕也不用再点了。' },
-        { text: '把注意力放宽，感受整个身体坐在这里。', detail: 'standard', minMinutes: 10, pause: 8 },
+        { text: tr('数到这里就好，屏幕也不用再点了。') },
+        { text: tr('把注意力放宽，感受整个身体坐在这里。'), detail: 'standard', minMinutes: 10, pause: 8 },
       ],
     },
   ],
   closing: [
-    { text: '留意一下此刻的感觉，不需要评判它。', detail: 'detailed', minMinutes: 10 },
-    { text: '刚才每一次发现走神，都是一次回神。', detail: 'standard', minMinutes: 10 },
-    { text: '等钟声响起，再慢慢活动身体。' },
+    { text: tr('留意一下此刻的感觉，不需要评判它。'), detail: 'detailed', minMinutes: 10 },
+    { text: tr('刚才每一次发现走神，都是一次回神。'), detail: 'standard', minMinutes: 10 },
+    { text: tr('等钟声响起，再慢慢活动身体。') },
   ],
 }
