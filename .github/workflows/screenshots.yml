@@ -1,0 +1,51 @@
+name: README 截图
+
+# 手动运行：启动开发服务器，用 scripts/dev-shot.mjs 截取演示数据下的手机界面（中文、日文），提交到 docs/screenshots/。
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  screenshots:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 安装中日文字体
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends fonts-noto-cjk
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      - name: 截图（390×844，2 倍像素）
+        run: |
+          nohup npx vite --port 5173 --strictPort > /tmp/vite.log 2>&1 &
+          for i in $(seq 1 60); do
+            curl -sf http://localhost:5173/ > /dev/null && break
+            sleep 1
+          done
+          for lang in zh-CN ja; do
+            for page in today practices records evidence; do
+              path="/$page"
+              [ "$page" = today ] && path="/"
+              node scripts/dev-shot.mjs "http://localhost:5173${path}?seed=demo&lang=${lang}" "docs/screenshots/${lang}-${page}.png" phone --wait=1500
+            done
+          done
+
+      - name: 提交截图（无变化则跳过）
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/screenshots
+          git diff --cached --quiet || {
+            git commit -m "docs: 更新 README 截图"
+            git push
+          }
