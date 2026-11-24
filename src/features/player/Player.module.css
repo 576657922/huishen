@@ -32,26 +32,50 @@
   justify-content: space-between;
   gap: var(--sp-3);
 }
+/* 悬浮雕塑感深潭控制胶囊坞：彻底告别 3 列带框表格 */
 .controls {
   display: flex;
-  border-top: var(--hair) solid var(--rule);
-  border-bottom: var(--hair) solid var(--rule);
+  gap: 4px;
+  width: 100%;
+  max-width: 440px;
+  margin-inline: auto;
+  padding: 5px;
+  border-radius: var(--r-full);
+  background: rgb(255 255 255 / 0.045);
+  box-shadow:
+    inset 0 0 0 var(--hair) rgb(255 255 255 / 0.1),
+    0 18px 40px -16px rgb(0 0 0 / 0.7);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
 }
 .controls > button {
   flex: 1;
   min-width: 0;
-  min-height: var(--controls-h);
+  min-height: 48px;
+  padding-inline: var(--sp-2);
+  border-radius: var(--r-full);
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: var(--sp-1);
-  font-size: var(--fs-body);
-}
-.controls > :where(button) + button {
-  border-left: var(--hair) solid var(--rule);
+  gap: 6px;
+  font-size: var(--fs-caption);
+  letter-spacing: 0.05em;
+  color: var(--ink-2);
+  transition:
+    background-color var(--dur-state) var(--ease-expo),
+    color var(--dur-state) var(--ease-expo),
+    transform var(--dur-press) var(--ease-expo);
 }
 .controls > button:active {
-  background: var(--wash-2);
+  background: rgb(255 255 255 / 0.12);
+  color: var(--ink);
+  transform: scale(0.97);
+}
+@media (hover: hover) and (pointer: fine) {
+  .controls > button:hover {
+    background: rgb(255 255 255 / 0.075);
+    color: var(--ink);
+  }
 }
 .focusStage {
   justify-content: flex-start;
@@ -59,14 +83,67 @@
 }
 .focusKey,
 .countPad > button {
-  background: var(--paper-raised);
-  border: var(--hair) solid var(--line);
-  border-radius: var(--r-3);
+  position: relative;
+  overflow: hidden;
+  background-color: rgb(255 255 255 / 0.03);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  /* Subtle architectural registration ticks in the four interior corners of the press-plate */
+  background-image:
+    radial-gradient(ellipse 60% 50% at 50% 50%, rgb(225 232 242 / 0.05), transparent 72%),
+    linear-gradient(rgb(241 242 238 / 0.14), rgb(241 242 238 / 0.14)),
+    linear-gradient(rgb(241 242 238 / 0.14), rgb(241 242 238 / 0.14)),
+    linear-gradient(rgb(241 242 238 / 0.14), rgb(241 242 238 / 0.14)),
+    linear-gradient(rgb(241 242 238 / 0.14), rgb(241 242 238 / 0.14)),
+    linear-gradient(rgb(241 242 238 / 0.14), rgb(241 242 238 / 0.14)),
+    linear-gradient(rgb(241 242 238 / 0.14), rgb(241 242 238 / 0.14)),
+    linear-gradient(rgb(241 242 238 / 0.14), rgb(241 242 238 / 0.14)),
+    linear-gradient(rgb(241 242 238 / 0.14), rgb(241 242 238 / 0.14));
+  background-size:
+    100% 100%,
+    10px 1px,
+    1px 10px,
+    10px 1px,
+    1px 10px,
+    10px 1px,
+    1px 10px,
+    10px 1px,
+    1px 10px;
+  background-position:
+    0 0,
+    18px 18px,
+    18px 18px,
+    calc(100% - 18px) 18px,
+    calc(100% - 18px) 18px,
+    18px calc(100% - 18px),
+    18px calc(100% - 18px),
+    calc(100% - 18px) calc(100% - 18px),
+    calc(100% - 18px) calc(100% - 18px);
+  background-repeat: no-repeat;
+  border: var(--hair) solid rgb(241 242 238 / 0.12);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.06);
+  border-radius: var(--r-4);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: var(--sp-3);
+  transition:
+    background-color var(--dur-state) var(--ease-expo),
+    border-color var(--dur-state) var(--ease-expo),
+    transform var(--dur-press) var(--ease-expo);
+}
+.focusKey:active,
+.countPad > button:active {
+  background-color: rgb(255 255 255 / 0.07);
+  transform: scale(0.99);
+}
+@media (hover: hover) and (pointer: fine) {
+  .focusKey:hover,
+  .countPad > button:hover {
+    background-color: rgb(255 255 255 / 0.05);
+    border-color: rgb(241 242 238 / 0.24);
+  }
 }
 .focusKey {
   flex: 1;
@@ -74,15 +151,36 @@
   min-height: calc(var(--sp-20) * 3);
   margin-top: var(--sp-2);
 }
-.focusKey > span:first-child {
+.focusLabel {
   font-family: var(--font-display);
   font-size: var(--fs-title);
   font-weight: var(--w-semibold);
   letter-spacing: var(--tr-key);
+  margin-right: calc(-1 * var(--tr-key));
 }
-.focusKey:active,
-.countPad > button:active {
-  background: var(--wash-2);
+.markRipple {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  border-radius: var(--r-full);
+  border: 1px solid var(--line);
+  pointer-events: none;
+  animation: mark-ripple 440ms var(--ease-standard) forwards;
+}
+@keyframes mark-ripple {
+  from {
+    transform: scale(0.55);
+    opacity: 0.55;
+  }
+  to {
+    transform: scale(1.75);
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .markRipple {
+    display: none;
+  }
 }
 .focusCaption {
   min-height: calc(var(--sp-4) * 3.5);
@@ -120,20 +218,53 @@
   line-height: var(--lh-title);
   margin-top: var(--sp-10);
 }
+@media (min-width: 768px) {
+  .guidedCaption {
+    font-size: var(--fs-title);
+    line-height: 2.25rem;
+  }
+}
 .progress {
   display: block;
   width: 100%;
-  margin-block: var(--sp-4);
+  margin-block: var(--sp-5);
+  overflow: visible;
+}
+.gridRule {
+  stroke: var(--grid-major);
+  stroke-width: 1;
+  fill: none;
 }
 .track {
   stroke: var(--line);
   stroke-width: 1;
   fill: none;
 }
+.wash {
+  fill: var(--trace-fill);
+}
+.futureTrace {
+  stroke: var(--trace-future);
+  stroke-width: 1.5;
+  stroke-dasharray: 2 5;
+  stroke-linecap: round;
+  fill: none;
+}
 .trace {
   stroke: var(--trace);
   stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
   fill: none;
+}
+.bellDone {
+  fill: var(--trace);
+}
+.bellNext {
+  fill: var(--line);
+}
+.dotRing {
+  fill: var(--paper);
 }
 .dot {
   fill: var(--now);
@@ -154,18 +285,23 @@
 }
 .data {
   margin-top: var(--sp-6);
-  border-top: var(--hair) solid var(--ink);
-  padding-top: var(--sp-3);
+  padding: var(--sp-5);
+  border-radius: var(--r-3);
+  background: var(--paper-raised);
+  box-shadow: inset 0 0 0 var(--hair) var(--surface-border);
 }
 .week {
-  margin-top: var(--sp-6);
-  padding-block: var(--sp-3);
-  border-block: var(--hair) solid var(--rule);
+  margin-top: var(--sp-4);
+  padding: var(--sp-4) var(--sp-5);
+  border-radius: var(--r-3);
+  background: var(--paper-sunk);
 }
 .gentler {
-  border-top: var(--hair) solid var(--ink);
   margin-top: var(--sp-6);
-  padding-top: var(--sp-4);
+  padding: var(--sp-5);
+  border-radius: var(--r-3);
+  background: var(--paper-raised);
+  box-shadow: inset 0 0 0 var(--hair) var(--surface-border);
 }
 .gentler h2 {
   font-size: var(--fs-name);
@@ -178,10 +314,18 @@
 .note {
   margin-top: var(--sp-8);
 }
+.summaryMeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  margin-top: var(--sp-3);
+}
 .summaryDock {
   display: flex;
   flex-direction: column;
   gap: var(--sp-2);
+  margin-top: var(--sp-4);
 }
 @media (min-width: 768px) {
   .hudUnwell {
@@ -222,6 +366,16 @@
   line-height: var(--lh-readout);
 }
 
+@media (max-width: 767px) {
+  .controls > button {
+    flex-direction: column;
+    gap: 3px;
+    min-height: 52px;
+    font-size: var(--fs-micro);
+    line-height: 1.1;
+    white-space: nowrap;
+  }
+}
 /* Japanese labels need a full line while preserving the four existing controls. */
 :global(html:lang(ja)) .controls > button {
   flex-direction: column;

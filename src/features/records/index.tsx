@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { PageFrame } from '@/app/layout'
 import { getRepo } from '@/app/services'
 import { DETAIL, PLAYER, PROGRAM, RECORDS, SETTINGS, SUMMARY } from '@/content/copy'
@@ -21,10 +21,12 @@ import {
   useToday,
 } from '@/data'
 import { addDays, dayKey, fmtDate, fmtWhen, parseDayKey } from '@/lib/date'
-import { fmtMinutes } from '@/lib/time'
+import { getLanguage } from '@/lib/locale'
+import { fmtMinutes, pad2 } from '@/lib/time'
 import {
   Button,
   ConfirmDialog,
+  CountRows,
   DisclosureRow,
   DotPlot,
   EmptyState,
@@ -33,8 +35,10 @@ import {
   ListGroup,
   MonthCalendar,
   PageHead,
+  PracticeBars,
   Row,
   Section,
+  SessionsTable,
   Sheet,
   Sparkline,
   Tag,
@@ -55,6 +59,16 @@ const monthName = (month: number): string => RECORDS.month.replace('{month}', St
 const fullMonthName = (year: number, month: number): string =>
   RECORDS.yearMonth.replace('{year}', String(year)).replace('{month}', String(month))
 const percent = (value: number): string => `${Math.round(value * 100)}%`
+const monthDay = (iso: string): string => {
+  const d = new Date(iso)
+  return `${d.getMonth() + 1}月${d.getDate()}日`
+}
+const shortWeekday = (d: Date): string =>
+  new Intl.DateTimeFormat(getLanguage(), { weekday: 'short' }).format(d)
+const startClock = (iso: string): string => {
+  const d = new Date(iso)
+  return `${pad2(d.getHours())}:${pad2(d.getMinutes())}`
+}
 function dataOf(r: SessionRecord): string {
   const data: string[] = []
   if (r.marks) data.push(SUMMARY.marks(r.marks.length))
@@ -98,6 +112,15 @@ export function RecordsPage() {
   const stats = useStats(now)
   const prefs = usePrefs()
   const toast = useToast()
+  const [wide, setWide] = useState(() => window.matchMedia?.('(min-width: 1024px)').matches ?? false)
+  useEffect(() => {
+    const query = window.matchMedia?.('(min-width: 1024px)')
+    if (!query) return
+    const update = (): void => setWide(query.matches)
+    update()
+    query.addEventListener('change', update)
+    return () => query.removeEventListener('change', update)
+  }, [])
   const [offset, setOffset] = useState(0)
   const [visible, setVisible] = useState(6)
   const [selected, setSelected] = useState<SessionRecord | null>(null)
@@ -137,21 +160,63 @@ export function RecordsPage() {
       toast.show({ message: RECORDS.failed })
     }
   }
-  const exportButtons = (
+  const desktopExportButtons = (
     <>
-      <Button icon="download" onClick={() => exportRecords('csv', records, prefs.stressRatings)}>
+      <Button size="sm" icon="download" onClick={() => exportRecords('csv', records, prefs.stressRatings)}>
         {SETTINGS.data.export.csv}
       </Button>
-      <Button icon="download" onClick={() => exportRecords('json', records, prefs.stressRatings)}>
+      <Button size="sm" icon="download" onClick={() => exportRecords('json', records, prefs.stressRatings)}>
         {SETTINGS.data.export.json}
       </Button>
     </>
   )
+  const mobileExportButtons = (
+    <>
+      <Button icon="download" block onClick={() => exportRecords('csv', records, prefs.stressRatings)}>
+        {SETTINGS.data.export.csv}
+      </Button>
+      <Button icon="download" block onClick={() => exportRecords('json', records, prefs.stressRatings)}>
+        {SETTINGS.data.export.json}
+      </Button>
+    </>
+  )
+  const countRows = stats.countSummary.trend
+    .slice(-5)
+    .reverse()
+    .map(p => ({
+      date: monthDay(p.startedAt),
+      accuracy: p.accuracy,
+      resets: p.resets,
+    }))
+  const barRows = breakdown.map(row => ({
+    name: isCatalogPracticeId(row.practiceId) ? PRACTICE_BY_ID[row.practiceId].name : row.practiceId,
+    minutes: Math.max(1, Math.round(row.seconds / 60)),
+    sessions: row.sessions,
+  }))
+  const tableRows = records.slice(0, visible).map(r => {
+    const d = parseDayKey(r.date)
+    return {
+      id: r.id,
+      date: `${d.getMonth() + 1}月${d.getDate()}日`,
+      weekday: shortWeekday(d),
+      start: startClock(r.startedAt),
+      practice: nameOf(r),
+      minutes: Math.max(1, Math.round(r.actualSec / 60)),
+      data: dataOf({ ...r, feeling: undefined }) || undefined,
+      feeling: r.feeling ? feelingOf(r) : undefined,
+      before: r.checkin?.pre ?? null,
+      after: r.checkin?.post ?? null,
+      note: r.note,
+    }
+  })
   const empty = !loading && records.length === 0
   return (
     <PageFrame title={RECORDS.title} className={styles.page}>
       <PageHead
         title={RECORDS.title}
+        variant={wide ? 'subline' : 'folio'}
+        subline={RECORDS.sessions(records.length)}
+        actions={wide && records.length > 0 ? desktopExportButtons : undefined}
         folioStart={RECORDS.sessions(records.length)}
         folioEnd={<span className={styles.local}>{RECORDS.local}</span>}
       />
@@ -165,7 +230,6 @@ export function RecordsPage() {
       )}
       {records.length > 0 && (
         <>
-          <div className={styles.desktopExport}>{exportButtons}</div>
           <div className={styles.overview}>
             <section aria-labelledby="week">
               <h2 id="week">{RECORDS.week.title}</h2>
@@ -174,7 +238,7 @@ export function RecordsPage() {
                 <Unit>{RECORDS.dayUnit}</Unit>
               </p>
               <p className="t-caption ink-3">{RECORDS.totalMinutes(Math.round(stats.week.seconds / 60))}</p>
-              <WeekDots days={weekDays} />
+              <WeekDots days={weekDays} size={wide ? 'desk' : 'phone'} />
             </section>
             <section aria-labelledby="month">
               <h2 id="month">{monthName(now.getMonth() + 1)}</h2>
@@ -203,11 +267,12 @@ export function RecordsPage() {
                   : fullMonthName(month.getFullYear(), month.getMonth() + 1)
               }
               aside={
-                <div>
+                <div className={styles.monthNav}>
                   <IconButton icon="back" label={RECORDS.prevMonth} onClick={() => setOffset(n => n - 1)} />
                   <IconButton
                     icon="chevron-right"
                     label={RECORDS.nextMonth}
+                    disabled={offset >= 0}
                     onClick={() => setOffset(n => n + 1)}
                   />
                 </div>
@@ -226,34 +291,10 @@ export function RecordsPage() {
                   )
                 }
               />
-              <p className="t-caption ink-3">{typeset(RECORDS.calendar)}</p>
+              <p className={styles.note}>{typeset(RECORDS.calendar)}</p>
             </Section>
             <Section className={styles.breakdown} title={RECORDS.byPractice.title}>
-              {breakdown.map(row => (
-                <div className={styles.barRow} key={row.practiceId}>
-                  <span>
-                    {isCatalogPracticeId(row.practiceId)
-                      ? PRACTICE_BY_ID[row.practiceId].name
-                      : row.practiceId}
-                  </span>
-                  <svg
-                    width="88"
-                    height="8"
-                    viewBox="0 0 88 8"
-                    role="img"
-                    aria-label={RECORDS.totalMinutes(Math.round(row.seconds / 60))}
-                  >
-                    <rect
-                      width={(row.seconds / Math.max(...breakdown.map(r => r.seconds), 1)) * 88}
-                      height="6"
-                      fill="var(--bar)"
-                    />
-                  </svg>
-                  <span className="t-caption ink-3">
-                    {RECORDS.byPractice.row(row.sessions, Math.round(row.seconds / 60))}
-                  </span>
-                </div>
-              ))}
+              <PracticeBars rows={barRows} />
             </Section>
             <Section className={styles.focus} title={RECORDS.focus.title} aside={RECORDS.focus.unit}>
               {focus.length ? (
@@ -274,11 +315,13 @@ export function RecordsPage() {
               ) : (
                 <p className="ink-3">{RECORDS.noData}</p>
               )}
-              <p className="t-caption ink-3">{typeset(RECORDS.focus.note)}</p>
+              <p className={styles.note}>{typeset(RECORDS.focus.note)}</p>
             </Section>
             <Section className={styles.count} title={RECORDS.count.title}>
               {!stats.countSummary.ready ? (
                 <p className="ink-3">{typeset(RECORDS.count.notEnough)}</p>
+              ) : wide ? (
+                <CountRows rows={countRows} dots />
               ) : (
                 <>
                   <div className={styles.trend}>
@@ -287,39 +330,21 @@ export function RecordsPage() {
                       lastIsToday={stats.countSummary.latest?.date === today}
                       label={RECORDS.count.accuracy}
                     />
-                    <div>
+                    <div className={styles.trendValue}>
                       <p className={styles.readout}>{percent(stats.countSummary.latest?.accuracy ?? 0)}</p>
                       <p className="t-caption ink-3">{RECORDS.count.latest}</p>
                     </div>
                   </div>
-                  <table className={styles.miniTable}>
-                    <thead>
-                      <tr>
-                        <th>{RECORDS.date}</th>
-                        <th>{RECORDS.count.accuracy}</th>
-                        <th>{RECORDS.count.resets}</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {stats.countSummary.trend
-                        .slice(-5)
-                        .reverse()
-                        .map(p => (
-                          <tr key={p.id}>
-                            <td>{fmtWhen(p.startedAt, now)}</td>
-                            <td>{percent(p.accuracy)}</td>
-                            <td>{p.resets}</td>
-                          </tr>
-                        ))}
-                    </tbody>
-                  </table>
+                  <CountRows rows={countRows} dots={false} />
                 </>
               )}
-              <DisclosureRow label={RECORDS.count.howCounted}>
-                {RECORDS.count.explain.map(line => (
-                  <p key={line}>{line}</p>
-                ))}
-              </DisclosureRow>
+              <div className={styles.countDisclosure}>
+                <DisclosureRow label={RECORDS.count.howCounted}>
+                  {RECORDS.count.explain.map(line => (
+                    <p key={line}>{line}</p>
+                  ))}
+                </DisclosureRow>
+              </div>
             </Section>
             <Section
               className={styles.checkin}
@@ -336,10 +361,10 @@ export function RecordsPage() {
                       ] as const
                     ).map(([key, value]) => (
                       <div key={key}>
-                        <p className={styles.figure}>{value}</p>
                         <p className="t-caption ink-3">
                           {RECORDS.checkin[key]} · {RECORDS.checkin.median}
                         </p>
+                        <p className={styles.figure}>{value}</p>
                       </div>
                     ))}
                   </div>
@@ -348,12 +373,12 @@ export function RecordsPage() {
                     pre={stats.checkin.medianPre ?? 0}
                     post={stats.checkin.medianPost ?? 0}
                   />
-                  <p className="t-caption ink-3">{typeset(RECORDS.checkin.noise)}</p>
+                  <p className={styles.note}>{typeset(RECORDS.checkin.noise)}</p>
                 </>
               ) : (
                 <p className="ink-3">{typeset(RECORDS.checkin.notEnough)}</p>
               )}
-              <p className="t-caption ink-3">{typeset(RECORDS.checkin.caveat)}</p>
+              <p className={styles.note}>{typeset(RECORDS.checkin.caveat)}</p>
             </Section>
             {stress.length > 0 && (
               <Section
@@ -368,7 +393,7 @@ export function RecordsPage() {
                 ) : (
                   <p>{RECORDS.weeklyStress.notEnough}</p>
                 )}
-                <p className="t-caption ink-3">{typeset(RECORDS.weeklyStress.caveat)}</p>
+                <p className={styles.note}>{typeset(RECORDS.weeklyStress.caveat)}</p>
               </Section>
             )}
           </div>
@@ -392,47 +417,47 @@ export function RecordsPage() {
                   </span>
                 </button>
               ))}
+              {visible < records.length && (
+                <Button variant="quiet" onClick={() => setVisible(records.length)}>
+                  {RECORDS.list.showEarlier(records.length - visible)}
+                </Button>
+              )}
             </div>
-            <table className={styles.sessionTable}>
-              <thead>
-                <tr>
-                  <th>{RECORDS.date}</th>
-                  <th>{RECORDS.practice}</th>
-                  <th>{RECORDS.duration}</th>
-                  <th>{SUMMARY.title}</th>
-                  <th>{AFTER_PRACTICE.question}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {records.slice(0, visible).map(r => (
-                  <tr key={r.id}>
-                    <td>{fmtWhen(r.startedAt, now)}</td>
-                    <td>
-                      <button type="button" onClick={() => setSelected(r)} aria-haspopup="dialog">
-                        {nameOf(r)}
-                      </button>
-                    </td>
-                    <td>{fmtMinutes(r.actualSec)}</td>
-                    <td>{dataOf({ ...r, feeling: undefined }) || '—'}</td>
-                    <td>{feelingOf(r)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            {visible < records.length && (
-              <Button variant="quiet" onClick={() => setVisible(records.length)}>
-                {RECORDS.list.showEarlier(records.length - visible)}
-              </Button>
-            )}
+            <div className={styles.desktopTable}>
+              <SessionsTable
+                rows={tableRows}
+                onOpen={id => {
+                  const found = records.find(r => r.id === id)
+                  if (found) setSelected(found)
+                }}
+                onDelete={id => {
+                  const found = records.find(r => r.id === id)
+                  if (found) {
+                    setSelected(found)
+                    setDeleting(true)
+                  }
+                }}
+                more={
+                  visible < records.length
+                    ? {
+                        label: RECORDS.list.showEarlier(records.length - visible),
+                        onMore: () => setVisible(records.length),
+                      }
+                    : undefined
+                }
+              />
+            </div>
           </Section>
           <Section className={styles.export} title={RECORDS.export}>
-            {exportButtons}
-            <p className="t-caption ink-3">{typeset(SETTINGS.data.export.help)}</p>
-            <p className="t-caption ink-3">{typeset(RECORDS.exportHelp)}</p>
+            <div className={styles.exportStack}>{mobileExportButtons}</div>
+            <p className={styles.note}>{typeset(SETTINGS.data.export.help)}</p>
+            <p className={styles.note}>{typeset(RECORDS.exportHelp)}</p>
           </Section>
         </>
       )}
-      <LinkMore to="/help">{CRISIS_CARD.title}</LinkMore>
+      <LinkMore to="/help" className={styles.help}>
+        {CRISIS_CARD.title}
+      </LinkMore>
       <Sheet
         open={selected !== null}
         onClose={() => setSelected(null)}
@@ -502,7 +527,7 @@ export function RecordsPage() {
                 ))}
               {selected.note && <Row label={SUMMARY.note.label} hint={selected.note} />}
             </ListGroup>
-            <Button variant="danger" onClick={() => setDeleting(true)}>
+            <Button variant="danger" className={styles.deleteBtn} onClick={() => setDeleting(true)}>
               {RECORDS.deleteRecord}
             </Button>
           </>

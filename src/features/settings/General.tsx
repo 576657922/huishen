@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router'
 import { exportRecords } from '@/app/flows/backup'
 import { NavBar, PageFrame } from '@/app/layout'
@@ -46,9 +46,26 @@ export function SettingsOverview() {
   const storage = useStorageMode()
   const [deleteStep, setDeleteStep] = useState<0 | 1 | 2>(0)
   const [busy, setBusy] = useState(false)
+  const [activeGroup, setActiveGroup] = useState<(typeof groups)[number][0]>('appearance')
   const input = useRef<HTMLInputElement>(null)
   const toast = useToast()
   const navigate = useNavigate()
+  useEffect(() => {
+    if (typeof IntersectionObserver !== 'function') return
+    const nodes = groups
+      .map(([id]) => document.getElementById(id))
+      .filter((el): el is HTMLElement => el !== null)
+    if (!nodes.length) return
+    const observer = new IntersectionObserver(
+      entries => {
+        const hit = entries.find(e => e.isIntersecting)
+        if (hit) setActiveGroup(hit.target.id as (typeof groups)[number][0])
+      },
+      { rootMargin: '-12% 0px -65% 0px' },
+    )
+    for (const node of nodes) observer.observe(node)
+    return () => observer.disconnect()
+  }, [])
   const importFile = async (file: File): Promise<void> => {
     setBusy(true)
     try {
@@ -130,7 +147,12 @@ export function SettingsOverview() {
       <div className={styles.layout}>
         <nav className={styles.contents} aria-label={SETTINGS.navigation}>
           {groups.map(([id, title]) => (
-            <a key={id} href={`#${id}`}>
+            <a
+              key={id}
+              href={`#${id}`}
+              aria-current={activeGroup === id ? 'location' : undefined}
+              onClick={() => setActiveGroup(id)}
+            >
               {title}
             </a>
           ))}

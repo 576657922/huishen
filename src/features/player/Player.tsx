@@ -36,7 +36,7 @@ import {
   stepSections,
 } from '@/ui'
 import { DistressSheet } from '@/widgets/DistressSheet'
-import { CaptionLine, PacedStage } from '@/widgets/SessionStage'
+import { AmbientField, CaptionLine, PacedStage } from '@/widgets/SessionStage'
 import { SoundPicker } from '@/widgets/SoundPicker'
 import { StartButton } from '@/widgets/StartButton'
 import { StopGuidance } from '@/widgets/StopGuidance'
@@ -164,10 +164,20 @@ function Player({ practiceId }: PlayerPageProps) {
       value: String(point ? point.cycle + 1 : completedCycles(plan.pattern, time)),
     })
   } else if (practice.kind === 'guided' && practiceId !== 'grounding') {
-    const section = timeline?.sections.find(s => s.id === state.section?.id)
-    const next = timeline?.sections[(state.section?.index ?? -1) + 1]
+    const sections = timeline?.sections ?? []
+    const section =
+      sections.find(s => s.id === state.section?.id) ?? sections.find(s => time >= s.t0 && time < s.t1)
+    const sectionIndex = section ? sections.indexOf(section) : (state.section?.index ?? -1)
+    const first = sections[0]
+    const inIntro = !section && first && time < first.t0
+    const next = inIntro ? first : sections[sectionIndex + 1]
+    const sectionRem = section
+      ? Math.max(0, section.t1 - time)
+      : inIntro
+        ? Math.max(0, first.t0 - time)
+        : null
     readouts.push(
-      { label: PLAYER.guided.sectionLeft, value: section ? fmtClock(Math.max(0, section.t1 - time)) : '—' },
+      { label: PLAYER.guided.sectionLeft, value: sectionRem !== null ? fmtClock(sectionRem) : '—' },
       { label: PLAYER.readouts.next, value: next?.title ?? '—', text: true },
     )
   } else if (practice.kind === 'timer') {
@@ -201,6 +211,15 @@ function Player({ practiceId }: PlayerPageProps) {
     )
   return (
     <>
+      {!plan?.pattern && (
+        <AmbientField
+          pulse={
+            state.marks.length +
+            (state.count ? state.count.current + state.count.cycles * 9 + state.count.resets : 0)
+          }
+          paused={state.status === 'paused'}
+        />
+      )}
       <header data-region="hud" className={styles.hud}>
         <div>
           <p className={styles.name}>{practice.name}</p>
@@ -283,7 +302,10 @@ function Player({ practiceId }: PlayerPageProps) {
               aria-describedby="mark-help"
               onClick={() => ctrl.mark()}
             >
-              <span>{PLAYER.focus.mark}</span>
+              {state.marks.length > 0 && (
+                <span key={state.marks.length} className={styles.markRipple} aria-hidden="true" />
+              )}
+              <span className={styles.focusLabel}>{PLAYER.focus.mark}</span>
               <span className="t-caption ink-3" data-modality="touch">
                 {PLAYER.focus.markHintTouch}
               </span>
@@ -513,39 +535,67 @@ function ProgressLine({
   interval?: number | null
   fade?: number
 }) {
-  const now = duration > 0 ? Math.min(1, time / duration) : 0
+  const W = 350
+  const topY = 14
+  const botY = 50
+  const now = duration > 0 ? Math.min(1, Math.max(0, time / duration)) : 0
+  const nowX = now * W
+  if (fade) {
+    const knee = duration > 0 ? Math.max(0, 1 - fade / duration) * W : W
+    const fadeW = W - knee
+    // Smooth cosine S-curve fade envelope for acoustic volume over the final fade window
+    const envY = (x: number): number => {
+      if (duration <= 0 || x <= knee || fadeW <= 0) return topY
+      const u = Math.min(1, (x - knee) / fadeW)
+      return topY + ((1 - Math.cos(Math.PI * u)) / 2) * (botY - topY)
+    }
+    const curve = (from: number, to: number): string => {
+      if (to <= from) return ''
+      const pts: string[] = []
+      const steps = Math.max(2, Math.ceil((to - from) / 4))
+      for (let i = 0; i <= steps; i++) {
+        const x = from + ((to - from) * i) / steps
+        pts.push(`${i === 0 ? 'M' : 'L'}${x.toFixed(1)} ${envY(x).toFixed(1)}`)
+      }
+      return pts.join('')
+    }
+    const pastPath = nowX > 0 ? curve(0, nowX) : ''
+    const futurePath = nowX < W ? curve(nowX, W) : ''
+    const fillPath = pastPath ? `${pastPath}L${nowX.toFixed(1)} ${botY}L0 ${botY}Z` : ''
+    const dotY = envY(nowX)
+    return (
+      <svg viewBox="0 0 350 64" className={styles.progress} aria-hidden="true">
+        <path className={styles.gridRule} d={`M0 ${topY}H${W}`} />
+        <path className={styles.track} d={`M0 ${botY}H${W}`} />
+        {duration > 0 && knee < W && (
+          <path className={styles.gridRule} d={`M${knee.toFixed(1)} ${topY}V${botY + 5}`} />
+        )}
+        {fillPath && <path className={styles.wash} d={fillPath} />}
+        {futurePath && <path className={styles.futureTrace} d={futurePath} />}
+        {pastPath && <path className={styles.trace} d={pastPath} />}
+        <circle className={styles.dotRing} cx={nowX} cy={dotY} r="6.5" />
+        <circle className={styles.dot} cx={nowX} cy={dotY} r="4.5" />
+      </svg>
+    )
+  }
   return (
     <svg viewBox="0 0 350 64" className={styles.progress} aria-hidden="true">
-      <path className={styles.track} d="M0 48H350" />
-      {fade ? (
-        <path
-          className={styles.trace}
-          d={duration > 0 ? `M0 12H${350 * Math.max(0, 1 - fade / duration)}L350 48` : 'M0 12H350'}
-        />
-      ) : (
-        <path className={styles.trace} d={`M0 48H${350 * now}`} />
-      )}
+      <path className={styles.track} d={`M0 ${botY}H${W}`} />
+      <path className={styles.trace} d={`M0 ${botY}H${nowX.toFixed(1)}`} />
       {interval && duration > 0
-        ? Array.from({ length: Math.ceil(duration / interval) - 1 }, (_, i) => (i + 1) * interval).map(t => (
-            <path
-              key={t}
-              className={t <= time ? styles.trace : styles.track}
-              d={`M${(t / duration) * 350} 42v6`}
-            />
-          ))
+        ? Array.from({ length: Math.ceil(duration / interval) - 1 }, (_, i) => (i + 1) * interval).map(t => {
+            const x = (t / duration) * W
+            const rung = t <= time
+            return (
+              <g key={t}>
+                <path className={rung ? styles.trace : styles.track} d={`M${x.toFixed(1)} ${botY - 9}v9`} />
+                <circle className={rung ? styles.bellDone : styles.bellNext} cx={x} cy={botY - 12} r="2" />
+              </g>
+            )
+          })
         : null}
-      <circle
-        className={styles.dot}
-        cx={now * 350}
-        cy={
-          fade
-            ? duration > 0 && time > duration - fade
-              ? 12 + ((time - duration + fade) / fade) * 36
-              : 12
-            : 48
-        }
-        r="4"
-      />
+      <circle className={styles.dotRing} cx={nowX} cy={botY} r="6.5" />
+      <circle className={styles.dot} cx={nowX} cy={botY} r="4.5" />
     </svg>
   )
 }

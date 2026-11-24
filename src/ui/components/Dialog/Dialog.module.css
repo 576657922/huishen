@@ -15,7 +15,9 @@
   position: absolute;
   inset: 0;
   background: var(--scrim);
-  animation: fade-in var(--dur-sheet) var(--ease-standard);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  animation: fade-in var(--dur-sheet) var(--ease-expo);
 }
 .layer[data-state="closing"] .scrim {
   animation: fade-out var(--dur-state) var(--ease-exit) forwards;

@@ -6,8 +6,8 @@
 import { useEffect } from 'react'
 import { type ThemePref, usePrefs } from '@/data'
 
-/** 两种纸色，与 tokens.css 的 --paper、vite.config.ts 里清单的 theme_color 一致 */
-export const THEME_COLORS = { light: '#F4F1EA', dark: '#121110' } as const
+/** 两种纸色，与 tokens.css 的 --paper 一致 */
+export const THEME_COLORS = { light: '#F6F6F3', dark: '#080A0D' } as const
 
 type Scheme = keyof typeof THEME_COLORS
 

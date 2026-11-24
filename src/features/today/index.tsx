@@ -27,6 +27,7 @@ import { StartButton } from '@/widgets/StartButton'
 import lake from './images/lake-960.webp'
 import lakeLarge from './images/lake-1536.webp'
 import leaves from './images/leaves-540.webp'
+import mist from './images/mist-540.webp'
 import water from './images/water-540.webp'
 import { LanguageToggle } from './LanguageToggle'
 import { RecommendationFigure } from './RecommendationFigure'
@@ -45,7 +46,7 @@ function start(item: Shortcut, from: StartSource): void {
 
 function PhotoPick({ item }: { item: ReturnType<typeof quickPicks>[number] }) {
   const hintId = useId()
-  const image = item.practiceId === 'pause' ? water : item.practiceId === 'breathing-space' ? leaves : lake
+  const image = item.practiceId === 'pause' ? water : item.practiceId === 'breathing-space' ? leaves : mist
   return (
     <button
       type="button"
@@ -53,7 +54,9 @@ function PhotoPick({ item }: { item: ReturnType<typeof quickPicks>[number] }) {
       aria-describedby={hintId}
       onClick={() => start(item, 'today')}
     >
-      <img className={styles.pickImage} src={image} width="540" height="540" alt="" decoding="async" />
+      <span className={styles.pickFrame} aria-hidden="true">
+        <img className={styles.pickImage} src={image} width="540" height="720" alt="" decoding="async" />
+      </span>
       <span className={styles.pickName}>{item.label}</span>
       <span className={styles.pickStructure}>{item.structure}</span>
       <span className={styles.pickDuration}>{TODAY.minutes(item.minutes)}</span>
@@ -165,38 +168,40 @@ export function TodayPage() {
       <h1 className="vh" tabIndex={-1}>
         {TODAY.title}
       </h1>
-      <Masthead actions={<LanguageToggle />} />
       <div className={styles.grid}>
-        <div className={styles.main}>
+        <div className={styles.mastheadWrap}>
+          <Masthead actions={<LanguageToggle />} />
+        </div>
+        <div className={styles.datelineWrap}>
           <Dateline date={now} />
-          {practice && (
-            <section
-              className={styles.recommendation}
-              aria-labelledby="recommendation-title"
-              aria-busy={loading}
-              data-theme="dark"
-            >
-              <img
-                className={styles.heroImage}
-                src={lakeLarge}
-                srcSet={`${lake} 960w, ${lakeLarge} 1536w`}
-                sizes="(min-width: 1024px) 640px, (min-width: 768px) 640px, calc(100vw - 40px)"
-                width="1536"
-                height="1024"
-                alt=""
-                fetchPriority="high"
-                decoding="async"
-              />
-              <Kicker
-                start={day?.doneToday && index === 0 ? TODAY.program.doneToday : pick.reason}
-                end={<GradeMark grade={practice.grade} prefix />}
-                tone={recommendation.source === 'welcome-back' ? 'note' : 'meta'}
-              />
-              <div className={styles.title}>
-                <h2 id="recommendation-title" className="t-display">
-                  {practice.name}
-                </h2>
+        </div>
+        {practice && (
+          <section
+            className={styles.recommendation}
+            aria-labelledby="recommendation-title"
+            aria-busy={loading}
+            data-theme="dark"
+          >
+            <img
+              className={styles.heroImage}
+              src={lakeLarge}
+              srcSet={`${lake} 960w, ${lakeLarge} 1536w`}
+              sizes="(min-width: 1024px) 1240px, (min-width: 768px) 92vw, calc(100vw - 40px)"
+              width="1536"
+              height="1024"
+              alt=""
+              fetchPriority="high"
+              decoding="async"
+            />
+            <div key={pick.practiceId} className={styles.heroBody}>
+              <div className={styles.heroTop}>
+                <Kicker
+                  start={day?.doneToday && index === 0 ? TODAY.program.doneToday : pick.reason}
+                  end={<GradeMark grade={practice.grade} prefix />}
+                  tone={recommendation.source === 'welcome-back' ? 'note' : 'meta'}
+                />
                 <Button
+                  className={styles.changeBtn}
                   variant="quiet"
                   icon="refresh"
                   onClick={() => setSelection({ key: recommendation, index: (index + 1) % choices.length })}
@@ -204,39 +209,48 @@ export function TodayPage() {
                   {TODAY.change}
                 </Button>
               </div>
-              {day?.doneToday && index === 0 && (
-                <p className="t-caption ink-3">{TODAY.program.next(day.week, day.day)}</p>
-              )}
-              <p className={styles.description}>
-                {pick.plan && day?.firstDayOfWeek
-                  ? TODAY.program.newWeek(day.week)
-                  : clauses(practice.todayLine)}
-              </p>
-              {pick.plan && day?.firstDayOfWeek && (
-                <LinkMore to={`/program/${pick.plan.programId}`}>{PROGRAM.reading}</LinkMore>
-              )}
-              {pairDay && pick.plan?.role === 'day' && (
-                <p className="t-caption ink-2">{firstDone ? PROGRAM.second : PROGRAM.paired}</p>
-              )}
-              <figure className={styles.figure}>
-                <RecommendationFigure practice={practice} minutes={pick.minutes} />
-              </figure>
-              {practice.id === 'pace-finder' ? (
-                <ButtonLink className={styles.start} variant="primary" to="/pace-finder">
+              <div className={styles.heroLead}>
+                <h2 id="recommendation-title" className={styles.heroTitle}>
                   {practice.name}
-                </ButtonLink>
-              ) : (
-                <StartButton
-                  className={styles.start}
-                  practiceId={practice.id}
-                  minutes={pick.minutes}
-                  from="today"
-                  {...(pick.params ? { overrides: { params: pick.params } } : {})}
-                  {...(pick.plan ? { programDay: pick.plan } : {})}
-                />
-              )}
-            </section>
-          )}
+                </h2>
+                {day?.doneToday && index === 0 && (
+                  <p className="t-caption ink-3">{TODAY.program.next(day.week, day.day)}</p>
+                )}
+                <p className={styles.description}>
+                  {pick.plan && day?.firstDayOfWeek
+                    ? TODAY.program.newWeek(day.week)
+                    : clauses(practice.todayLine)}
+                </p>
+                {pick.plan && day?.firstDayOfWeek && (
+                  <LinkMore to={`/program/${pick.plan.programId}`}>{PROGRAM.reading}</LinkMore>
+                )}
+                {pairDay && pick.plan?.role === 'day' && (
+                  <p className="t-caption ink-2">{firstDone ? PROGRAM.second : PROGRAM.paired}</p>
+                )}
+              </div>
+              <div className={styles.heroFooter}>
+                {practice.id === 'pace-finder' ? (
+                  <ButtonLink className={styles.start} variant="primary" to="/pace-finder">
+                    {practice.name}
+                  </ButtonLink>
+                ) : (
+                  <StartButton
+                    className={styles.start}
+                    practiceId={practice.id}
+                    minutes={pick.minutes}
+                    from="today"
+                    {...(pick.params ? { overrides: { params: pick.params } } : {})}
+                    {...(pick.plan ? { programDay: pick.plan } : {})}
+                  />
+                )}
+                <figure className={styles.figure}>
+                  <RecommendationFigure practice={practice} minutes={pick.minutes} />
+                </figure>
+              </div>
+            </div>
+          </section>
+        )}
+        <div className={styles.main}>
           <Section title={TODAY.quick.title} className={styles.quick}>
             <ul className={styles.photoPicks}>
               {picks.map(p => (

@@ -42,6 +42,27 @@ import { StopGuidance } from '@/widgets/StopGuidance'
 import styles from './PaceFinder.module.css'
 import { useStrap } from './useStrap'
 
+/** Build a real asymmetric breath waveform path inside a 15-second window for a given rate (breaths/min). */
+function rateWavePath(rate: number, x0: number, width: number, topY: number, botY: number): string {
+  const period = 60 / rate
+  const inhale = (period * 4.5) / 11
+  const windowSec = 15
+  const steps = 40
+  const pts: string[] = []
+  for (let i = 0; i <= steps; i++) {
+    const t = (i / steps) * windowSec
+    const ph = t % period
+    const v =
+      ph < inhale
+        ? (1 - Math.cos((Math.PI * ph) / inhale)) / 2
+        : (1 + Math.cos((Math.PI * (ph - inhale)) / (period - inhale))) / 2
+    const x = x0 + (i / steps) * width
+    const y = botY - v * (botY - topY)
+    pts.push(`${i === 0 ? 'M' : 'L'}${x.toFixed(1)} ${y.toFixed(1)}`)
+  }
+  return pts.join('')
+}
+
 const practice = PRACTICE_BY_ID['pace-finder']
 type View = 'intro' | 'run' | 'result'
 const active = (status: string): boolean => ['lead', 'running', 'paused'].includes(status)
@@ -426,51 +447,61 @@ export function PaceFinderPage() {
       <NavBar backTo="/practices" backLabel={CATALOGUE.title} />
       <div className={styles.page}>
         {view === 'intro' ? (
-          <>
-            <Kicker start={PACE_FINDER.kicker} />
-            <h1 tabIndex={-1}>{practice.name}</h1>
-            <Lead>
-              {practice.description
-                .match(/[^。]+。/g)
-                ?.slice(0, 2)
-                .join('')}
-            </Lead>
-            <figure className={styles.figure}>
-              <svg viewBox="0 0 600 90" role="img" aria-label={DETAIL.figureCaption['pace-finder']}>
-                {PACE_FINDER_RATES.map((value, i) => (
-                  <g key={value}>
-                    <path d={`M${i * 120} ${20 + i * 8}h112`} />
-                    <text x={i * 120 + 56} y="80" textAnchor="middle">
-                      {value.toFixed(1)}
-                    </text>
-                  </g>
+          <div className={styles.introGrid}>
+            <div className={styles.introMain}>
+              <Kicker start={PACE_FINDER.kicker} />
+              <h1 tabIndex={-1}>{practice.name}</h1>
+              <Lead>
+                {practice.description
+                  .match(/[^。]+。/g)
+                  ?.slice(0, 2)
+                  .join('')}
+              </Lead>
+              <figure className={styles.figure}>
+                <svg viewBox="0 0 600 104" role="img" aria-label={DETAIL.figureCaption['pace-finder']}>
+                  <path className={styles.gridRule} d="M0 16.5H600M0 72.5H600" />
+                  {PACE_FINDER_RATES.map((value, i) => {
+                    const x0 = i * 120
+                    const segW = 108
+                    return (
+                      <g key={value}>
+                        {i > 0 && <path className={styles.gridRule} d={`M${x0 - 6}.5 16V76`} />}
+                        <path className={styles.wave} d={rateWavePath(value, x0 + 2, segW, 20, 68)} />
+                        <text x={x0 + 56} y="92" textAnchor="middle">
+                          {value.toFixed(1)}
+                        </text>
+                      </g>
+                    )
+                  })}
+                </svg>
+                <figcaption>
+                  {DETAIL.figure} · {DETAIL.figureCaption['pace-finder']}
+                </figcaption>
+              </figure>
+              <Section title={DETAIL.sections.how}>
+                <ol className={styles.steps}>
+                  {practice.steps.map((line, index) => (
+                    <li key={line}>
+                      <span className="tnum ink-3">{String(index + 1).padStart(2, '0')}</span>
+                      <p>{typeset(line)}</p>
+                    </li>
+                  ))}
+                </ol>
+              </Section>
+              <Section title={DETAIL.sections.safety}>
+                {practice.safety.map(line => (
+                  <p key={line}>{typeset(line)}</p>
                 ))}
-              </svg>
-              <figcaption>
-                {DETAIL.figure} · {DETAIL.figureCaption['pace-finder']}
-              </figcaption>
-            </figure>
-            <Section title={DETAIL.sections.how}>
-              <ol className={styles.steps}>
-                {practice.steps.map((line, index) => (
-                  <li key={line}>
-                    <span className="tnum ink-3">{String(index + 1).padStart(2, '0')}</span>
-                    <p>{typeset(line)}</p>
-                  </li>
-                ))}
-              </ol>
-            </Section>
-            {strapRow}
-            <Section title={DETAIL.sections.safety}>
-              {practice.safety.map(line => (
-                <p key={line}>{typeset(line)}</p>
-              ))}
-              <LinkMore to="/help">{CRISIS_CARD.title}</LinkMore>
-            </Section>
-            <Dock>
-              <StartBar minutes={7} approx onStart={start} />
-            </Dock>
-          </>
+                <LinkMore to="/help">{CRISIS_CARD.title}</LinkMore>
+              </Section>
+            </div>
+            <aside className={styles.introAside}>
+              {strapRow}
+              <Dock className={styles.introDock}>
+                <StartBar minutes={7} approx onStart={start} />
+              </Dock>
+            </aside>
+          </div>
         ) : (
           <>
             <h1 ref={heading} tabIndex={-1}>

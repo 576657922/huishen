@@ -151,7 +151,12 @@ export function EffectRows({ outcomes, domain, ticks, note }: EffectRowsProps) {
         {ticks.map(t => (
           <g key={t}>
             <line className={styles.axisLine} x1={pct(t)} x2={pct(t)} y1={0.5} y2={4.5} />
-            <text className={styles.axisLabel} x={pct(t)} y={17} textAnchor="middle">
+            <text
+              className={styles.axisLabel}
+              x={pct(t)}
+              y={17}
+              textAnchor={t === domain[0] ? 'start' : t === domain[1] ? 'end' : 'middle'}
+            >
               {t === 0 ? '0' : signed(t)}
             </text>
           </g>

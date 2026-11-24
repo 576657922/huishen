@@ -37,9 +37,12 @@ html[data-bars="none"] {
   scroll-padding-bottom: calc(var(--safe-bottom) + 8px);
 }
 @media (min-width: 768px) {
-  /* tablet and desktop: the rail replaces the tab bar */
+  /* tablet and desktop: sticky top gallery masthead replaces the bottom dock */
+  html {
+    scroll-padding-top: calc(var(--header-h) + 16px);
+  }
   html:not([data-bars="dock"]):not([data-bars="player"]) {
-    scroll-padding-bottom: 8px;
+    scroll-padding-bottom: 16px;
   }
 }
 @media (min-width: 1024px) {
@@ -68,6 +71,24 @@ body {
   text-wrap: pretty; /* no one-character last lines (inherited)   */
   text-spacing-trim: trim-start; /* 「 at line start sits flush with the column */
   overflow-wrap: break-word;
+}
+
+/* Archival cotton-washi paper fiber grain: imperceptible physical texture, zero network requests. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: var(--grain-opacity);
+  mix-blend-mode: var(--grain-blend);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  background-size: 220px 220px;
+}
+@media (forced-colors: active), print {
+  body::before {
+    display: none;
+  }
 }
 
 h1,

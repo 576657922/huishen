@@ -77,15 +77,26 @@ function SoundSetup({ id }: { id: 'listen' | 'sleep' }) {
           <figure className={styles.figure}>
             <svg
               className={styles.plot}
-              viewBox="0 0 600 100"
+              viewBox="0 0 600 108"
               role="img"
               aria-label={DETAIL.figureCaption[id]}
             >
-              <path className={styles.axis} d="M0 76.5H600" />
+              <path className={styles.gridRule} d="M0 20.5H600" />
+              <path className={styles.axis} d="M0 78.5H600" />
+              {minutes !== 0 && <path className={styles.gridRule} d="M460.5 20V84" />}
               <path
                 className={styles.trace}
-                d={minutes === 0 ? 'M0 20H600' : 'M0 20H480C540 20 540 76 600 76'}
+                d={minutes === 0 ? 'M0 20H600' : 'M0 20H460C515 20 535 78 600 78'}
               />
+              <path className={styles.axis} d="M0.5 78.5V84M599.5 78.5V84" />
+              <text x="0" y="99" textAnchor="start">
+                0
+              </text>
+              {minutes !== 0 && (
+                <text x="600" y="99" textAnchor="end">
+                  {listenLabel(minutes)}
+                </text>
+              )}
             </svg>
             <figcaption>
               {DETAIL.figure} · {minutes === 0 ? listenLabel(0) : DETAIL.figureCaption[id]}
@@ -142,7 +153,7 @@ function SoundSetup({ id }: { id: 'listen' | 'sleep' }) {
             <ul className={styles.claims}>
               {practice.evidenceClaims.map(claim => (
                 <li key={claim.claim}>
-                  <p>
+                  <p className={styles.claimText}>
                     {typeset(claim.claim)}{' '}
                     {claim.cites.map((cite, n) => (
                       <Cite
@@ -152,7 +163,9 @@ function SoundSetup({ id }: { id: 'listen' | 'sleep' }) {
                       />
                     ))}
                   </p>
-                  <GradeMark grade={claim.grade} />
+                  <div className={styles.claimGrade}>
+                    <GradeMark grade={claim.grade} prefix />
+                  </div>
                 </li>
               ))}
             </ul>

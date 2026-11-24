@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useSessionSecond, useSessionState } from '@/app/hooks'
 import { getController } from '@/app/services'
 import { PLAYER } from '@/content/copy'
@@ -7,6 +7,7 @@ import { Chip, clauses, cx } from '@/ui'
 import { BreathCanvas } from './Canvas'
 import styles from './SessionStage.module.css'
 
+export { AmbientField } from './AmbientField'
 export { BreathCanvas } from './Canvas'
 export function CaptionLine({
   caption,
@@ -50,6 +51,26 @@ export function PacedStage({
   }, [hint])
   const lead = countdown ?? (state.status === 'lead' ? Math.max(0, -second) : null)
   const active = lead !== null || point !== null
+  const phaseKey = lead !== null ? 'lead' : (point?.seg?.key ?? '')
+  const phaseLabel = lead !== null ? PLAYER.leadIn : (point?.seg?.label ?? '')
+  // Preserve departing phase word in a non-paragraph aria-hidden ghost for serene cross-fade overlap.
+  const prevPhaseRef = useRef<{ key: string; label: string }>({ key: phaseKey, label: phaseLabel })
+  const [departing, setDeparting] = useState<{ id: number; label: string } | null>(null)
+  const departSeq = useRef(0)
+  useEffect(() => {
+    const prev = prevPhaseRef.current
+    if (prev.key && phaseKey && prev.key !== phaseKey && prev.label) {
+      departSeq.current += 1
+      const id = departSeq.current
+      setDeparting({ id, label: prev.label })
+      const timer = setTimeout(() => {
+        setDeparting(curr => (curr?.id === id ? null : curr))
+      }, 720)
+      prevPhaseRef.current = { key: phaseKey, label: phaseLabel }
+      return () => clearTimeout(timer)
+    }
+    prevPhaseRef.current = { key: phaseKey, label: phaseLabel }
+  }, [phaseKey, phaseLabel])
   const next =
     point?.seg && plan?.pattern ? plan.pattern.segs[(point.idx + 1) % plan.pattern.segs.length] : null
   const maxed = request?.rate === 7 || state.rate === 7
@@ -59,9 +80,16 @@ export function PacedStage({
       {active && (
         <>
           <div className={styles.phaseRow}>
-            <p key={lead !== null ? 'lead' : point?.seg?.key} className={styles.phase}>
-              {lead !== null ? PLAYER.leadIn : point?.seg?.label}
-            </p>
+            <div className={styles.phaseSlot}>
+              {departing && (
+                <span key={departing.id} className={styles.phaseOut} aria-hidden="true">
+                  {departing.label}
+                </span>
+              )}
+              <p key={phaseKey} className={styles.phase}>
+                {phaseLabel}
+              </p>
+            </div>
             <p className={styles.next}>
               {lead !== null ? (
                 <span className="t-count">{lead}</span>

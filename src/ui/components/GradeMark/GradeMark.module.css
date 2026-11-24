@@ -1,24 +1,25 @@
-/* DESIGN.md §8.5 · components.css 8.5：18 × 18 的方框，1 px 墨线、圆角 2，Inter 600 11 px */
+/* 圆形素石证据印记：取代生硬方形线框 */
 .grade {
   display: inline-flex;
   align-items: center;
   gap: 6px;
   font-size: var(--fs-caption);
   line-height: var(--lh-caption);
-  letter-spacing: var(--tr-caption);
+  letter-spacing: 0.04em;
   color: var(--ink-3);
   white-space: nowrap;
 }
 .box {
   display: inline-grid;
   place-items: center;
-  width: 18px;
-  height: 18px;
-  border: 1px solid var(--ink);
-  border-radius: var(--r-1);
+  width: 20px;
+  height: 20px;
+  border: var(--hair) solid var(--line);
+  border-radius: var(--r-full);
+  background: var(--paper-sunk);
   font-family: var(--font-num);
   font-weight: var(--w-semibold);
-  font-size: var(--fs-axis);
+  font-size: 10px;
   line-height: 1;
   letter-spacing: 0;
   color: var(--ink);
@@ -26,13 +27,13 @@
 .word {
   color: var(--ink-2);
 }
-/* 目录行：字母跟在名字后面 8 px，对齐汉字的字身中线 */
 .inline {
   margin-left: var(--sp-2);
-  vertical-align: 2px;
+  vertical-align: 1px;
 }
 .none .box {
-  border-color: var(--line);
+  background: transparent;
+  border-color: var(--rule);
   color: var(--ink-3);
   font-weight: var(--w-regular);
 }

@@ -1,29 +1,83 @@
 .page {
   max-width: var(--reading-max);
 }
+.introGrid {
+  display: grid;
+}
+.introMain,
+.introAside {
+  min-width: 0;
+}
 .figure {
-  margin: var(--sp-8) 0;
+  margin: var(--sp-6) 0 0;
+  padding: var(--sp-6);
+  border-radius: var(--r-3);
+  background: var(--paper-raised);
+  box-shadow:
+    inset 0 0 0 var(--hair) var(--surface-border),
+    var(--surface-shadow);
 }
 .figure svg {
   display: block;
   width: 100%;
   overflow: visible;
 }
-.figure path {
+.gridRule {
+  fill: none;
+  stroke: var(--grid-major);
+  stroke-width: 1;
+}
+.wave {
   fill: none;
   stroke: var(--ink);
-  stroke-width: 2;
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 .figure text {
   fill: var(--ink-3);
   font-size: var(--fs-axis);
   font-family: var(--font-num);
+  font-variant-numeric: tabular-nums;
 }
 .figure figcaption {
-  margin-top: var(--sp-2);
+  margin-top: var(--sp-4);
   font-size: var(--fs-caption);
   line-height: var(--lh-caption);
   color: var(--ink-3);
+}
+@media (min-width: 1024px) {
+  .page:has(.introGrid) {
+    max-width: none;
+  }
+  .introGrid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--sp-10);
+  }
+  .introMain {
+    grid-column: 1 / 8;
+  }
+  .introAside {
+    grid-column: 8 / 13;
+    position: sticky;
+    top: calc(var(--header-h) + var(--sp-6));
+    align-self: start;
+    padding: var(--sp-6) var(--sp-8);
+    border-radius: var(--r-4);
+    background: var(--paper-raised);
+    box-shadow:
+      inset 0 0 0 var(--hair) var(--surface-border),
+      var(--surface-shadow);
+  }
+  .introAside > section:first-child {
+    margin-top: 0;
+  }
+  .introDock {
+    margin-top: var(--sp-6);
+  }
+  .introAside > .introDock:first-child {
+    margin-top: 0;
+  }
 }
 .steps {
   list-style: none;

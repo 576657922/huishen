@@ -327,7 +327,7 @@ function Detail({ practice }: { practice: CatalogPractice }) {
             <ul className={styles.claims}>
               {practice.evidenceClaims.map(claim => (
                 <li key={claim.claim}>
-                  <p>
+                  <p className={styles.claimText}>
                     {typeset(claim.claim)}{' '}
                     {claim.cites.map((cite, n) => (
                       <Cite
@@ -337,7 +337,9 @@ function Detail({ practice }: { practice: CatalogPractice }) {
                       />
                     ))}
                   </p>
-                  <GradeMark grade={claim.grade} />
+                  <div className={styles.claimGrade}>
+                    <GradeMark grade={claim.grade} prefix />
+                  </div>
                 </li>
               ))}
             </ul>

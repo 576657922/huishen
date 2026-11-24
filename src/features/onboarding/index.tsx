@@ -5,7 +5,8 @@ import { navigate } from '@/app/navigation'
 import { WELCOME } from '@/content/copy'
 import { CRISIS_CARD, FIRST_RUN_NOTICE } from '@/content/safety'
 import { prefsStore } from '@/data'
-import { Button, clauses, Dock, Lead, LinkMore, ListGroup, Row, Section, Sheet, typeset } from '@/ui'
+import { Button, clauses, Dock, Lead, LinkMore, Sheet, typeset } from '@/ui'
+import { BreathPlate } from './BreathPlate'
 import styles from './Welcome.module.css'
 
 function useReadToEnd(open: boolean): [(el: HTMLDivElement | null) => void, boolean] {
@@ -58,31 +59,50 @@ export function WelcomePage() {
     navigate('/practices')
   }
   return (
-    <PageFrame title={null} variant="dock" className={styles.page}>
-      <h1 className={styles.brand} tabIndex={-1}>
-        <Lockup link={false} size="large" />
-      </h1>
-      <Lead>{WELCOME.tagline}</Lead>
-      <ListGroup className={styles.description}>
-        {WELCOME.lines.map(line => (
-          <Row key={line} label={clauses(line)} />
-        ))}
-      </ListGroup>
-      <p className="t-caption ink-3">{typeset(WELCOME.scope)}</p>
-      <Section title={WELCOME.privacy.title}>
-        {WELCOME.privacy.lines.map(line => (
-          <Row key={line} label={line} />
-        ))}
-      </Section>
-      <LinkMore to="/help">{CRISIS_CARD.title}</LinkMore>
-      <Dock className={styles.actions}>
-        <Button variant="primary" block onClick={() => setOpen(true)}>
-          {WELCOME.start}
-        </Button>
-        <Button variant="quiet" block onClick={browse}>
-          {WELCOME.browse}
-        </Button>
-      </Dock>
+    <PageFrame title={null} variant="bare" className={styles.page}>
+      <div className={styles.spread}>
+        <aside className={styles.art} aria-hidden="true">
+          <BreathPlate />
+        </aside>
+        <div className={styles.col}>
+          <div className={styles.colInner}>
+            <h1 className={styles.brand} tabIndex={-1}>
+              <Lockup link={false} size="large" />
+            </h1>
+            <Lead className={styles.tagline}>{WELCOME.tagline}</Lead>
+            <ol className={styles.principles}>
+              {WELCOME.lines.map((line, i) => (
+                <li key={line}>
+                  <span className={styles.index} aria-hidden="true">
+                    0{i + 1}
+                  </span>
+                  <span>{clauses(line)}</span>
+                </li>
+              ))}
+            </ol>
+            <p className={styles.scope}>{typeset(WELCOME.scope)}</p>
+            <section className={styles.privacy} aria-labelledby="welcome-privacy">
+              <h2 id="welcome-privacy">{WELCOME.privacy.title}</h2>
+              <ul>
+                {WELCOME.privacy.lines.map(line => (
+                  <li key={line}>{line}</li>
+                ))}
+              </ul>
+            </section>
+            <LinkMore to="/help" className={styles.help}>
+              {CRISIS_CARD.title}
+            </LinkMore>
+            <Dock className={styles.actions}>
+              <Button variant="primary" block onClick={() => setOpen(true)}>
+                {WELCOME.start}
+              </Button>
+              <Button variant="quiet" block onClick={browse}>
+                {WELCOME.browse}
+              </Button>
+            </Dock>
+          </div>
+        </div>
+      </div>
       <Sheet
         open={open}
         onClose={() => setOpen(false)}

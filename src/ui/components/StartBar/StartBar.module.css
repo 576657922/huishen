@@ -1,44 +1,59 @@
-/* DESIGN.md §8.4 · components.css .startbar。深色里是次级墨色的板（--fill-primary），不刺眼 */
+/* 雕塑感胶囊启动条：精密触感反馈 */
 .bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
   height: var(--startbar-h);
-  padding: 0 var(--sp-5) 0 var(--sp-4);
-  border-radius: var(--r-2);
+  padding: 0 var(--sp-6) 0 var(--sp-5);
+  border-radius: var(--r-full);
   background: var(--fill-primary, var(--ink));
   color: var(--on-ink);
   text-decoration: none;
-  transition: background-color var(--dur-press) var(--ease-standard);
+  box-shadow: 0 10px 28px -12px rgb(14 16 19 / 0.35);
+  transition:
+    background-color var(--dur-state) var(--ease-expo),
+    transform var(--dur-press) var(--ease-expo),
+    box-shadow var(--dur-state) var(--ease-expo);
 }
 .bar:active {
   background: var(--fill-primary-press, var(--ink-press));
+  transform: scale(0.985);
 }
 .bar:focus-visible {
   outline: 2px solid var(--focus);
-  outline-offset: 2px;
+  outline-offset: 3px;
 }
 .label {
   display: inline-flex;
   align-items: center;
   gap: var(--sp-2);
-  font-size: var(--fs-name);
-  line-height: var(--lh-name);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
   font-weight: var(--w-semibold);
-  letter-spacing: var(--tr-text);
+  letter-spacing: 0.05em;
+}
+.label svg {
+  transition: transform var(--dur-state) var(--ease-expo);
 }
 .meta {
   color: var(--on-ink-2);
-  font-size: var(--fs-body);
-  line-height: var(--lh-body);
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+  letter-spacing: 0.04em;
 }
 .figure {
   color: var(--on-ink);
+  font-weight: var(--w-medium);
 }
 @media (hover: hover) and (pointer: fine) {
   .bar:hover {
     background: var(--fill-primary-press, var(--ink-press));
+    transform: translateY(-1px);
+    box-shadow: 0 14px 32px -12px rgb(14 16 19 / 0.42);
+  }
+  .bar:hover .label svg {
+    transform: translateX(3px);
   }
 }
 @media (forced-colors: active) {

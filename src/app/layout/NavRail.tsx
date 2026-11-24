@@ -25,17 +25,18 @@ function RailItem({ item, current }: { item: NavItem; current: NavKey | null }) 
 export function NavRail({ current }: NavRailProps) {
   return (
     <nav className={styles.rail} aria-label={NAV.label}>
-      <Lockup className={styles.lockup} />
-      <div className={styles.list}>
-        {MAIN_NAV.map(item => (
-          <RailItem key={item.key} item={item} current={current} />
-        ))}
-      </div>
-      <div className={styles.foot}>
-        {FOOT_NAV.map(item => (
-          <RailItem key={item.key} item={item} current={current} />
-        ))}
-        <p className={styles.note}>{NAV.railNote}</p>
+      <div className={styles.inner}>
+        <Lockup className={styles.lockup} />
+        <div className={styles.list}>
+          {MAIN_NAV.map(item => (
+            <RailItem key={item.key} item={item} current={current} />
+          ))}
+        </div>
+        <div className={styles.foot}>
+          {FOOT_NAV.map(item => (
+            <RailItem key={item.key} item={item} current={current} />
+          ))}
+        </div>
       </div>
     </nav>
   )

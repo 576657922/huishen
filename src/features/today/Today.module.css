@@ -1,21 +1,38 @@
 .grid {
   display: grid;
 }
+.mastheadWrap,
+.datelineWrap,
 .main,
 .aside {
   min-width: 0;
 }
+
+/* ---------- 展陈级主推荐画幅 ------------------------------------------ */
 .recommendation {
-  --ink-2: var(--ink);
-  --ink-3: var(--ink);
-  --fill-primary: var(--ink);
+  --ink: var(--hero-ink);
+  --ink-2: var(--hero-ink-2);
+  --ink-3: var(--hero-ink-3);
+  --line: var(--hero-line);
+  --rule: var(--hero-rule);
+  --trace: var(--hero-ink);
+  --fill-primary: var(--hero-bar-bg);
+  --fill-primary-press: var(--hero-bar-press);
+  --on-ink: var(--hero-bar-ink);
+  --on-ink-2: var(--hero-bar-ink-2);
+  --wash: rgb(246 246 243 / 0.1);
+  --wash-2: rgb(246 246 243 / 0.18);
   position: relative;
   isolation: isolate;
-  margin-top: var(--sp-4);
+  overflow: hidden;
+  margin-top: var(--sp-2);
   padding: var(--sp-5);
-  border-radius: var(--r-2);
-  background: var(--paper);
+  border-radius: var(--r-4);
+  background: #0b0e12;
   color: var(--ink);
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 0.12),
+    0 24px 60px -28px rgb(8 10 13 / 0.42);
 }
 .heroImage,
 .recommendation::before {
@@ -29,31 +46,94 @@
 .heroImage {
   z-index: -2;
   object-fit: cover;
-  object-position: center;
+  object-position: center 42%;
+  animation: hero-breathe 28s var(--ease-breath) infinite alternate;
 }
+@keyframes hero-breathe {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.045);
+  }
+}
+/* 电影级光影暗角：左上与底缘深沉凝练，留出湖面与远山自然呼吸光感 */
 .recommendation::before {
   z-index: -1;
   content: "";
-  background: color-mix(in srgb, var(--paper) 60%, transparent);
+  background:
+    linear-gradient(115deg, rgb(8 10 14 / 0.82) 0%, rgb(8 10 14 / 0.44) 48%, rgb(8 10 14 / 0.28) 100%),
+    linear-gradient(180deg, rgb(8 10 14 / 0.46) 0%, rgb(8 10 14 / 0.08) 38%, rgb(8 10 14 / 0.72) 100%);
 }
-.title {
+.heroBody {
   display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  animation: hero-settle var(--dur-editorial) var(--ease-expo);
+}
+@keyframes hero-settle {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+.heroTop {
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: var(--sp-2);
-  margin-top: var(--sp-1);
-  margin-right: calc(-1 * var(--sp-1));
+  gap: var(--sp-2) var(--sp-3);
 }
-.title h2 {
+.heroTop > :first-child {
+  flex: 1 1 200px;
+  min-width: 0;
+}
+.changeBtn {
+  flex: none;
+  min-height: 36px;
+  padding: 0 var(--sp-3);
+  border-radius: var(--r-full);
+  background: rgb(255 255 255 / 0.09);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.14);
+  color: var(--ink);
+  font-size: var(--fs-caption);
+}
+.heroLead {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+.heroTitle {
   margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--w-display);
+  font-size: var(--fs-hero);
+  line-height: var(--lh-hero);
+  letter-spacing: 0.02em;
+  color: var(--ink);
 }
 .description {
-  margin-top: var(--sp-2);
-  max-width: var(--measure);
+  margin-top: var(--sp-1);
+  max-width: 34em;
+  font-size: var(--fs-reading);
+  line-height: var(--lh-reading);
   color: var(--ink-2);
 }
+.heroFooter {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: var(--sp-4);
+}
 .figure {
-  margin: var(--sp-4) 0 var(--sp-5);
+  margin: 0;
+  padding: var(--sp-3) var(--sp-4);
+  border-radius: var(--r-3);
+  background: rgb(8 10 14 / 0.38);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.12);
 }
 .plot {
   display: block;
@@ -76,6 +156,8 @@
   stroke: var(--line);
   stroke-width: 1;
 }
+
+/* ---------- 只有几分钟 · 画廊摄影版画 -------------------------------- */
 .quick {
   margin-top: var(--sp-6);
 }
@@ -84,7 +166,7 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--sp-3);
   padding: 0;
-  margin: var(--sp-2) 0 var(--sp-4);
+  margin: var(--sp-3) 0 var(--sp-4);
   list-style: none;
 }
 .photoPick {
@@ -94,15 +176,41 @@
   width: 100%;
   height: 100%;
   text-align: left;
-  border-radius: var(--r-2);
+  border-radius: var(--r-3);
+}
+.pickFrame {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: var(--r-3);
+  background: var(--paper-sunk);
+  box-shadow: var(--surface-shadow);
+  transition: box-shadow var(--dur-editorial) var(--ease-expo);
+}
+.pickFrame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px rgb(14 16 19 / 0.08);
+  pointer-events: none;
+}
+:global([data-theme="dark"]) .pickFrame::after {
+  box-shadow: inset 0 0 0 1px rgb(241 242 238 / 0.1);
+}
+@media (prefers-color-scheme: dark) {
+  :global(:root:not([data-theme="light"])) .pickFrame::after {
+    box-shadow: inset 0 0 0 1px rgb(241 242 238 / 0.1);
+  }
 }
 .pickImage {
   display: block;
   width: 100%;
-  height: auto;
-  aspect-ratio: 1;
+  height: 100%;
   object-fit: cover;
-  border-radius: var(--r-2);
+  transition: transform 720ms var(--ease-expo);
 }
 .pickName {
   margin-top: var(--sp-3);
@@ -110,119 +218,227 @@
   font-weight: var(--w-display);
   font-size: var(--fs-body);
   line-height: var(--lh-body);
+  color: var(--ink);
+  transition: color var(--dur-state) var(--ease-expo);
 }
 .pickStructure,
 .pickDuration {
   font-size: var(--fs-caption);
   line-height: var(--lh-caption);
-  color: var(--ink-2);
+  letter-spacing: 0.03em;
 }
 .pickStructure {
   display: none;
-  margin-top: var(--sp-1);
+  margin-top: 2px;
+  color: var(--ink-3);
 }
 .pickDuration {
   margin-top: auto;
-  padding-top: var(--sp-2);
+  padding-top: var(--sp-1);
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums lining-nums;
 }
 .photoPick:focus-visible {
   outline: 2px solid var(--focus);
   outline-offset: var(--sp-1);
 }
-.photoPick:active .pickName {
-  text-decoration: underline;
-  text-underline-offset: var(--sp-1);
+.photoPick:active .pickImage {
+  transform: scale(1.02);
 }
+
+/* ---------- 本周与安放栏 ---------------------------------------------- */
 .week {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  gap: var(--sp-3);
+  gap: var(--sp-4);
   margin-top: var(--sp-6);
-  padding-top: var(--sp-3);
-  border-top: var(--hair) solid var(--rule);
+  padding: var(--sp-5) var(--sp-6);
+  border-radius: var(--r-3);
+  background: var(--paper-raised);
+  box-shadow:
+    inset 0 0 0 var(--hair) var(--surface-border),
+    var(--surface-shadow);
 }
 .week h2 {
   font-family: var(--font-ui);
-  font-weight: var(--w-regular);
-  font-size: var(--fs-caption);
-  line-height: var(--lh-caption);
+  font-weight: var(--w-medium);
+  font-size: var(--fs-micro);
+  line-height: var(--lh-micro);
+  letter-spacing: 0.1em;
   color: var(--ink-3);
 }
 .week p {
-  margin-top: var(--sp-1);
-  font-size: var(--fs-name);
-  line-height: var(--lh-name);
+  margin-top: var(--sp-2);
+  font-family: var(--font-display);
+  font-size: var(--fs-head);
+  line-height: var(--lh-head);
+}
+.weekActions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--sp-2);
 }
 .hardDesktop {
   display: none;
 }
-@media (min-width: 768px) {
+
+@media (min-width: 768px) and (max-width: 1023px) {
   .grid {
-    max-width: var(--reading-max);
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: var(--sp-4);
+    align-items: center;
+  }
+  .datelineWrap {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .mastheadWrap {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .recommendation {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    padding: var(--sp-8);
+  }
+  .main {
+    grid-column: 1 / -1;
+    grid-row: 3;
+  }
+  .aside {
+    grid-column: 1 / -1;
+    grid-row: 4;
   }
   .pickStructure {
     display: block;
   }
 }
+
 @media (min-width: 1024px) {
   .grid {
     grid-template-columns: repeat(12, minmax(0, 1fr));
-    gap: var(--gutter);
-    max-width: none;
+    column-gap: var(--sp-10);
+    row-gap: 0;
+  }
+  .datelineWrap {
+    grid-column: 1 / 9;
+    grid-row: 1;
+    align-self: center;
+  }
+  .mastheadWrap {
+    grid-column: 9 / 13;
+    grid-row: 1;
+    align-self: center;
+  }
+  .recommendation {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    margin-top: var(--sp-4);
+    padding: var(--sp-10) var(--sp-12);
+    min-height: 496px;
+    display: flex;
+    flex-direction: column;
+  }
+  .heroBody {
+    flex: 1;
+    justify-content: space-between;
+    gap: var(--sp-8);
+  }
+  .heroLead {
+    max-width: 600px;
+    margin-block: auto;
+  }
+  .heroFooter {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--sp-10);
+  }
+  .start {
+    width: 310px;
+    flex: none;
+  }
+  .figure {
+    flex: 1;
+    max-width: 520px;
+    padding: var(--sp-4) var(--sp-5);
   }
   .main {
     grid-column: 1 / 8;
+    grid-row: 3;
   }
   .aside {
-    grid-column: 9 / 13;
+    grid-column: 8 / 13;
+    grid-row: 3;
   }
   .quick {
-    margin-top: var(--sp-6);
+    margin-top: var(--sp-12);
   }
-  .recommendation {
-    padding: var(--sp-8);
+  .photoPicks {
+    gap: var(--sp-5);
+    margin: var(--sp-5) 0 0;
   }
-  .pickImage {
-    aspect-ratio: 4 / 3;
+  .pickFrame {
+    aspect-ratio: 3 / 4;
   }
   .pickName {
     font-size: var(--fs-name);
+    line-height: var(--lh-name);
+  }
+  .pickStructure {
+    display: block;
   }
   .week {
-    margin-top: 0;
-    border-top: 1px solid var(--ink);
-    min-height: var(--sp-20);
+    margin-top: var(--sp-12);
   }
   .hardRow {
     display: none;
   }
   .hardDesktop {
     display: block;
-  }
-  .start {
-    max-width: calc(var(--sp-20) * 4);
+    margin-top: var(--sp-6);
+    padding: var(--sp-6) var(--sp-8);
+    border-radius: var(--r-4);
+    background: var(--paper-raised);
+    box-shadow:
+      inset 0 0 0 var(--hair) var(--surface-border),
+      var(--surface-shadow);
   }
 }
-.weekActions {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: var(--sp-1);
-}
+
 @media (hover: hover) and (pointer: fine) {
+  .photoPick:hover .pickFrame {
+    box-shadow: var(--surface-shadow-hover);
+  }
+  .photoPick:hover .pickImage {
+    transform: scale(1.045);
+  }
   .photoPick:hover .pickName {
-    text-decoration: underline;
-    text-underline-offset: var(--sp-1);
+    color: var(--ink);
+  }
+  .changeBtn:hover {
+    background: rgb(255 255 255 / 0.16);
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .heroImage,
+  .heroBody {
+    animation: none;
+  }
+}
+
 @media (forced-colors: active) {
   .heroImage,
   .recommendation::before,
-  .pickImage {
+  .pickImage,
+  .pickFrame::after {
     display: none;
   }
   .recommendation {
     border: 1px solid CanvasText;
+    box-shadow: none;
   }
 }

@@ -8,6 +8,7 @@
   text-decoration: none;
   font-size: var(--fs-body);
   line-height: var(--lh-body);
+  transition: color var(--dur-state) var(--ease-standard);
 }
 .link:active {
   color: var(--ink);
@@ -18,9 +19,16 @@
 }
 .icon {
   color: var(--ink-3);
+  transition:
+    transform var(--dur-state) var(--ease-standard),
+    color var(--dur-state) var(--ease-standard);
 }
 @media (hover: hover) and (pointer: fine) {
   .link:hover {
     color: var(--ink);
+  }
+  .link:hover .icon {
+    color: var(--ink);
+    transform: translateX(2px);
   }
 }

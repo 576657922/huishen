@@ -1,44 +1,59 @@
-/* 标签栏（DESIGN.md §8.11，components.css .tabbar / .tab） */
+/* 手机端底部悬浮胶囊导航坞：告别传统贴底标签栏 */
 .tabbar {
   position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  left: 16px;
+  right: 16px;
+  bottom: calc(12px + var(--safe-bottom));
   z-index: var(--z-bar);
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  height: calc(var(--tabbar-h) + var(--safe-bottom));
-  padding-bottom: var(--safe-bottom);
-  background: var(--paper);
-  border-top: var(--hair) solid var(--rule);
+  align-items: center;
+  height: 58px;
+  padding: 5px;
+  border-radius: var(--r-full);
+  background: var(--paper-rail);
+  backdrop-filter: blur(24px) saturate(150%);
+  -webkit-backdrop-filter: blur(24px) saturate(150%);
+  border: var(--hair) solid var(--rule);
+  box-shadow: var(--shadow-pop);
 }
 
 .tab {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   gap: 2px;
-  padding-top: 6px;
+  height: 48px;
+  border-radius: var(--r-full);
   color: var(--ink-3);
   text-decoration: none;
   font-size: var(--fs-micro);
-  line-height: var(--lh-micro);
+  line-height: 1.1;
   letter-spacing: var(--tr-micro);
+  transition:
+    color var(--dur-state) var(--ease-expo),
+    background-color var(--dur-state) var(--ease-expo);
+}
+.tab > svg {
+  width: 20px;
+  height: 20px;
 }
 .tab:active {
   background: var(--wash-2);
 }
 .tab[aria-current="page"] {
+  background: var(--paper-raised);
   color: var(--ink);
   font-weight: var(--w-semibold);
+  box-shadow: 0 1px 4px rgb(14 16 19 / 0.08);
 }
 .tab:focus-visible {
-  outline-offset: -4px;
-  border-radius: var(--r-2);
+  outline-offset: -3px;
+  border-radius: var(--r-full);
 }
 
-/* 平板和桌面由导航栏代替；有停靠栏的页面、播放器和首次使用页上不显示（DESIGN.md §5.3） */
 @media (min-width: 768px) {
   .tabbar {
     display: none;

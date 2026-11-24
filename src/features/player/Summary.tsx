@@ -214,21 +214,27 @@ function Summary({ summary }: { summary: SessionSummary }) {
             />
           </div>
         )}
-        {!summary.gentler && (
-          <LinkMore to="/help" size="caption">
-            {CRISIS_CARD.title}
-          </LinkMore>
-        )}
-        {record && (
-          <Button
-            variant="quiet"
-            onClick={() => {
-              saveNote()
-              practiceAgain()
-            }}
-          >
-            {SUMMARY.again}
-          </Button>
+        {(!summary.gentler || record) && (
+          <div className={styles.summaryMeta}>
+            {!summary.gentler ? (
+              <LinkMore to="/help" size="caption">
+                {CRISIS_CARD.title}
+              </LinkMore>
+            ) : (
+              <span />
+            )}
+            {record && (
+              <Button
+                variant="quiet"
+                onClick={() => {
+                  saveNote()
+                  practiceAgain()
+                }}
+              >
+                {SUMMARY.again}
+              </Button>
+            )}
+          </div>
         )}
         <Dock className={styles.summaryDock}>
           <Button

@@ -1,15 +1,15 @@
-/* DESIGN.md §8.2 · components.css .section / .section-head */
+/* 章节节奏：用空间与呼吸建立层级，去除每个标题上方千篇一律的黑横线 */
 .section {
-  margin-top: var(--sp-10);
+  margin-top: var(--sp-12);
 }
 .head {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: space-between;
-  gap: var(--sp-3);
-  min-height: 48px;
-  padding-top: var(--sp-1);
-  border-top: 1px solid var(--ink);
+  gap: var(--sp-4);
+  margin-bottom: var(--sp-4);
+  padding-bottom: var(--sp-3);
+  border-bottom: var(--hair) solid var(--rule);
 }
 .head > :first-child {
   flex: 0 1 auto;
@@ -18,12 +18,12 @@
 .h3 {
   font-size: var(--fs-head);
   line-height: var(--lh-head);
-  letter-spacing: var(--tr-head);
+  letter-spacing: 0.03em;
 }
 .aside {
   color: var(--ink-3);
   font-size: var(--fs-caption);
   line-height: var(--lh-caption);
-  letter-spacing: var(--tr-caption);
+  letter-spacing: 0.04em;
   text-align: right;
 }

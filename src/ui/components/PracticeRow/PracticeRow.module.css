@@ -79,6 +79,9 @@ div.row::after {
 .chevron {
   color: var(--ink-3);
   margin-right: -4px;
+  transition:
+    transform var(--dur-state) var(--ease-standard),
+    color var(--dur-state) var(--ease-standard);
 }
 .dur {
   font-size: var(--fs-caption);
@@ -109,6 +112,11 @@ div.row::after {
   a.row:hover::after,
   button.row:hover::after {
     background: var(--wash);
+  }
+  a.row:hover .chevron,
+  button.row:hover .chevron {
+    color: var(--ink);
+    transform: translateX(2px);
   }
   a.row:active::after,
   button.row:active::after {

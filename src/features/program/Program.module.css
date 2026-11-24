@@ -11,9 +11,23 @@
 }
 .progress {
   display: block;
-  margin-top: var(--sp-8);
+  margin-top: var(--sp-6);
   max-width: 100%;
+  height: auto;
   overflow: visible;
+}
+.weekNum {
+  fill: var(--ink-3);
+  font-family: var(--font-num);
+  font-size: var(--fs-axis);
+  font-variant-numeric: tabular-nums;
+}
+.weekNumCurrent {
+  fill: var(--ink);
+  font-family: var(--font-num);
+  font-size: var(--fs-axis);
+  font-weight: var(--w-semibold);
+  font-variant-numeric: tabular-nums;
 }
 .futureWeek {
   fill: none;
@@ -23,11 +37,21 @@
 .currentWeek {
   fill: none;
   stroke: var(--ink);
-  stroke-width: 2;
+  stroke-width: 1.5;
 }
-.completeWeek,
-.day {
+.completeWeek {
   fill: var(--dot);
+  stroke: var(--dot);
+  stroke-width: 1;
+}
+.dayDone {
+  fill: var(--dot);
+}
+.dayToday {
+  fill: var(--now);
+}
+.dayEmpty {
+  fill: var(--rule);
 }
 .tip {
   color: var(--ink-3);
@@ -56,13 +80,15 @@
 }
 .weeks button {
   display: grid;
-  grid-template-columns: var(--sp-5) minmax(0, 1fr) auto;
+  grid-template-columns: var(--sp-6) minmax(0, 1fr) auto;
   gap: var(--sp-3);
   align-items: center;
   text-align: left;
   width: 100%;
   min-height: var(--hit);
-  padding: var(--sp-3) 0;
+  padding: var(--sp-3) var(--sp-2);
+  border-radius: var(--r-2);
+  transition: background-color var(--dur-state) var(--ease-expo);
 }
 .weeks button > span:nth-child(2) {
   display: flex;
@@ -71,8 +97,10 @@
 .weeks strong {
   font-weight: var(--w-semibold);
 }
-.weeks button:hover {
-  background: var(--wash);
+@media (hover: hover) and (pointer: fine) {
+  .weeks button:hover {
+    background: var(--wash);
+  }
 }
 .management {
   display: flex;
@@ -83,29 +111,48 @@
 @media (min-width: 768px) {
   .layout {
     max-width: var(--reading-max);
+    margin-inline: auto;
   }
 }
 @media (min-width: 1024px) {
   .layout {
     display: grid;
     grid-template-columns: repeat(12, minmax(0, 1fr));
-    gap: var(--gutter);
+    column-gap: var(--sp-10);
     max-width: none;
-    margin-top: var(--sp-4);
+    margin-inline: 0;
+    margin-top: var(--sp-6);
   }
   .content {
     grid-column: 1 / 8;
     grid-row: 1;
   }
   .intro {
-    grid-column: 9 / 13;
+    grid-column: 8 / 13;
     grid-row: 1;
     align-self: start;
     position: sticky;
-    top: var(--sp-10);
+    top: calc(var(--header-h) + var(--sp-6));
+    padding: var(--sp-6) var(--sp-8);
+    border-radius: var(--r-4);
+    background: var(--paper-raised);
+    box-shadow:
+      inset 0 0 0 var(--hair) var(--surface-border),
+      var(--surface-shadow);
+  }
+  .intro > :first-child {
+    margin-top: 0;
   }
   .progress {
     margin-top: 0;
+    width: 100%;
+    max-width: 460px;
+    padding: var(--sp-5) var(--sp-6);
+    border-radius: var(--r-3);
+    background: var(--paper-raised);
+    box-shadow:
+      inset 0 0 0 var(--hair) var(--surface-border),
+      var(--surface-shadow);
   }
   .dock {
     margin-top: var(--sp-6);

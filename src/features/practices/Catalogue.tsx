@@ -89,8 +89,10 @@ export function CataloguePage() {
         ))}
       <footer className={styles.legend}>
         <p>{CATALOGUE.legend}</p>
-        <LinkMore to="/evidence">{CATALOGUE.allEvidence}</LinkMore>
-        <LinkMore to="/help">{CRISIS_CARD.title}</LinkMore>
+        <div className={styles.legendLinks}>
+          <LinkMore to="/evidence">{CATALOGUE.allEvidence}</LinkMore>
+          <LinkMore to="/help">{CRISIS_CARD.title}</LinkMore>
+        </div>
       </footer>
     </PageFrame>
   )

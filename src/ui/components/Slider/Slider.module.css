@@ -40,6 +40,14 @@
   box-shadow:
     var(--shadow-knob),
     inset 0 0 0 1px var(--line);
+  transition: box-shadow var(--dur-state) var(--ease-standard);
+}
+@media (hover: hover) and (pointer: fine) {
+  .slider:not([aria-disabled="true"]):hover .thumb {
+    box-shadow:
+      var(--shadow-knob),
+      inset 0 0 0 1.5px var(--ink);
+  }
 }
 .ticks {
   position: absolute;

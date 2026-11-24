@@ -56,41 +56,57 @@ function optionsFor(pick: TodayPick): StartOptions | null {
 function Progress({ program, progress }: { program: ProgramContent; progress: ProgramProgress | undefined }) {
   const next = nextProgramDay(progress, program.weeks.length)
   const done = new Set(progress?.done ?? [])
+  const cell = 36
+  const gap = 8
+  const totalW = program.weeks.length * cell + (program.weeks.length - 1) * gap
   return (
     <svg
       className={styles.progress}
-      width={program.weeks.length * 32 + 32}
-      height="48"
-      viewBox={`0 0 ${program.weeks.length * 32 + 32} 48`}
+      width={totalW}
+      height="58"
+      viewBox={`0 0 ${totalW} 58`}
       role="img"
       aria-label={next ? TODAY.program.day(program.title, next.week, next.day) : PROGRAM.finished}
     >
-      {program.weeks.map(week => {
+      {program.weeks.map((week, idx) => {
+        const x = idx * (cell + gap)
         const complete = Array.from({ length: 7 }, (_, i) => done.has(`w${week.week}d${i + 1}`)).every(
           Boolean,
         )
         const current = Boolean(progress && next?.week === week.week)
         return (
           <g key={week.week}>
+            <text
+              x={x + cell / 2}
+              y="11"
+              textAnchor="middle"
+              className={current ? styles.weekNumCurrent : styles.weekNum}
+            >
+              {String(week.week).padStart(2, '0')}
+            </text>
             <rect
-              x={(week.week - 1) * 32 + 17}
-              y="1"
-              width="24"
-              height="24"
+              x={x + 0.5}
+              y="18.5"
+              width={cell - 1}
+              height="20"
+              rx="2"
               className={complete ? styles.completeWeek : current ? styles.currentWeek : styles.futureWeek}
             />
             {current &&
-              Array.from({ length: 7 }, (_, i) => i + 1)
-                .filter(day => done.has(`w${week.week}d${day}`))
-                .map(day => (
+              Array.from({ length: 7 }, (_, i) => i + 1).map(day => {
+                const isDone = done.has(`w${week.week}d${day}`)
+                const isNext = next?.day === day
+                if (!isDone && !isNext) return null
+                return (
                   <circle
                     key={day}
-                    className={styles.day}
-                    cx={(week.week - 1) * 32 + 29 + (day - 4) * 8}
-                    cy="38"
-                    r="3"
+                    className={isDone ? styles.dayDone : styles.dayToday}
+                    cx={x + 4.5 + (day - 1) * 4.5}
+                    cy="48"
+                    r={isNext ? 2.2 : 1.75}
                   />
-                ))}
+                )
+              })}
           </g>
         )
       })}

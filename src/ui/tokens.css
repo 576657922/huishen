@@ -67,37 +67,50 @@
 [data-theme="light"] {
   color-scheme: light;
 
-  /* ---------- Colour · 纸 light ----------------------------------------
-     Ratios are WCAG 2.x contrast against paper / paper-sunk / paper-raised. */
-  --paper: #f4f1ea; /* page ground; PWA background_color + theme_color */
-  --paper-sunk: #eae6dd; /* tracks, wells, segmented ground, selected rail item */
-  --paper-raised: #fbfaf7; /* sheets, dialogs, selected segment, thumbs, toasts */
-  --ink: #1b1916; /* text, strong rules, fills        15.55 / 14.08 / 16.80 */
-  --ink-2: #4e4943; /* secondary text                    7.90 /  7.15 /  8.53 */
-  --ink-3: #6b645a; /* meta, axes, captions              5.18 /  4.69 /  5.60 */
-  --line: #857e72; /* control boundaries (1.4.11)       3.56 /  3.23 /  3.85 */
-  --rule: #dcd6cb; /* hairlines between rows; decorative only, never a boundary */
-  --on-ink: #f4f1ea; /* text on ink fills                15.55 */
-  --on-ink-2: #b7b5af; /* secondary text on ink (72 %)      8.55 */
-  --ink-press: #34312c; /* pressed ink fill                          */
-  /* Primary fills are ink in light. Declared here too (not only in dark), so a
-     data-theme="light" subtree under a dark root does not inherit the dark ink-2 fill. */
+  /* ---------- Colour · 素石 Gallery Chalk & Wet Sumi (light) -----------
+     Cool-neutral museum rag & architectural stone; zero oatmeal/beige. */
+  --paper: #f6f6f3; /* gallery chalk page ground */
+  --paper-rail: rgb(246 246 243 / 0.82); /* frosted architectural masthead / dock */
+  --paper-sunk: #ebebea; /* recessed mineral stone trough */
+  --paper-raised: #ffffff; /* crisp gallery specimen plate, dialogs, active pill */
+  --surface-border: rgb(14 16 19 / 0.08);
+  --surface-shadow: 0 1px 2px rgb(14 16 19 / 0.03), 0 14px 36px -20px rgb(14 16 19 / 0.08);
+  --surface-shadow-hover: 0 2px 6px rgb(14 16 19 / 0.04), 0 20px 44px -22px rgb(14 16 19 / 0.13);
+  --grain-opacity: 0.018;
+  --grain-blend: multiply;
+  --hero-ink: #f6f6f3;
+  --hero-ink-2: rgb(246 246 243 / 0.84);
+  --hero-ink-3: rgb(246 246 243 / 0.64);
+  --hero-line: rgb(246 246 243 / 0.34);
+  --hero-rule: rgb(246 246 243 / 0.16);
+  --hero-bar-bg: #f6f6f3;
+  --hero-bar-press: #e7e7e3;
+  --hero-bar-ink: #0e1013;
+  --hero-bar-ink-2: #4b5058;
+  --ink: #0e1013; /* wet sumi obsidian: text, primary actuators       17.6 : 1 */
+  --ink-2: #4b5058; /* slate graphite secondary text                     7.6 : 1 */
+  --ink-3: #686e77; /* mineral ash captions & metadata                   4.9 : 1 */
+  --line: rgb(14 16 19 / 0.22); /* architectural hairline control border */
+  --rule: rgb(14 16 19 / 0.08); /* whisper-thin divider rule             */
+  --on-ink: #f6f6f3; /* text on obsidian fills                           17.6 : 1 */
+  --on-ink-2: #b4b8bf; /* secondary text on obsidian fills                  9.1 : 1 */
+  --ink-press: #25282e; /* pressed obsidian fill                             */
   --fill-primary: var(--ink);
   --fill-primary-press: var(--ink-press);
-  --zhu: #b33a21; /* 朱 cinnabar — marks only           5.25 /  4.76 /  5.68 */
-  --zhu-wash: rgb(179 58 33 / 0.12);
-  --wash: rgb(27 25 22 / 0.05); /* hover; area under a curve          */
-  --wash-2: rgb(27 25 22 / 0.09); /* pressed                            */
-  --scrim: rgb(27 25 22 / 0.36); /* behind sheets and dialogs          */
-  --selection: rgb(27 25 22 / 0.14);
-  --trace-fill: rgb(27 25 22 / 0.07); /* wash under the past curve (players only) */
-  --grid: rgb(27 25 22 / 0.07); /* 1 s grid inside figures            */
-  --grid-major: rgb(27 25 22 / 0.14); /* 5 s grid, zero lines               */
+  --zhu: #c42f18; /* 朱 museum lacquer vermilion — marks only          5.4 : 1 */
+  --zhu-wash: rgb(196 47 24 / 0.11);
+  --wash: rgb(14 16 19 / 0.045); /* hover wash */
+  --wash-2: rgb(14 16 19 / 0.085); /* pressed wash */
+  --scrim: rgb(8 10 13 / 0.42); /* behind sheets and dialogs */
+  --selection: rgb(14 16 19 / 0.13);
+  --trace-fill: rgb(14 16 19 / 0.06);
+  --grid: rgb(14 16 19 / 0.055);
+  --grid-major: rgb(14 16 19 / 0.12);
 
-  /* elevation: hairline first; a shadow only on things that float (sheets, dialogs, knobs) */
-  --shadow-sheet: 0 -1px 0 var(--rule), 0 -8px 24px rgb(27 25 22 / 0.06);
-  --shadow-pop: 0 0 0 1px var(--rule), 0 8px 24px rgb(27 25 22 / 0.08);
-  --shadow-knob: 0 0 0 0.5px rgb(27 25 22 / 0.18), 0 1px 2px rgb(27 25 22 / 0.16);
+  /* elevation: sculptural air, zero heavy drop shadows */
+  --shadow-sheet: 0 -1px 0 var(--rule), 0 -16px 40px rgb(8 10 13 / 0.09);
+  --shadow-pop: 0 0 0 1px var(--rule), 0 20px 52px -12px rgb(8 10 13 / 0.16);
+  --shadow-knob: 0 0 0 0.5px rgb(14 16 19 / 0.18), 0 2px 6px rgb(14 16 19 / 0.16);
 
   /* ---------- Type: families ------------------------------------------ */
   --font-display: "HS Display", "Noto Serif SC", "Source Han Serif SC", "Songti SC", "STSong", serif;
@@ -127,19 +140,21 @@
   --lh-head: 1.75rem; /* 20 / 28  section heads (display)    */
   --fs-title: 1.5rem;
   --lh-title: 2rem; /* 24 / 32  sheet titles, player section */
-  --fs-display: 2rem;
-  --lh-display: 2.5rem; /* 32 / 40  page and lead titles       */
+  --fs-display: clamp(2rem, 3.2vw, 2.75rem);
+  --lh-display: 1.18; /* monumental page and lead titles */
+  --fs-hero: clamp(2.35rem, 4.4vw, 3.75rem);
+  --lh-hero: 1.12; /* exhibition hero titles */
   --fs-axis: 11px; /* labels inside SVG figures (fixed)   */
   --fs-readout: 24px;
   --lh-readout: 32px; /* player readouts, spec strips (num 300) */
   --fs-timer: 32px;
   --lh-timer: 40px; /* remaining time (num 300)            */
-  --fs-figure: 40px;
-  --lh-figure: 48px; /* key figures (num 300)               */
-  --fs-count: 64px;
-  --lh-count: 64px; /* lead-in and grounding countdown     */
-  --fs-phase: 128px;
-  --lh-phase: 128px; /* 吸 / 呼 (display 300)                */
+  --fs-figure: clamp(2.5rem, 4vw, 3.5rem);
+  --lh-figure: 1.08; /* sculptural key figures (num 300)    */
+  --fs-count: 68px;
+  --lh-count: 68px; /* lead-in and grounding countdown     */
+  --fs-phase: clamp(112px, 15vw, 176px);
+  --lh-phase: 1; /* 吸 / 呼 (display 300)                */
 
   /* Tracking: three values. Text 0.02em, display (serif titles and names) 0.04em,
      figures 0. The only exceptions are the 回神 key and the wordmark (DESIGN.md §4.2). */
@@ -180,46 +195,49 @@
 
   /* ---------- Layout -------------------------------------------------- */
   --margin: 20px; /* phone side margin: 390 → 350 column; 16 px below 360 */
-  --margin-tablet: 32px;
-  --margin-desk: 48px;
-  --rail-w: 240px; /* desktop navigation rail, ≥ 1024 px          */
-  --rail-w-compact: 80px; /* tablet rail, 768–1023 px                    */
-  --content-max: 1104px; /* 12 × 70 px columns + 11 × 24 px gutters     */
-  --col: 70px;
+  --margin-tablet: 36px;
+  --margin-desk: 56px;
+  --rail-w: 0px; /* desktop top gallery masthead replaces left sidebar */
+  --rail-w-compact: 0px;
+  --header-h: 68px; /* architectural top gallery masthead */
+  --content-max: 1240px; /* wide exhibition gallery canvas */
+  --col: 80px;
   --gutter: 24px;
-  --reading-max: 640px; /* a reading column: 7 columns + 6 gutters     */
-  --measure: 34em; /* longest line of running text                */
-  --navbar-h: 44px;
-  --tabbar-h: 49px; /* plus env(safe-area-inset-bottom)            */
-  --startbar-h: 56px;
-  --dock-h: 80px; /* 12 + start bar 56 + 12, plus safe-bottom     */
-  --controls-h: 56px; /* player controls, plus safe-bottom + 8        */
-  --hit: 44px; /* minimum touch target                        */
-  --hair: 1px; /* hairline; 0.5 px on 2× screens              */
-  --glyph-w: 48px; /* practice glyph 48 × 24                      */
+  --reading-max: 660px;
+  --measure: 36em;
+  --navbar-h: 48px;
+  --tabbar-h: 76px; /* floating bottom capsule dock + clearance */
+  --startbar-h: 54px;
+  --dock-h: 82px;
+  --controls-h: 64px;
+  --hit: 44px;
+  --hair: 1px;
+  --glyph-w: 48px;
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
   --safe-left: env(safe-area-inset-left, 0px);
   --safe-right: env(safe-area-inset-right, 0px);
 
-  /* ---------- Radii: square, like a printed page --------------------- */
+  /* ---------- Radii: architectural tension (sharp plates + river-stone capsules) */
   --r-0: 0;
-  --r-1: 2px; /* grade box, bars, keycaps, the 自评 tag     */
-  --r-2: 4px; /* buttons, start bar, fields, chips, choice groups */
-  --r-3: 8px; /* 回神 key, count-pad keys, toasts           */
-  --r-4: 14px; /* sheet top corners, dialogs                */
-  --r-full: 999px; /* toggle, slider thumb, dots only           */
+  --r-1: 4px;
+  --r-2: 10px;
+  --r-3: 16px;
+  --r-4: 22px;
+  --r-full: 999px;
 
   /* ---------- Motion -------------------------------------------------- */
-  --ease-standard: cubic-bezier(0.2, 0, 0, 1); /* enter, settle            */
-  --ease-exit: cubic-bezier(0.4, 0, 1, 1); /* leave                    */
-  --ease-breath: cubic-bezier(0.37, 0, 0.63, 1); /* ≈ (1 − cos πt) / 2       */
-  --dur-press: 100ms; /* press feedback, a tick dropping onto the timeline */
-  --dur-state: 180ms; /* toggle, segment, tab, focus                       */
-  --dur-move: 240ms; /* list changes, disclosure, toast                    */
-  --dur-sheet: 320ms; /* sheets, dialogs, page push                         */
-  --dur-phase: 700ms; /* 吸 → 呼 cross-fade of the phase word                */
-  --dur-scene: 900ms; /* entering a player: the room dims to ink            */
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1); /* FWA luxury settle */
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+  --ease-breath: cubic-bezier(0.37, 0, 0.63, 1);
+  --dur-press: 110ms;
+  --dur-state: 220ms;
+  --dur-move: 320ms;
+  --dur-sheet: 380ms;
+  --dur-editorial: 560ms;
+  --dur-phase: 820ms;
+  --dur-scene: 960ms;
 
   /* ---------- Layers -------------------------------------------------- */
   --z-bar: 20;
@@ -243,66 +261,82 @@
   }
 }
 
-/* ---------- Colour · 墨 dark: ink-black ground, paper-white text ---------
-   Ratios against paper / paper-sunk / paper-raised. Players always use it. */
+/* ---------- Colour · 深潭 Abyssal Obsidian & Moonlight (dark) -----------
+   Cinema-depth dark ground; players always use it. */
 [data-theme="dark"] {
   color-scheme: dark;
-  --paper: #121110;
-  --paper-sunk: #0b0a09;
-  --paper-raised: #1c1a17;
-  --ink: #ede7db; /* 15.32 / 16.06 / 14.10 */
-  --ink-2: #b7afa2; /*  8.68 /  9.11 /  7.99 */
-  --ink-3: #918a7e; /*  5.52 /  5.78 /  5.08 */
-  --line: #6e675d; /*  3.38 /  3.54 /  3.11 */
-  --rule: #2b2824;
-  --on-ink: #121110; /* 15.32 on ink · 8.68 on ink-2 */
-  --on-ink-2: #3e3c38; /*  8.90 on ink · 5.07 on ink-2 */
-  --ink-press: #d2ccc0;
-  /* Dark primary fills (start bar, primary buttons) are ink-2, not ink: dark mode is the
-     night mode, and a full-ink slab glares (8.68 : 1 on paper, still the strongest mark). */
-  --fill-primary: var(--ink-2);
-  --fill-primary-press: var(--ink-3);
-  --zhu: #e2683f; /*  5.65 /  5.92 /  5.20 */
-  --zhu-wash: rgb(226 104 63 / 0.16);
-  --wash: rgb(237 231 219 / 0.06);
-  --wash-2: rgb(237 231 219 / 0.1);
-  --scrim: rgb(0 0 0 / 0.56);
-  --selection: rgb(237 231 219 / 0.2);
-  --trace-fill: rgb(237 231 219 / 0.07);
-  --grid: rgb(237 231 219 / 0.05);
-  --grid-major: rgb(237 231 219 / 0.11);
-  --shadow-sheet: 0 -1px 0 var(--rule);
-  --shadow-pop: 0 0 0 1px var(--rule);
-  --shadow-knob: 0 0 0 0.5px rgb(0 0 0 / 0.5), 0 1px 2px rgb(0 0 0 / 0.5);
+  --paper: #080a0d;
+  --paper-rail: rgb(8 10 13 / 0.78);
+  --paper-sunk: #101319;
+  --paper-raised: #151921;
+  --surface-border: rgb(241 242 238 / 0.08);
+  --surface-shadow: inset 0 1px 0 rgb(255 255 255 / 0.04), 0 18px 42px -20px rgb(0 0 0 / 0.7);
+  --surface-shadow-hover: inset 0 1px 0 rgb(255 255 255 / 0.07), 0 24px 48px -20px rgb(0 0 0 / 0.85);
+  --grain-opacity: 0.028;
+  --grain-blend: soft-light;
+  --ink: #f1f2ee; /* 17.5 : 1 */
+  --ink-2: #a5acb6; /*  8.4 : 1 */
+  --ink-3: #838b96; /*  5.6 : 1 */
+  --line: rgb(241 242 238 / 0.24);
+  --rule: rgb(241 242 238 / 0.09);
+  --on-ink: #080a0d;
+  --on-ink-2: #3b4048;
+  --ink-press: #d9dcd7;
+  --fill-primary: #d8dce0;
+  --fill-primary-press: #bec4cc;
+  --zhu: #ef5236; /*  5.8 : 1 */
+  --zhu-wash: rgb(239 82 54 / 0.16);
+  --wash: rgb(241 242 238 / 0.055);
+  --wash-2: rgb(241 242 238 / 0.1);
+  --scrim: rgb(0 0 0 / 0.64);
+  --selection: rgb(241 242 238 / 0.2);
+  --trace-fill: rgb(241 242 238 / 0.07);
+  --grid: rgb(241 242 238 / 0.05);
+  --grid-major: rgb(241 242 238 / 0.11);
+  --shadow-sheet: 0 -1px 0 var(--rule), 0 -18px 48px rgb(0 0 0 / 0.65);
+  --shadow-pop: 0 0 0 1px var(--rule), 0 24px 60px rgb(0 0 0 / 0.72);
+  --shadow-knob: 0 0 0 0.5px rgb(0 0 0 / 0.6), 0 2px 6px rgb(0 0 0 / 0.55);
+}
+:root[data-theme="dark"] {
+  --hero-bar-bg: #e2e5e9;
+  --hero-bar-press: #cfd4da;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     color-scheme: dark;
-    --paper: #121110;
-    --paper-sunk: #0b0a09;
-    --paper-raised: #1c1a17;
-    --ink: #ede7db;
-    --ink-2: #b7afa2;
-    --ink-3: #918a7e;
-    --line: #6e675d;
-    --rule: #2b2824;
-    --on-ink: #121110;
-    --on-ink-2: #3e3c38;
-    --ink-press: #d2ccc0;
-    --fill-primary: var(--ink-2);
-    --fill-primary-press: var(--ink-3);
-    --zhu: #e2683f;
-    --zhu-wash: rgb(226 104 63 / 0.16);
-    --wash: rgb(237 231 219 / 0.06);
-    --wash-2: rgb(237 231 219 / 0.1);
-    --scrim: rgb(0 0 0 / 0.56);
-    --selection: rgb(237 231 219 / 0.2);
-    --trace-fill: rgb(237 231 219 / 0.07);
-    --grid: rgb(237 231 219 / 0.05);
-    --grid-major: rgb(237 231 219 / 0.11);
-    --shadow-sheet: 0 -1px 0 var(--rule);
-    --shadow-pop: 0 0 0 1px var(--rule);
-    --shadow-knob: 0 0 0 0.5px rgb(0 0 0 / 0.5), 0 1px 2px rgb(0 0 0 / 0.5);
+    --paper: #080a0d;
+    --paper-rail: rgb(8 10 13 / 0.78);
+    --paper-sunk: #101319;
+    --paper-raised: #151921;
+    --surface-border: rgb(241 242 238 / 0.08);
+    --surface-shadow: inset 0 1px 0 rgb(255 255 255 / 0.04), 0 18px 42px -20px rgb(0 0 0 / 0.7);
+    --surface-shadow-hover: inset 0 1px 0 rgb(255 255 255 / 0.07), 0 24px 48px -20px rgb(0 0 0 / 0.85);
+    --grain-opacity: 0.028;
+    --grain-blend: soft-light;
+    --hero-bar-bg: #e2e5e9;
+    --hero-bar-press: #cfd4da;
+    --ink: #f1f2ee;
+    --ink-2: #a5acb6;
+    --ink-3: #838b96;
+    --line: rgb(241 242 238 / 0.24);
+    --rule: rgb(241 242 238 / 0.09);
+    --on-ink: #080a0d;
+    --on-ink-2: #3b4048;
+    --ink-press: #d9dcd7;
+    --fill-primary: #d8dce0;
+    --fill-primary-press: #bec4cc;
+    --zhu: #ef5236;
+    --zhu-wash: rgb(239 82 54 / 0.16);
+    --wash: rgb(241 242 238 / 0.055);
+    --wash-2: rgb(241 242 238 / 0.1);
+    --scrim: rgb(0 0 0 / 0.64);
+    --selection: rgb(241 242 238 / 0.2);
+    --trace-fill: rgb(241 242 238 / 0.07);
+    --grid: rgb(241 242 238 / 0.05);
+    --grid-major: rgb(241 242 238 / 0.11);
+    --shadow-sheet: 0 -1px 0 var(--rule), 0 -18px 48px rgb(0 0 0 / 0.65);
+    --shadow-pop: 0 0 0 1px var(--rule), 0 24px 60px rgb(0 0 0 / 0.72);
+    --shadow-knob: 0 0 0 0.5px rgb(0 0 0 / 0.6), 0 2px 6px rgb(0 0 0 / 0.55);
   }
 }
 
@@ -327,29 +361,29 @@
    ink-2 (8.68 : 1 on the dark paper); primary fills are already ink-2 in dark.
    DESIGN.md §3.2 */
 [data-surface="player"] {
-  --trace: var(--ink-2);
-  --phase-ink: var(--ink-2);
+  --trace: #c8ced7;
+  --phase-ink: #dfe4eb;
 }
 
 /* More contrast on request: tertiary text and hairlines step up one notch. */
 @media (prefers-contrast: more) {
   :root,
   [data-theme="light"] {
-    --ink-3: #4e4943;
-    --line: #5f594f;
-    --rule: #a9a193;
+    --ink-3: #3e4249;
+    --line: rgb(14 16 19 / 0.48);
+    --rule: rgb(14 16 19 / 0.22);
   }
   [data-theme="dark"] {
-    --ink-3: #b7afa2;
-    --line: #918a7e;
-    --rule: #4a453f;
+    --ink-3: #b8bfc9;
+    --line: rgb(241 242 238 / 0.48);
+    --rule: rgb(241 242 238 / 0.22);
   }
 }
 @media (prefers-contrast: more) and (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --ink-3: #b7afa2;
-    --line: #918a7e;
-    --rule: #4a453f;
+    --ink-3: #b8bfc9;
+    --line: rgb(241 242 238 / 0.48);
+    --rule: rgb(241 242 238 / 0.22);
   }
 }
 
@@ -361,6 +395,7 @@
     --dur-state: 0ms;
     --dur-move: 0ms;
     --dur-sheet: 0ms;
+    --dur-editorial: 0ms;
     --dur-phase: 0ms;
     --dur-scene: 0ms;
   }

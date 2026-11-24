@@ -1,41 +1,71 @@
+.ambient {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+.ambientCanvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
 .phaseRow {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
+  gap: var(--sp-4);
 }
-.phase {
+.phaseSlot {
+  position: relative;
+  min-height: var(--fs-phase);
+}
+.phase,
+.phaseOut {
   font-family: var(--font-display);
   font-size: var(--fs-phase);
   line-height: var(--lh-phase);
   font-weight: var(--w-light);
   color: var(--phase-ink);
   margin-left: -0.04em;
-  animation: arrive var(--dur-phase) var(--ease-standard);
+  text-shadow: 0 0 42px rgb(220 228 240 / 0.14);
+}
+.phase {
+  animation: phase-in var(--dur-phase) var(--ease-expo) both;
+}
+.phaseOut {
+  position: absolute;
+  inset: 0 auto auto 0;
+  pointer-events: none;
+  animation: phase-out var(--dur-phase) var(--ease-expo) forwards;
 }
 .next {
-  padding-bottom: var(--sp-5);
+  padding-bottom: var(--sp-4);
   color: var(--ink-2);
+  font-size: var(--fs-caption);
+  letter-spacing: 0.06em;
+  font-variant-numeric: tabular-nums lining-nums;
+  white-space: nowrap;
 }
 .curve {
   display: block;
   max-width: none;
   width: calc(100% + var(--margin) * 2);
   margin: var(--sp-4) calc(-1 * var(--margin)) 0;
-  height: calc(var(--sp-24) * 2 + var(--sp-6));
+  height: 230px;
 }
 .box {
   display: block;
-  width: calc(var(--sp-16) * 4);
-  height: calc(var(--sp-16) * 4);
+  width: 290px;
+  height: 290px;
   max-width: 100%;
-  margin-top: var(--sp-4);
+  margin: var(--sp-4) auto 0;
 }
 .hurry {
   display: flex;
   justify-content: flex-end;
   align-items: center;
   gap: var(--sp-3);
-  margin-top: var(--sp-3);
+  margin-top: var(--sp-4);
 }
 .caption {
   font-size: var(--fs-reading);
@@ -43,42 +73,93 @@
   min-height: var(--sp-16);
   margin-top: var(--sp-8);
   color: var(--ink);
-  transition: color var(--dur-move);
+  transition: color var(--dur-move) var(--ease-expo);
 }
 .caption span {
-  animation: arrive var(--dur-move) var(--ease-standard);
+  display: inline-block;
+  animation: caption-in var(--dur-move) var(--ease-expo) both;
 }
 .dim {
-  color: var(--ink-3);
+  color: var(--ink-2);
+  opacity: 0.68;
 }
-@keyframes arrive {
+@keyframes phase-in {
   from {
     opacity: 0;
+    transform: translateY(10px) scale(0.97);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+@keyframes phase-out {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-10px) scale(1.02);
+    filter: blur(6px);
+  }
+}
+@keyframes caption-in {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 @media (min-width: 768px) {
   .curve {
-    width: 100%;
-    margin-inline: 0;
+    width: 100vw;
+    margin-inline: calc(50% - 50vw);
+    height: 300px;
+    mask-image: linear-gradient(90deg, transparent 0%, #000 8%, #000 92%, transparent 100%);
   }
   .box {
-    width: calc(var(--sp-24) * 3 + var(--sp-2));
-    height: calc(var(--sp-24) * 3 + var(--sp-2));
+    width: 340px;
+    height: 340px;
   }
 }
 @media (orientation: landscape) and (max-height: 499px) {
   .curve {
+    width: 100%;
+    margin-inline: 0;
     height: 150px;
   }
   .caption {
     margin-top: var(--sp-4);
   }
-  .phase {
+  .phaseSlot {
+    min-height: var(--lh-count);
+  }
+  .phase,
+  .phaseOut {
     font-size: var(--fs-count);
     line-height: var(--lh-count);
   }
   .box {
-    width: 180px;
-    height: 180px;
+    width: 196px;
+    height: 196px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .curve {
+    mask-image: none;
+  }
+  .phaseOut {
+    display: none;
+  }
+  .phase,
+  .caption span {
+    animation: none;
   }
 }

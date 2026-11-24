@@ -1,16 +1,130 @@
 .page {
-  max-width: calc(var(--reading-max) + var(--margin) * 2);
-  padding-top: calc(var(--safe-top) + var(--sp-12));
-  padding-bottom: calc(var(--dock-h) + var(--hit) + var(--safe-bottom) + var(--sp-10));
+  min-height: 100dvh;
+  max-width: none;
+  padding: 0;
+}
+.spread {
+  display: grid;
+  min-height: 100dvh;
+}
+/* 手机端：深潭呼吸画幅置于顶部开篇 */
+.art {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: calc(var(--safe-top) + var(--sp-6)) var(--margin) var(--sp-5);
+  background: radial-gradient(ellipse 85% 75% at 50% 45%, #121722 0%, #080a0d 72%);
+  color: #f1f2ee;
+}
+.plate {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 620px;
+}
+.plateRule,
+.plateFoot {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  color: rgb(241 242 238 / 0.46);
+  letter-spacing: 0.1em;
+}
+.plateRule {
+  padding-bottom: var(--sp-2);
+  border-bottom: 1px solid rgb(241 242 238 / 0.1);
+}
+.plateCanvas {
+  display: block;
+  width: 100%;
+  height: 180px;
+  margin-block: var(--sp-2);
+  mask-image: linear-gradient(90deg, transparent 0%, #000 10%, #000 90%, transparent 100%);
+}
+.plateFoot {
+  padding-top: var(--sp-2);
+  border-top: 1px solid rgb(241 242 238 / 0.1);
+}
+
+.col {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: var(--sp-8) var(--margin) calc(var(--dock-h) + var(--hit) + var(--safe-bottom) + var(--sp-10));
+}
+.colInner {
+  width: 100%;
+  max-width: 500px;
+  margin-inline: auto;
 }
 .brand {
   margin: 0;
 }
-.description {
+.tagline {
+  margin-top: var(--sp-3);
+  color: var(--ink-2);
+}
+.principles {
+  display: grid;
+  gap: var(--sp-4);
+  margin-top: var(--sp-8);
+}
+.principles li {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr);
+  gap: var(--sp-3);
+  align-items: baseline;
+  font-size: var(--fs-reading);
+  line-height: var(--lh-reading);
+  color: var(--ink);
+}
+.index {
+  font-family: var(--font-num);
+  font-size: var(--fs-caption);
+  color: var(--ink-3);
+  letter-spacing: 0.06em;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+.scope {
+  margin-top: var(--sp-5);
+  color: var(--ink-3);
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+}
+.privacy {
+  margin-top: var(--sp-6);
+  padding: var(--sp-5) var(--sp-6);
+  border-radius: var(--r-3);
+  background: var(--paper-raised);
+  box-shadow:
+    inset 0 0 0 var(--hair) var(--surface-border),
+    var(--surface-shadow);
+}
+.privacy h2 {
+  font-family: var(--font-ui);
+  font-size: var(--fs-micro);
+  line-height: var(--lh-micro);
+  font-weight: var(--w-semibold);
+  letter-spacing: 0.12em;
+  color: var(--ink-3);
+}
+.privacy ul {
+  display: grid;
+  gap: var(--sp-2);
+  margin-top: var(--sp-3);
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+  color: var(--ink-2);
+}
+.help {
+  margin-top: var(--sp-4);
+}
+.actions {
   margin-top: var(--sp-6);
 }
 .actions button + button {
-  margin-top: var(--sp-1);
+  margin-top: var(--sp-2);
 }
 .noticeSection + .noticeSection {
   margin-top: var(--sp-6);
@@ -30,27 +144,45 @@
 .end {
   height: 1px;
 }
-@media (min-width: 768px) {
-  .page {
-    max-width: calc(var(--reading-max) + var(--margin-tablet) * 2);
-  }
-}
-@media (min-width: 1024px) {
-  .page {
-    max-width: calc(var(--reading-max) + var(--margin-desk) * 2);
-    padding-top: var(--sp-12);
-  }
-  .actions {
-    margin-top: var(--sp-8);
-    max-width: calc(var(--sp-20) * 5);
-  }
-  .notice {
-    max-width: calc(var(--reading-max) - var(--sp-20));
-  }
-}
 .noticeFooter {
   width: 100%;
 }
 .noticeFooter > :where(p) {
   margin-bottom: var(--sp-2);
+}
+
+@media (min-width: 1024px) {
+  .spread {
+    grid-template-columns: 52fr 48fr;
+  }
+  .art {
+    padding: var(--sp-16) var(--sp-12);
+    min-height: 100dvh;
+  }
+  .plateCanvas {
+    height: 400px;
+    margin-block: var(--sp-6);
+  }
+  .col {
+    padding: var(--sp-16) clamp(40px, 5vw, 88px);
+  }
+  .actions {
+    margin-top: var(--sp-8);
+    display: flex;
+    align-items: center;
+    gap: var(--sp-3);
+  }
+  .actions button {
+    width: auto;
+  }
+  .actions button:first-child {
+    flex: 1;
+    max-width: 240px;
+  }
+  .actions button + button {
+    margin-top: 0;
+  }
+  .notice {
+    max-width: calc(var(--reading-max) - var(--sp-20));
+  }
 }

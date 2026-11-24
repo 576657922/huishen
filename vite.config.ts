@@ -24,8 +24,8 @@ export default defineConfig({
         start_url: '/',
         scope: '/',
         display: 'standalone',
-        background_color: '#F4F1EA',
-        theme_color: '#F4F1EA',
+        background_color: '#F6F6F3',
+        theme_color: '#F6F6F3',
         categories: ['health', 'lifestyle'],
         // 同一张图按「可遮罩」的安全区画好（印在中间 80% 内），所以 512 同时声明 any 和 maskable
         icons: [

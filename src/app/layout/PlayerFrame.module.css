@@ -1,14 +1,19 @@
 /* 播放器外框（DESIGN.md §8.15.1、§8.15.18，components.css .player） */
 .player {
   position: relative;
+  container-type: inline-size;
+  overflow-x: clip;
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
-  padding: var(--safe-top) var(--margin) calc(var(--safe-bottom) + var(--sp-2));
-  background: var(--paper);
+  padding: calc(var(--safe-top) + var(--sp-3)) var(--margin) calc(var(--safe-bottom) + var(--sp-5));
+  background: radial-gradient(ellipse 80% 60% at 50% 35%, #11161f 0%, var(--paper) 70%);
   color: var(--ink);
-  /* 进入播放器：底色从应用的主题过渡到深色（§7.2）；减少动态效果时时长为 0 */
-  animation: scene-in var(--dur-scene) var(--ease-standard) both;
+  animation: scene-in var(--dur-scene) var(--ease-expo) both;
+}
+.player > [data-region] {
+  position: relative;
+  z-index: 1;
 }
 @keyframes scene-in {
   from {

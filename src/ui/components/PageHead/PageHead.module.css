@@ -1,13 +1,13 @@
-/* DESIGN.md §8.0 页头与 folio · §5.5 桌面页头 */
+/* 展陈级页头：宽阔负空间与雕琢比例，告别黑线框模板 */
 .head {
-  padding-top: var(--sp-3);
+  padding-top: var(--sp-2);
+  margin-bottom: var(--sp-6);
 }
 .title {
   font-size: var(--fs-display);
   line-height: var(--lh-display);
-  letter-spacing: var(--tr-display);
+  letter-spacing: 0.02em;
 }
-/* 路由切换时程序把焦点放到 h1 上；它不是控件，不画焦点框 */
 .title:focus {
   outline: none;
 }
@@ -15,19 +15,18 @@
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: var(--sp-3);
+  gap: var(--sp-4);
   margin-top: var(--sp-3);
-  padding: var(--sp-1) 0;
-  border-top: 1px solid var(--ink);
-  border-bottom: var(--hair) solid var(--rule);
+  padding-top: var(--sp-3);
+  border-top: var(--hair) solid var(--rule);
   color: var(--ink-3);
   font-size: var(--fs-caption);
   line-height: var(--lh-caption);
-  letter-spacing: var(--tr-caption);
+  letter-spacing: 0.05em;
 }
 .folio b {
-  color: var(--ink-2);
-  font-weight: var(--w-regular);
+  color: var(--ink);
+  font-weight: var(--w-medium);
 }
 .folio > :last-child {
   text-align: right;
@@ -37,19 +36,20 @@
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  gap: var(--sp-4);
+  gap: var(--sp-6);
   padding-top: 0;
-  padding-bottom: var(--sp-4);
-  border-bottom: 1px solid var(--ink);
+  padding-bottom: var(--sp-6);
+  border-bottom: var(--hair) solid var(--rule);
 }
 .sub {
-  margin-top: var(--sp-1);
+  margin-top: var(--sp-2);
   color: var(--ink-3);
   font-size: var(--fs-caption);
   line-height: var(--lh-caption);
-  letter-spacing: var(--tr-caption);
+  letter-spacing: 0.05em;
 }
 .actions {
   display: flex;
+  flex-wrap: wrap;
   gap: var(--sp-2);
 }

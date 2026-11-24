@@ -6,13 +6,16 @@
 }
 .row {
   display: grid;
-  grid-template-columns: 112px minmax(0, 1fr) 128px;
+  grid-template-columns: minmax(76px, 112px) minmax(28px, 1fr) auto;
   column-gap: var(--sp-3);
   align-items: center;
   min-height: 32px;
 }
 .name {
   min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .track {
   display: block;

@@ -1,4 +1,4 @@
-/* DESIGN.md §8.3 · components.css 8.3。按下只换底色；悬停只在能悬停的指针上（§7.2） */
+/* 雕塑感胶囊按钮语言：告别传统 4px 线框矩形 */
 .btn {
   position: relative;
   display: inline-flex;
@@ -7,43 +7,51 @@
   gap: var(--sp-2);
   min-height: 48px;
   padding: 0 var(--sp-6);
-  border-radius: var(--r-2);
+  border-radius: var(--r-full);
   font-size: var(--fs-body);
   line-height: var(--lh-body);
   font-weight: var(--w-semibold);
-  letter-spacing: var(--tr-button);
+  letter-spacing: 0.04em;
   text-decoration: none;
   white-space: nowrap;
   transition:
-    background-color var(--dur-press) var(--ease-standard),
-    color var(--dur-press) var(--ease-standard);
+    background-color var(--dur-state) var(--ease-expo),
+    color var(--dur-state) var(--ease-expo),
+    box-shadow var(--dur-state) var(--ease-expo),
+    transform var(--dur-press) var(--ease-expo);
 }
 .btn:focus-visible {
   outline: 2px solid var(--focus);
-  outline-offset: 2px;
+  outline-offset: 3px;
 }
 
 .primary {
   background: var(--fill-primary, var(--ink));
   color: var(--on-ink);
+  box-shadow: 0 6px 20px -10px rgb(14 16 19 / 0.35);
 }
 .primary:active {
   background: var(--fill-primary-press, var(--ink-press));
+  transform: scale(0.985);
 }
 
 .secondary {
+  background: var(--paper-raised);
   color: var(--ink);
-  box-shadow: inset 0 0 0 1px var(--line);
+  box-shadow:
+    inset 0 0 0 var(--hair) var(--line),
+    0 1px 2px rgb(14 16 19 / 0.04);
   font-weight: var(--w-medium);
 }
 .secondary:active,
 .danger:active {
-  background: var(--wash-2);
+  background: var(--paper-sunk);
+  transform: scale(0.985);
 }
 
 .quiet {
   min-height: var(--hit);
-  padding: 0 var(--sp-1);
+  padding: 0 var(--sp-3);
   color: var(--ink-2);
   font-weight: var(--w-regular);
 }
@@ -53,6 +61,7 @@
 }
 
 .danger {
+  background: var(--paper-raised);
   color: var(--ink);
   box-shadow: inset 0 0 0 1px var(--ink);
   font-weight: var(--w-medium);
@@ -60,10 +69,10 @@
 
 .small {
   min-height: 36px;
-  padding: 0 var(--sp-3);
+  padding: 0 var(--sp-4);
   font-size: var(--fs-caption);
   line-height: var(--lh-caption);
-  letter-spacing: var(--tr-caption);
+  letter-spacing: 0.03em;
 }
 /* 36 高的小按钮把点按区域扩到 44 */
 .small::before {
@@ -77,13 +86,13 @@
   width: 100%;
 }
 
-/* 不可用：纸色凹底、三级墨色文字、没有线框；安静按钮只把字变成三级墨色 */
 .btn:disabled,
 .btn[aria-disabled="true"] {
   background: var(--paper-sunk);
   color: var(--ink-3);
   box-shadow: none;
   cursor: default;
+  transform: none;
 }
 .quiet:disabled,
 .quiet[aria-disabled="true"] {
@@ -93,13 +102,16 @@
 @media (hover: hover) and (pointer: fine) {
   .primary:not(:disabled, [aria-disabled="true"]):hover {
     background: var(--fill-primary-press, var(--ink-press));
+    transform: translateY(-1px);
   }
   .secondary:not(:disabled, [aria-disabled="true"]):hover,
   .danger:not(:disabled, [aria-disabled="true"]):hover {
-    background: var(--wash);
+    background: var(--paper-sunk);
+    box-shadow: inset 0 0 0 var(--hair) var(--ink-3);
   }
   .quiet:not(:disabled, [aria-disabled="true"]):hover {
     color: var(--ink);
+    background: var(--wash);
   }
 }
 
