@@ -17,12 +17,12 @@
 
 ## 练习
 
-| 类别 | 内容 |
-| --- | --- |
+| 类别 | 内容                                                                                       |
+| ---- | ------------------------------------------------------------------------------------------ |
 | 冥想 | 专注呼吸、数息、身体扫描、三分钟呼吸空间、慈心、自我关怀、开放觉察、一分钟停一停、静坐计时 |
-| 呼吸 | 慢呼吸、周期性叹息、箱式呼吸、舒适节律探索 |
-| 声音 | 听声音 · 放松、听声音 · 睡前（自然声、噪声和实时合成的音乐，可以叠加） |
-| 计划 | 八周正念、四周呼吸 |
+| 呼吸 | 慢呼吸、周期性叹息、箱式呼吸、舒适节律探索                                                 |
+| 声音 | 听声音 · 放松、听声音 · 睡前（自然声、噪声和实时合成的音乐，可以叠加）                     |
+| 计划 | 八周正念、四周呼吸                                                                         |
 
 ## 几个做法
 
@@ -53,17 +53,17 @@ npm run e2e       # Playwright 端到端测试
 
 ## 文档
 
-| 文件 | 内容 |
-| --- | --- |
-| [docs/PRODUCT.md](docs/PRODUCT.md) | 产品规格：功能、默认值、安全、文案规范 |
-| [docs/design/DESIGN.md](docs/design/DESIGN.md) | 设计规格，设计稿在 `docs/design/final/` |
-| [docs/APP.md](docs/APP.md) | 应用层：路由、开始和结束练习的流程 |
-| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | 技术栈、目录和依赖方向 |
-| [docs/modules.md](docs/modules.md) | 引擎、声音、数据、心率四个模块的公开接口 |
-| [docs/LOCALIZATION.md](docs/LOCALIZATION.md) | 中日文界面 |
-| [docs/TASKS.md](docs/TASKS.md) | 剩余任务 |
-| [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) | 部署 |
-| [docs/research/evidence.json](docs/research/evidence.json) | 依据数据 |
+| 文件                                                       | 内容                                     |
+| ---------------------------------------------------------- | ---------------------------------------- |
+| [docs/PRODUCT.md](docs/PRODUCT.md)                         | 产品规格：功能、默认值、安全、文案规范   |
+| [docs/design/DESIGN.md](docs/design/DESIGN.md)             | 设计规格，设计稿在 `docs/design/final/`  |
+| [docs/APP.md](docs/APP.md)                                 | 应用层：路由、开始和结束练习的流程       |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)               | 技术栈、目录和依赖方向                   |
+| [docs/modules.md](docs/modules.md)                         | 引擎、声音、数据、心率四个模块的公开接口 |
+| [docs/LOCALIZATION.md](docs/LOCALIZATION.md)               | 中日文界面                               |
+| [docs/TASKS.md](docs/TASKS.md)                             | 剩余任务                                 |
+| [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)                   | 部署                                     |
+| [docs/research/evidence.json](docs/research/evidence.json) | 依据数据                                 |
 
 ## 部署
 

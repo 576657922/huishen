@@ -15,6 +15,7 @@ import {
   Cite,
   ConfirmDialog,
   clauses,
+  cx,
   Dock,
   GradeMark,
   Kicker,
@@ -169,7 +170,7 @@ function SoundSetup({ id }: { id: 'listen' | 'sleep' }) {
                 </li>
               ))}
             </ul>
-            <p className="t-caption ink-3">{EVIDENCE.grades.scope}</p>
+            <p className={cx('t-caption ink-3', styles.scopeNote)}>{EVIDENCE.grades.scope}</p>
             {notes && (
               <Notes
                 items={notes.notes.map(note => ({

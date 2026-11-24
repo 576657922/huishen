@@ -24,6 +24,7 @@ import type { CueStyle } from '@/engine'
 import {
   Cite,
   clauses,
+  cx,
   Dock,
   GradeMark,
   Kicker,
@@ -343,7 +344,7 @@ function Detail({ practice }: { practice: CatalogPractice }) {
                 </li>
               ))}
             </ul>
-            <p className="t-caption ink-3">{EVIDENCE.grades.scope}</p>
+            <p className={cx('t-caption ink-3', styles.scopeNote)}>{EVIDENCE.grades.scope}</p>
             {notes && (
               <Notes
                 items={notes.notes.map(note => ({

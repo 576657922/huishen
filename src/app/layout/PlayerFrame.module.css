@@ -36,6 +36,13 @@
     padding-inline: max(var(--margin-tablet), calc((100% - var(--reading-max)) / 2));
   }
 }
+/* 宽屏：舞台放宽到 800，读数和控件不再缩在窗口中间一小条 */
+@media (min-width: 1280px) {
+  .player {
+    padding-inline: calc((100% - 800px) / 2);
+    padding-bottom: calc(var(--safe-bottom) + var(--sp-8));
+  }
+}
 
 /* 横着拿的手机：舞台在左 55 %，HUD、读数和控件在右 45 %（§13.5.12） */
 @media (orientation: landscape) and (max-height: 499px) {

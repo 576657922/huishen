@@ -17,12 +17,12 @@ Huishen is a tool for practising on your own. It does not replace a doctor, psyc
 
 ## Practices
 
-| Category | Practices |
-| --- | --- |
+| Category   | Practices                                                                                                                                                         |
+| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Meditation | Focused breathing, breath counting, body scan, three-minute breathing space, loving-kindness, self-compassion, open awareness, one-minute pause, meditation timer |
-| Breathing | Slow breathing, cyclic sighing, box breathing, comfortable pace finder |
-| Sound | Listening for relaxation, listening before sleep (nature sounds, noise and music synthesized in real time, which can be layered) |
-| Programs | Eight weeks of mindfulness, four weeks of breathing |
+| Breathing  | Slow breathing, cyclic sighing, box breathing, comfortable pace finder                                                                                            |
+| Sound      | Listening for relaxation, listening before sleep (nature sounds, noise and music synthesized in real time, which can be layered)                                  |
+| Programs   | Eight weeks of mindfulness, four weeks of breathing                                                                                                               |
 
 ## Design decisions
 
@@ -53,17 +53,17 @@ In development builds, adding `?seed=demo` to the URL loads eight weeks of demo 
 
 ## Documentation (in Chinese)
 
-| File | Contents |
-| --- | --- |
-| [docs/PRODUCT.md](docs/PRODUCT.md) | Product spec: features, defaults, safety, writing rules |
-| [docs/design/DESIGN.md](docs/design/DESIGN.md) | Design spec; mockups are in `docs/design/final/` |
-| [docs/APP.md](docs/APP.md) | App layer: routes, how practices start and finish |
-| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Stack, directory layout and dependency direction |
-| [docs/modules.md](docs/modules.md) | Public interfaces of the engine, audio, data and heart-rate modules |
-| [docs/LOCALIZATION.md](docs/LOCALIZATION.md) | Chinese and Japanese interface |
-| [docs/TASKS.md](docs/TASKS.md) | Remaining work |
-| [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) | Deployment |
-| [docs/research/evidence.json](docs/research/evidence.json) | Evidence data |
+| File                                                       | Contents                                                            |
+| ---------------------------------------------------------- | ------------------------------------------------------------------- |
+| [docs/PRODUCT.md](docs/PRODUCT.md)                         | Product spec: features, defaults, safety, writing rules             |
+| [docs/design/DESIGN.md](docs/design/DESIGN.md)             | Design spec; mockups are in `docs/design/final/`                    |
+| [docs/APP.md](docs/APP.md)                                 | App layer: routes, how practices start and finish                   |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)               | Stack, directory layout and dependency direction                    |
+| [docs/modules.md](docs/modules.md)                         | Public interfaces of the engine, audio, data and heart-rate modules |
+| [docs/LOCALIZATION.md](docs/LOCALIZATION.md)               | Chinese and Japanese interface                                      |
+| [docs/TASKS.md](docs/TASKS.md)                             | Remaining work                                                      |
+| [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)                   | Deployment                                                          |
+| [docs/research/evidence.json](docs/research/evidence.json) | Evidence data                                                       |
 
 ## Deployment
 

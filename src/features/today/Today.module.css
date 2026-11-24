@@ -369,9 +369,9 @@
     grid-column: 1 / 8;
     grid-row: 3;
   }
+  /* 桌面：本周卡落到照片下面，现在有点难独占右栏，两栏底边大致齐平 */
   .aside {
-    grid-column: 8 / 13;
-    grid-row: 3;
+    display: contents;
   }
   .quick {
     margin-top: var(--sp-12);
@@ -391,14 +391,20 @@
     display: block;
   }
   .week {
-    margin-top: var(--sp-12);
+    grid-column: 1 / 8;
+    grid-row: 4;
+    align-self: start;
+    margin-top: var(--sp-8);
   }
   .hardRow {
     display: none;
   }
   .hardDesktop {
+    grid-column: 8 / 13;
+    grid-row: 3 / 5;
+    align-self: start;
     display: block;
-    margin-top: var(--sp-6);
+    margin-top: var(--sp-12);
     padding: var(--sp-6) var(--sp-8);
     border-radius: var(--r-4);
     background: var(--paper-raised);

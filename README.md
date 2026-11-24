@@ -17,12 +17,12 @@
 
 ## 練習
 
-| 分類 | 内容 |
-| --- | --- |
-| 瞑想 | 呼吸に注意を向ける、呼吸を数える、ボディスキャン、3分間の呼吸空間、慈しみ、セルフ・コンパッション、開かれた気づき、ひと息つく、瞑想タイマー |
-| 呼吸 | ゆっくり呼吸、周期的なため息、ボックス呼吸、心地よい呼吸ペースを探す |
-| 音 | 音を聴く · 休憩、音を聴く · 就寝前（自然音、ノイズ、リアルタイムに合成した音楽を重ねられます） |
-| プログラム | 8週間のマインドフルネス、4週間の呼吸 |
+| 分類       | 内容                                                                                                                                        |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| 瞑想       | 呼吸に注意を向ける、呼吸を数える、ボディスキャン、3分間の呼吸空間、慈しみ、セルフ・コンパッション、開かれた気づき、ひと息つく、瞑想タイマー |
+| 呼吸       | ゆっくり呼吸、周期的なため息、ボックス呼吸、心地よい呼吸ペースを探す                                                                        |
+| 音         | 音を聴く · 休憩、音を聴く · 就寝前（自然音、ノイズ、リアルタイムに合成した音楽を重ねられます）                                              |
+| プログラム | 8週間のマインドフルネス、4週間の呼吸                                                                                                        |
 
 ## 方針
 
@@ -53,17 +53,17 @@ npm run e2e       # PlaywrightによるE2Eテスト
 
 ## ドキュメント（中国語）
 
-| ファイル | 内容 |
-| --- | --- |
-| [docs/PRODUCT.md](docs/PRODUCT.md) | プロダクト仕様：機能、初期設定、安全、文言のルール |
-| [docs/design/DESIGN.md](docs/design/DESIGN.md) | デザイン仕様。デザインカンプは`docs/design/final/` |
-| [docs/APP.md](docs/APP.md) | アプリ層：ルーティング、練習の開始と終了の流れ |
-| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | 技術構成、ディレクトリ、依存の向き |
-| [docs/modules.md](docs/modules.md) | エンジン、音、データ、心拍の各モジュールの公開インターフェース |
-| [docs/LOCALIZATION.md](docs/LOCALIZATION.md) | 中国語と日本語の切り替え |
-| [docs/TASKS.md](docs/TASKS.md) | 残っている作業 |
-| [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) | デプロイ |
-| [docs/research/evidence.json](docs/research/evidence.json) | 根拠のデータ |
+| ファイル                                                   | 内容                                                           |
+| ---------------------------------------------------------- | -------------------------------------------------------------- |
+| [docs/PRODUCT.md](docs/PRODUCT.md)                         | プロダクト仕様：機能、初期設定、安全、文言のルール             |
+| [docs/design/DESIGN.md](docs/design/DESIGN.md)             | デザイン仕様。デザインカンプは`docs/design/final/`             |
+| [docs/APP.md](docs/APP.md)                                 | アプリ層：ルーティング、練習の開始と終了の流れ                 |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)               | 技術構成、ディレクトリ、依存の向き                             |
+| [docs/modules.md](docs/modules.md)                         | エンジン、音、データ、心拍の各モジュールの公開インターフェース |
+| [docs/LOCALIZATION.md](docs/LOCALIZATION.md)               | 中国語と日本語の切り替え                                       |
+| [docs/TASKS.md](docs/TASKS.md)                             | 残っている作業                                                 |
+| [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)                   | デプロイ                                                       |
+| [docs/research/evidence.json](docs/research/evidence.json) | 根拠のデータ                                                   |
 
 ## デプロイ
 

@@ -62,23 +62,25 @@ export function CataloguePage() {
             title={section.title}
             aside={CATALOGUE.count(section.groups.flatMap(g => g.ids).length)}
           >
-            {section.groups.map(group => (
-              <div key={group.title ?? section.category}>
-                {group.title && <GroupTitle>{group.title}</GroupTitle>}
-                <PracticeList className={styles.columns}>
-                  {group.ids.map(id => (
-                    <PracticeRow
-                      key={id}
-                      practice={PRACTICE_BY_ID[id]}
-                      minutes={adjustedDefaults(id, screening).defaultMinutes}
-                      endText={id === 'pace-finder' ? CATALOGUE.about(7) : undefined}
-                      showGrade
-                      to={id === 'pace-finder' ? '/pace-finder' : `/practices/${id}`}
-                    />
-                  ))}
-                </PracticeList>
-              </div>
-            ))}
+            <div className={styles.groups}>
+              {section.groups.map(group => (
+                <div key={group.title ?? section.category}>
+                  {group.title && <GroupTitle>{group.title}</GroupTitle>}
+                  <PracticeList className={styles.columns}>
+                    {group.ids.map(id => (
+                      <PracticeRow
+                        key={id}
+                        practice={PRACTICE_BY_ID[id]}
+                        minutes={adjustedDefaults(id, screening).defaultMinutes}
+                        endText={id === 'pace-finder' ? CATALOGUE.about(7) : undefined}
+                        showGrade
+                        to={id === 'pace-finder' ? '/pace-finder' : `/practices/${id}`}
+                      />
+                    ))}
+                  </PracticeList>
+                </div>
+              ))}
+            </div>
             {section.hidden.length > 0 && (
               <p className="t-caption ink-3">
                 {CATALOGUE.hidden(section.hidden.map(id => PRACTICE_BY_ID[id].name))}{' '}
